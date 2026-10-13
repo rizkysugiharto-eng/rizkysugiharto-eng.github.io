@@ -195,6 +195,17 @@
     .tabs button { font: 600 var(--fs-sm) "Inter", sans-serif; min-height: 44px; padding: 10px 14px; border-radius: 8px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); cursor: pointer; }
     .tabs button[aria-selected="true"] { background: var(--dark); color: #fff; border-color: var(--dark); }
     .dash img { width: 100%; border-radius: 10px; border: 1px solid var(--line); cursor: zoom-in; }
+    /* Pratinjau langsung web app (iframe) — otomatis ikut versi terbaru website */
+    .live-frame { border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: var(--dark); }
+    .live-bar { display: flex; align-items: center; gap: 12px; padding: 10px 14px; background: var(--dark-2); color: #c9ccd3; font-size: var(--fs-xs); }
+    .live-dots { display: flex; gap: 6px; }
+    .live-dots i { width: 10px; height: 10px; border-radius: 50%; background: #3a3f48; }
+    .live-url { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .live-badge { display: inline-flex; align-items: center; gap: 6px; font-weight: 700; color: #fff; }
+    .live-badge::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--success); }
+    .live-frame iframe { display: block; width: 100%; height: 640px; border: 0; background: #f9f9f7; }
+    .live-links { display: flex; flex-wrap: wrap; gap: 12px 28px; }
+    .print-only { display: none; }
     .insight { margin: 12px 0 0; padding: 12px 16px; border-left: 4px solid var(--accent); background: var(--bg); border-radius: 8px; font-size: var(--fs-base); }
 
     /* Education */
@@ -270,6 +281,7 @@
       .gallery, .gallery.g4 { grid-template-columns: repeat(2, 1fr); }
       .certs { grid-template-columns: repeat(2, 1fr); }
       .award { padding: 24px; }
+      .live-frame iframe { height: 560px; }
       .lb-inner { padding: 64px 12px 84px; }
       .lb-prev, .lb-next { top: auto; bottom: 16px; transform: none; }
       .lb-prev { left: calc(50% - 60px); }
@@ -295,6 +307,9 @@
       .grid-3 { grid-template-columns: repeat(3, 1fr); }
       .gallery img:hover { transform: none; box-shadow: none; }
       .dash-print { display: grid; gap: 16px; }
+      .print-only { display: block; }
+      .live-print { width: 100%; border-radius: 10px; border: 1px solid var(--line); margin-bottom: 8px; }
+      .live-links { display: none; }
       .dash-print img { width: 100%; border-radius: 10px; border: 1px solid var(--line); }
       .dash-print figcaption { margin-top: 8px; padding: 10px 14px; border-left: 4px solid var(--accent); background: var(--bg); border-radius: 8px; font-size: var(--fs-sm); }
       .card, .cert, .focus li, .edu, .award, .note, .contact-card, .gallery img, .dash-print figure, .sec-head { break-inside: avoid; }
@@ -482,6 +497,27 @@
 
       <article class="project card reveal">
         <div class="num">PROJECT 02</div>
+        <h3>Fleet Maintenance Dashboard — Web App</h3>
+        <p>Pengembangan dashboard Power BI di atas menjadi aplikasi web end-to-end: user menginput work order, lalu KPI (PA, MTBF, MTTR, backlog, biaya) dihitung otomatis dan tampil sebagai grafik interaktif. Dibangun dengan React dan open source di GitHub.<span class="screen-only"> Pratinjau di bawah adalah website aslinya, jadi selalu menampilkan versi terbaru.</span></p>
+        <div class="tags"><span class="tag">React &amp; JavaScript</span><span class="tag">Recharts</span><span class="tag">MTBF · MTTR · PA</span><span class="tag">GitHub Actions</span><span class="tag">Open Source</span></div>
+        <div class="live-frame screen-only">
+          <div class="live-bar">
+            <span class="live-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+            <span class="live-url">rizkysugiharto-eng.github.io/fleet-maintenance-dashboard</span>
+            <span class="live-badge">Live</span>
+          </div>
+          <iframe src="https://rizkysugiharto-eng.github.io/fleet-maintenance-dashboard/" title="Pratinjau langsung Fleet Maintenance Dashboard" loading="lazy"></iframe>
+        </div>
+        <img class="print-only live-print" src="assets/img/web-dashboard.webp" alt="Tampilan Fleet Maintenance Dashboard — Web App">
+        <p class="more-link live-links">
+          <a class="link" href="https://rizkysugiharto-eng.github.io/fleet-maintenance-dashboard/" target="_blank" rel="noopener">Buka website di tab baru →</a>
+          <a class="link" href="https://github.com/rizkysugiharto-eng/fleet-maintenance-dashboard" target="_blank" rel="noopener">Lihat source code di GitHub →</a>
+        </p>
+        <p class="print-only small muted">Website: rizkysugiharto-eng.github.io/fleet-maintenance-dashboard · Source code: github.com/rizkysugiharto-eng/fleet-maintenance-dashboard</p>
+      </article>
+
+      <article class="project card reveal">
+        <div class="num">PROJECT 03</div>
         <h3>CFD Analysis Using Ansys Fluent</h3>
         <p>Simulasi dan analisis aliran fluida menggunakan ANSYS Fluent melalui proses geometry, meshing, dan post-processing hasil CFD — termasuk distribusi tekanan aliran di sekitar kendaraan dan project UAS “Flow Over 2D Cylinder Transient Solution”.</p>
         <div class="tags"><span class="tag">Ansys Fluent</span><span class="tag">Meshing</span><span class="tag">Post-processing</span></div>
@@ -497,7 +533,7 @@
       </article>
 
       <article class="project card reveal">
-        <div class="num">PROJECT 03</div>
+        <div class="num">PROJECT 04</div>
         <h3>3D Mechanical Design Using SolidWorks</h3>
         <p>Merancang komponen mekanikal, assembly, dan engineering drawing menggunakan SolidWorks untuk mendukung proses desain dan manufaktur — termasuk desain kursi roda untuk Project Capstone.</p>
         <div class="tags"><span class="tag">SolidWorks</span><span class="tag">Assembly</span><span class="tag">Engineering Drawing</span></div>
@@ -512,7 +548,7 @@
       </article>
 
       <article class="project card reveal">
-        <div class="num">PROJECT 04</div>
+        <div class="num">PROJECT 05</div>
         <h3>Logo, Menu, Poster &amp; Banner Design</h3>
         <p>Merancang berbagai media promosi visual untuk mendukung kebutuhan publikasi, branding, dan penyampaian informasi secara efektif.</p>
         <div class="tags"><span class="tag">Canva</span><span class="tag">Branding</span><span class="tag">Visual Design</span></div>
@@ -579,6 +615,7 @@
         <div class="tags">
           <span class="tag gray">Microsoft Excel</span>
           <span class="tag gray">Power BI (DAX &amp; Power Query)</span>
+          <span class="tag gray">React &amp; JavaScript (dasar)</span>
           <span class="tag gray">ERP Ellipse</span>
           <span class="tag gray soon">SAP PM (in progress)</span>
           <span class="tag gray">Ansys Fluent</span>
