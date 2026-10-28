@@ -1,4 +1,5 @@
-// Membuat assets/Portfolio-Rizky-Bagus-Eka-Sugiharto.pdf dari index.html.
+// ARSIP: membuat assets/Portfolio-Rizky-Bagus-Eka-Sugiharto-lama.pdf dari portfolio-lama.html (desain lama).
+// PDF desain baru dibuat dengan tools/build_portfolio_pdf.py.
 // Setiap halaman A4 berisi satu bagian portfolio; isi yang terlalu panjang
 // diperkecil otomatis supaya pas satu halaman (tidak terpotong).
 //
@@ -8,8 +9,8 @@
 //   node tools/build-portfolio-pdf.mjs http://localhost:8000/
 import { chromium } from 'playwright';
 
-const url = process.argv[2] ?? 'http://localhost:8000/';
-const out = process.argv[3] ?? 'assets/Portfolio-Rizky-Bagus-Eka-Sugiharto.pdf';
+const url = process.argv[2] ?? 'http://localhost:8000/portfolio-lama.html';
+const out = process.argv[3] ?? 'assets/Portfolio-Rizky-Bagus-Eka-Sugiharto-lama.pdf';
 const SITE = 'https://rizkysugiharto-eng.github.io/';
 
 // Susunan halaman: [section, filter isi]. Filter menerima clone section dan menghapus yang tidak dipakai.

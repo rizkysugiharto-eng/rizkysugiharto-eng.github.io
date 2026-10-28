@@ -3,360 +3,497 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#121418">
+  <meta name="theme-color" content="#1C2228">
   <script>document.documentElement.classList.add('js')</script>
   <title>Rizky Bagus Eka Sugiharto | Portfolio</title>
-  <meta name="description" content="Portfolio Rizky Bagus Eka Sugiharto — Maintenance Engineer, Reliability Analyst, Heavy Equipment. S1 Teknik Mesin Universitas Pertamina.">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23121418'/%3E%3Ctext x='32' y='45' font-family='Arial' font-weight='700' font-size='38' text-anchor='middle' fill='%23f2a900'%3ER%3C/text%3E%3C/svg%3E">
+  <meta name="description" content="Portfolio Rizky Bagus Eka Sugiharto — Maintenance Engineer dan Reliability Analyst untuk alat berat tambang. S1 Teknik Mesin Universitas Pertamina.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%231C2228'/%3E%3Crect x='10' y='44' width='44' height='8' fill='%23F2B705'/%3E%3Ctext x='32' y='38' font-family='Arial Black,Arial' font-weight='900' font-size='30' text-anchor='middle' fill='%23F2B705'%3ER%3C/text%3E%3C/svg%3E">
 
-  <!-- Preview saat link dibagikan di LinkedIn / WhatsApp. -->
+  <link rel="canonical" href="https://rizkysugiharto-eng.github.io/">
+
+  <!-- Preview saat link dibagikan di LinkedIn / WhatsApp -->
   <meta property="og:type" content="website">
   <meta property="og:title" content="Rizky Bagus Eka Sugiharto | Portfolio">
-  <meta property="og:description" content="Maintenance Engineer · Reliability Analyst · Heavy Equipment">
-  <meta property="og:image" content="https://rizkysugiharto-eng.github.io/assets/img/og-cover.jpg">
+  <meta property="og:description" content="Maintenance & Reliability Engineer untuk alat berat tambang: data perawatan 3 site, KPI PA/MTBF/MTTR, dashboard Power BI & web app.">
+  <meta property="og:image" content="https://rizkysugiharto-eng.github.io/assets/img/og-cover-2026.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="627">
   <meta property="og:url" content="https://rizkysugiharto-eng.github.io/">
   <meta name="twitter:card" content="summary_large_image">
 
+  <!-- Data terstruktur untuk Google (schema.org Person) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Rizky Bagus Eka Sugiharto",
+    "jobTitle": "Maintenance & Reliability Engineer",
+    "url": "https://rizkysugiharto-eng.github.io/",
+    "image": "https://rizkysugiharto-eng.github.io/assets/img/profile.webp",
+    "email": "mailto:rizkysugiharto20@gmail.com",
+    "alumniOf": { "@type": "CollegeOrUniversity", "name": "Universitas Pertamina" },
+    "knowsAbout": ["Maintenance Engineering", "Reliability Analysis", "Heavy Equipment", "Physical Availability", "MTBF", "MTTR", "Power BI", "ERP Ellipse", "ASME B31"],
+    "sameAs": [
+      "https://www.linkedin.com/in/rizkybagusekasugiharto",
+      "https://github.com/rizkysugiharto-eng"
+    ]
+  }
+  </script>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Barlow+Semi+Condensed:wght@600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,500..900&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 
   <style>
+    /* =========================================================
+       Konsep: "Riwayat Servis Unit"
+       Hero gelap ala control room tambang + grafik riwayat karier
+       (component life chart). Huruf judul lebar & tebal ala decal
+       di bodi alat berat. Kuning = pekerjaan & aksi.
+       ========================================================= */
     :root {
-      --bg: #f5f5f3;
-      --surface: #ffffff;
-      --ink: #16181d;
-      --muted: #5c6270;
-      --line: #d6d6d0;
-      --dark: #121418;
-      --dark-2: #1b1e24;
-      --hero-bg: #14171b;
-      --footer: #0b0c0f;
-      --accent: #f2b705;      /* kuning alat berat, sama dengan banner LinkedIn */
-      --accent-text: #875c00; /* versi gelap untuk teks di background terang (kontras ≥ 4.5:1) */
-      --accent-ink: #3a2a00;
-      --accent-soft: #fff6dc;
-      --accent-soft-line: #f3dd9c;
-      --chip: #eef0f3;
-      --chip-line: #dde1e6;
-      --success: #2ecc71;
-      --radius: 14px;
-      --max: 1120px;
-      --stripe: repeating-linear-gradient(-45deg, var(--accent) 0 18px, var(--dark) 18px 36px);
+      --steel-900: #1C2228;   /* latar gelap: warna baja, bukan hitam */
+      --steel-800: #262E35;   /* permukaan di atas latar gelap */
+      --steel-600: #44505B;   /* garis di latar gelap */
+      --on-dark: #E8ECEF;
+      --on-dark-2: #A7B1BA;
+      --light: #F7F7F5;       /* latar terang untuk bagian bacaan */
+      --ink: #1C2228;
+      --ink-2: #4F585E;
+      --rule: #D5D9DB;
+      --yellow: #F2B705;      /* kuning alat berat: pekerjaan & aksi */
+      --yellow-text: #875C00; /* kuning versi teks di latar terang */
+      --yellow-ink: #2A2000;
+      --bar-muted: #8A9AA8;   /* batang pendidikan/organisasi/pelatihan */
+      --annot: #9CC3E0;       /* garis ukur di latar gelap */
+      --ok: #4CC38A;          /* status "siap" */
+      --stripe: repeating-linear-gradient(-45deg, var(--yellow) 0 16px, var(--steel-900) 16px 32px);
 
-      /* Skala ukuran huruf */
-      --fs-xs: 12px;
-      --fs-sm: 14px;
-      --fs-base: 16px;
-      --fs-md: 18px;
-      --fs-lg: 22px;
-      --fs-xl: 28px;
-      --fs-2xl: 36px;
-      --fs-3xl: 48px;
+      --display: "Archivo", "Arial Black", sans-serif;
+      --text: "Atkinson Hyperlegible", system-ui, sans-serif;
+
+      --t-sm: 13.5px;
+      --t-base: 16px;
+      --t-md: 18px;
+      --t-lg: 20px;
+      --t-xl: clamp(22px, 2.3vw, 26px);
+      --t-2xl: clamp(28px, 3.2vw, 36px);
+      --t-name: clamp(34px, 4.4vw, 56px);
+
+      --max: 1200px;
+      --gutter: clamp(16px, 4vw, 40px);
     }
     * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; scroll-padding-top: 72px; }
-    body { margin: 0; background: var(--bg); color: var(--ink); font: var(--fs-base)/1.65 "Inter", system-ui, sans-serif; }
+    html { scroll-behavior: smooth; scroll-padding-top: 64px; }
+    body { margin: 0; background: var(--light); color: var(--ink); font: var(--t-base)/1.6 var(--text); -webkit-tap-highlight-color: rgba(242,183,5,.25); }
     img { max-width: 100%; height: auto; display: block; }
     a { color: inherit; }
-    :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
-    h1, h2, h3 { font-family: "Barlow Semi Condensed", "Inter", sans-serif; line-height: 1.15; margin: 0; letter-spacing: .2px; text-wrap: balance; }
-    body { -webkit-tap-highlight-color: rgba(242,183,5,.25); }
-    .skip-link { position: absolute; left: 12px; top: -60px; z-index: 100; background: var(--accent); color: var(--accent-ink); font-weight: 600; padding: 10px 16px; border-radius: 8px; text-decoration: none; }
-    .skip-link:focus { top: 12px; }
-    .wrap { max-width: var(--max); margin: 0 auto; padding: 0 20px; }
-    .eyebrow { color: var(--muted); font-weight: 600; letter-spacing: 2px; text-transform: uppercase; font-size: var(--fs-xs); }
-    .eyebrow b { color: var(--accent-text); }
+    :focus-visible { outline: 2px solid var(--yellow); outline-offset: 3px; }
+    .light :focus-visible { outline-color: var(--ink); }
+    h1, h2, h3 { font-family: var(--display); font-stretch: 125%; font-variation-settings: "wdth" 125; line-height: 1.02; margin: 0; text-wrap: balance; }
+    h3 { font-weight: 700; font-size: var(--t-lg); letter-spacing: -.2px; }
+    p { margin: 0 0 1em; }
+    .wrap { max-width: var(--max); margin: 0 auto; padding: 0 var(--gutter); }
+    .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
     .sprite { position: absolute; width: 0; height: 0; }
     .ico { width: 1em; height: 1em; flex: none; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-    .with-ico { display: inline-flex; align-items: center; gap: 6px; }
+    .skip-link { position: absolute; left: 12px; top: -60px; z-index: 100; background: var(--yellow); color: var(--yellow-ink); font-weight: 700; padding: 10px 16px; border-radius: 6px; text-decoration: none; }
+    .skip-link:focus { top: 12px; }
 
-    /* ---------- Navbar ---------- */
-    .nav { position: sticky; top: 0; z-index: 50; background: rgba(18, 20, 24, .94); backdrop-filter: blur(8px); color: #fff; }
-    .nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 60px; }
-    .brand { font-family: "Barlow Semi Condensed", sans-serif; font-weight: 700; font-size: var(--fs-lg); text-decoration: none; letter-spacing: 1px; }
-    .brand span { color: var(--accent); }
-    .nav ul { display: flex; gap: 22px; list-style: none; margin: 0; padding: 0; font-size: var(--fs-sm); }
-    .nav ul a { text-decoration: none; opacity: .75; padding: 4px 0; border-bottom: 2px solid transparent; }
-    .nav ul a:hover, .nav ul a.active { opacity: 1; color: var(--accent); border-color: var(--accent); }
-    .menu-btn { display: none; background: none; border: 0; color: #fff; font-size: 24px; cursor: pointer; }
+    /* ---------- Navigasi ---------- */
+    .nav { position: sticky; top: 0; z-index: 50; background: rgba(28,34,40,.96); backdrop-filter: blur(8px); color: var(--on-dark); border-bottom: 1px solid var(--steel-600); }
+    .nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 56px; }
+    .brand { font-family: var(--display); font-stretch: 125%; font-variation-settings: "wdth" 125; font-weight: 800; font-size: var(--t-md); text-decoration: none; }
+    .brand::after { content: ""; display: inline-block; width: 8px; height: 8px; margin-left: 4px; background: var(--yellow); }
+    .nav ul { display: flex; gap: 24px; list-style: none; margin: 0; padding: 0; font-size: var(--t-sm); }
+    .nav ul a { text-decoration: none; color: var(--on-dark-2); padding: 6px 0; border-bottom: 2px solid transparent; }
+    .nav ul a:hover, .nav ul a.active { color: var(--on-dark); border-color: var(--yellow); }
+    .nav-right { display: flex; align-items: center; gap: 22px; }
+    .nav-cv { display: inline-flex; align-items: center; gap: 6px; min-height: 38px; padding: 6px 14px; border-radius: 999px; border: 1.5px solid var(--yellow); color: var(--on-dark); font-size: var(--t-sm); font-weight: 700; text-decoration: none; white-space: nowrap; }
+    .nav-cv:hover { background: var(--yellow); color: var(--yellow-ink); }
+    .nav-cv .ico { width: 15px; height: 15px; }
+    .brand-short { display: none; }
+    /* Garis progres baca: seberapa jauh halaman sudah di-scroll */
+    .nav-progress { position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; pointer-events: none; }
+    .nav-progress span { display: block; height: 100%; background: var(--yellow); transform-origin: left; transform: scaleX(0); }
+    .menu-btn { display: none; min-width: 44px; min-height: 44px; background: none; border: 1px solid var(--steel-600); border-radius: 6px; color: var(--on-dark); font: 700 var(--t-sm) var(--text); cursor: pointer; }
 
-    /* ---------- Hero (background = grafik dari banner LinkedIn) ---------- */
-    .hero { position: relative; color: #fff; overflow: hidden; background: var(--hero-bg); }
+    /* ---------- Hero ---------- */
+    .hero { position: relative; background: var(--h-bg); color: var(--h-fg); padding: 44px 0 12px; overflow: hidden; }
+    /* Garis hazard di batas bawah hero (seperti portfolio lama & banner LinkedIn) */
     .hero::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 12px; background: var(--stripe); }
-    .hero-bg {
-      position: absolute; left: 0; top: 0; bottom: 12px; width: 50%;
-      background: url("assets/img/hero-chart.webp") left center / cover no-repeat;
-      -webkit-mask-image: linear-gradient(90deg, #000 70%, transparent);
-      mask-image: linear-gradient(90deg, #000 70%, transparent);
+    /* Grafik tren dari banner LinkedIn sebagai latar di belakang foto, tepinya memudar */
+    .hero-bg { position: absolute; top: 0; right: 0; width: 58%; height: 560px; background: url("assets/img/hero-chart.webp") right top / cover no-repeat; opacity: .85; pointer-events: none;
+      -webkit-mask-image: linear-gradient(to left, #000 45%, transparent), linear-gradient(to bottom, #000 55%, transparent);
+      -webkit-mask-composite: source-in; mask-image: linear-gradient(to left, #000 45%, transparent), linear-gradient(to bottom, #000 55%, transparent); mask-composite: intersect; }
+    .hero .wrap { position: relative; }
+    .hero-top { display: grid; grid-template-columns: minmax(0, 1.9fr) minmax(0, 1fr); gap: 40px; align-items: center; }
+    .kicker { color: var(--h-fg-2); font-size: var(--t-md); margin-bottom: 10px; }
+    .hero h1 { font-size: var(--t-name); font-weight: 900; letter-spacing: -1px; margin-bottom: 14px; }
+    .tagline { font-size: var(--t-md); max-width: 38ch; margin-bottom: 22px; }
+    .btns { display: flex; flex-wrap: wrap; gap: 10px; }
+    .btn { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 9px 16px; border-radius: 999px; font: 700 15px var(--text); text-decoration: none; white-space: nowrap; border: 1.5px solid var(--h-btn-line); color: var(--h-btn-fg); transition: transform .15s; }
+    .btn.primary { background: var(--h-pri-bg); border-color: var(--h-pri-bg); color: var(--h-pri-fg); }
+    .btn:hover { transform: translateY(-1px); background: var(--h-btn-hover); }
+    .btn.primary:hover { background: var(--h-pri-hover); border-color: var(--h-pri-hover); }
+    .btn .ico { width: 17px; height: 17px; }
+    .portrait { position: relative; margin: 14px 14px 14px 0; justify-self: end; width: min(100%, 268px); }
+    /* Bingkai foto bulat + cincin putus-putus kuning seperti portfolio lama */
+    .portrait::before { content: ""; position: absolute; inset: -14px; border-radius: 50%; border: 2px dashed rgba(242,183,5,.55); pointer-events: none; }
+    .portrait img { width: 100%; aspect-ratio: 1; object-fit: cover; object-position: 50% 22%; border-radius: 50%; border: 6px solid var(--steel-800); }
+    .portrait figcaption { position: absolute; left: 50%; bottom: 4%; transform: translateX(-50%); white-space: nowrap; border: 1px solid rgba(255,255,255,.12); display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; border-radius: 999px; background: rgba(28,34,40,.92); color: #fff; font-size: var(--t-sm); font-weight: 700; }
+    .portrait figcaption::before { content: ""; width: 9px; height: 9px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 0 4px rgba(76,195,138,.25); }
+
+    /* Warna hero (Baja) */
+    .hero {
+      --h-bg: var(--steel-900); --h-fg: var(--on-dark); --h-fg-2: var(--on-dark-2);
+      --h-line: var(--steel-600); --h-line-soft: var(--steel-800);
+      --h-work: var(--yellow); --h-work-outline: none; --h-bar: var(--bar-muted); --h-hover: var(--yellow); --h-now: var(--ok);
+      --h-btn-line: var(--yellow); --h-btn-fg: var(--on-dark); --h-btn-hover: rgba(242,183,5,.12);
+      --h-pri-bg: var(--yellow); --h-pri-fg: var(--yellow-ink); --h-pri-hover: #FFC81A;
     }
-    .hero .wrap { position: relative; display: grid; grid-template-columns: 1fr 1.35fr; gap: 48px; align-items: center; padding-top: 88px; padding-bottom: 100px; }
-    .hero .eyebrow { color: var(--accent); }
-    .hero h1 { font-size: clamp(40px, 6vw, 68px); margin: 12px 0 10px; }
-    .hero .role { font-size: var(--fs-md); color: #c9ccd3; margin: 0 0 8px; }
-    .hero .tagline { font-size: clamp(var(--fs-md), 2.2vw, var(--fs-lg)); font-weight: 600; margin: 0 0 22px; max-width: 560px; }
-    .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 30px; }
-    .chips span { font-size: var(--fs-sm); padding: 5px 12px; border: 1px solid rgba(255,255,255,.18); border-radius: 6px; color: #dfe2e8; background: rgba(255,255,255,.04); }
-    .btns { display: grid; gap: 12px; }
-    .btn-row { display: flex; flex-wrap: wrap; gap: 12px; }
-    .btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 22px; border-radius: 999px; font-weight: 600; font-size: var(--fs-base); text-decoration: none; border: 2px solid var(--accent); transition: transform .15s; }
-    .btn.primary { background: var(--accent); color: var(--accent-ink); }
-    .btn.ghost { color: #fff; }
-    .btn:hover { filter: brightness(1.08); transform: translateY(-1px); }
-    .btn svg { width: 18px; height: 18px; }
-    .photo-wrap { justify-self: center; position: relative; width: min(330px, 80%); }
-    .photo-wrap::before { content: ""; position: absolute; inset: -14px; border-radius: 50%; border: 2px dashed rgba(242,183,5,.5); }
-    .photo { width: 100%; aspect-ratio: 1; border-radius: 50%; object-fit: cover; border: 6px solid var(--dark-2); }
-    .open-badge { position: absolute; bottom: 6%; left: 50%; transform: translateX(-50%); white-space: nowrap; background: var(--dark-2); border: 1px solid rgba(255,255,255,.12); padding: 6px 14px; border-radius: 999px; font-size: var(--fs-sm); display: flex; align-items: center; gap: 8px; }
-    .open-badge i { width: 9px; height: 9px; border-radius: 50%; background: var(--success); box-shadow: 0 0 0 4px rgba(46,204,113,.2); }
+    /* Grafik riwayat karier: component life chart 2021–2026 (72 bulan) */
+    .life { margin-top: 36px; padding: 20px 0 28px; border-top: 1px solid var(--h-line); }
+    .life-head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; align-items: baseline; margin-bottom: 12px; }
+    .life-head h2 { font-size: var(--t-lg); font-weight: 800; }
+    .life-head p { margin: 0; color: var(--h-fg-2); font-size: var(--t-sm); }
+    .life-axis, .lane { display: grid; grid-template-columns: 10rem minmax(0, 1fr); }
+    .years { display: grid; grid-template-columns: repeat(6, 1fr); color: var(--h-fg-2); font-size: var(--t-sm); font-variant-numeric: tabular-nums; }
+    .years span { padding-left: 6px; border-left: 1px solid var(--h-line); }
+    .lane { min-height: 50px; border-top: 1px solid var(--h-line-soft); }
+    .lane-name { align-self: center; color: var(--h-fg-2); font-size: var(--t-sm); padding-right: 12px; }
+    .track { position: relative; list-style: none; margin: 0; padding: 0; background-image: linear-gradient(to right, var(--h-line) 1px, transparent 1px); background-size: calc(100% / 6) 100%; }
+    .track li { position: absolute; top: 0; bottom: 0; left: calc(var(--s) / 72 * 100%); width: calc((var(--e) - var(--s)) / 72 * 100%); }
+    .track a { position: absolute; inset: 0; text-decoration: none; color: var(--h-fg); }
+    .track .bar { position: absolute; left: 0; right: 0; bottom: 9px; height: 13px; min-width: 8px; border-radius: 3px; background: var(--h-bar); transform-origin: left center; }
+    .lane-work .bar { background: var(--h-work); outline: var(--h-work-outline); outline-offset: -1.5px; height: 17px; bottom: 7px; }
+    .lane-edu .bar { background: linear-gradient(90deg, transparent, var(--h-bar) 4%, var(--h-bar) 96%, transparent); }
+    .track .lbl { position: absolute; left: 0; top: 4px; white-space: nowrap; font-size: var(--t-sm); font-weight: 700; }
+    .track .end .lbl { left: auto; right: 0; }
+    .track .lbl small { font-weight: 400; color: var(--h-fg-2); }
+    .lane-work .lbl small { display: none; }
+    .track a:hover .lbl, .track a:focus-visible .lbl { color: var(--h-hover); text-decoration: underline; }
+    .track .milestone .bar { width: 13px; min-width: 0; height: 13px; bottom: 9px; left: -6.5px; right: auto; border-radius: 2px; background: var(--h-work); outline: var(--h-work-outline); outline-offset: -1.5px; transform: rotate(45deg); }
+    .lanes { position: relative; }
+    .lanes-inner { position: absolute; top: 0; bottom: 0; left: 10rem; right: 0; pointer-events: none; }
+    .now { position: absolute; top: 0; bottom: 0; left: calc(69.9 / 72 * 100%); border-left: 2px dashed var(--h-now); }
+    /* Satu momen animasi: batang tumbuh dari kiri sesuai urutan waktu */
+    .js .track .bar { animation: grow .7s cubic-bezier(.2,.7,.2,1) both; animation-delay: calc(var(--s) * 14ms + .2s); }
+    .js .track .milestone .bar { animation: fade .5s both; animation-delay: calc(var(--s) * 14ms + .2s); }
+    @keyframes grow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+    @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
 
-    .stats { background: var(--dark-2); color: #fff; }
-    .stats .wrap { display: grid; grid-template-columns: repeat(4, 1fr); text-align: center; padding-top: 28px; padding-bottom: 28px; }
-    .stats b { display: block; font-family: "Barlow Semi Condensed", sans-serif; font-size: var(--fs-2xl); font-variant-numeric: tabular-nums; color: var(--accent); line-height: 1.1; }
-    .stats span { font-size: var(--fs-sm); opacity: .75; }
-
-    /* ---------- Sections ---------- */
-    section { padding: 88px 0; }
-    .sec-head { margin-bottom: 36px; }
-    .sec-head h2 { font-size: clamp(var(--fs-xl), 4.4vw, var(--fs-3xl)); margin-top: 6px; }
-    .sec-head p { color: var(--muted); max-width: 680px; margin: 10px 0 0; }
-    .sub-head { margin: 80px 0 28px; }
-    .sub-head h2 { font-size: clamp(var(--fs-lg), 3.2vw, var(--fs-2xl)); }
-    .sub-head p { margin: 8px 0 0; }
-    .alt { background: var(--surface); }
-    .card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 26px; }
-    .alt .card { background: var(--bg); }
-    .card h3 { font-size: var(--fs-lg); margin-bottom: 12px; }
-    .muted { color: var(--muted); }
-    .small { font-size: var(--fs-sm); }
-    .more-link { margin: 16px 0 0; }
-
-    .about-grid { display: grid; grid-template-columns: 1.6fr 1fr; gap: 40px; align-items: start; }
-    .about-grid p { margin-top: 0; }
-    .focus { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; }
-    .focus li { background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--accent); border-radius: 10px; padding: 14px 16px; }
-    .focus b { display: block; font-family: "Barlow Semi Condensed", sans-serif; font-size: var(--fs-md); }
-    .focus span { color: var(--muted); font-size: var(--fs-sm); }
-
-    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
-    .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
-    .tags { display: flex; flex-wrap: wrap; gap: 8px; }
-    .tag { font-size: var(--fs-sm); padding: 6px 12px; border-radius: 999px; background: var(--accent-soft); color: var(--accent-ink); border: 1px solid var(--accent-soft-line); }
-    .tag.gray { background: var(--chip); border-color: var(--chip-line); color: var(--ink); }
-    .tag.soon { background: transparent; border-style: dashed; }
-    .software { margin-top: 20px; }
-    .soft-skills { margin: 20px 0 0; color: var(--muted); font-size: var(--fs-sm); }
-    .soft-skills b { color: var(--ink); }
-
-    /* Experience */
-    .job { display: grid; grid-template-columns: 1fr 1.05fr; gap: 36px; align-items: start; }
-    .job + .job { margin-top: 56px; padding-top: 56px; border-top: 1px solid var(--line); }
-    .job .lead { margin-top: 0; }
-    .meta { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; color: var(--muted); font-size: var(--fs-sm); margin: 8px 0 16px; }
-    .date { background: var(--dark); color: #fff; padding: 3px 12px; border-radius: 999px; font-weight: 600; font-size: var(--fs-xs); }
-    .job h3 { font-size: var(--fs-xl); }
-    .pos { font-weight: 600; color: var(--accent-text); }
-    .job ul, .card ul { padding-left: 20px; margin: 0 0 16px; }
-    .job li, .card li { margin-bottom: 6px; }
-    .note { display: flex; width: fit-content; gap: 8px; align-items: center; font-size: var(--fs-sm); background: var(--accent-soft); border: 1px solid var(--accent-soft-line); border-radius: 8px; padding: 8px 12px; margin-bottom: 16px; }
-    .note .ico { color: var(--accent-text); width: 18px; height: 18px; }
-    .link { font-weight: 600; color: var(--accent-text); text-decoration: none; border-bottom: 2px solid var(--accent); }
+    /* ---------- Section umum ---------- */
+    section { padding: 56px 0; }
+    .dark { background: var(--steel-900); color: var(--on-dark); }
+    .sec-head { margin-bottom: 28px; max-width: 760px; }
+    .sec-head h2 { font-size: var(--t-2xl); font-weight: 800; letter-spacing: -.5px; }
+    .sec-head h2::before { content: ""; display: block; width: 44px; height: 6px; background: var(--yellow); margin-bottom: 14px; }
+    .sec-head p { margin: 10px 0 0; color: var(--ink-2); font-size: var(--t-base); max-width: 64ch; }
+    .dark .sec-head p { color: var(--on-dark-2); }
+    .muted { color: var(--ink-2); }
+    .dark .muted { color: var(--on-dark-2); }
+    .link { color: var(--yellow-text); font-weight: 700; text-underline-offset: 3px; text-decoration-thickness: 2px; }
     .link:hover { color: var(--ink); }
+    .dark .link { color: var(--yellow); }
+    .dark .link:hover { color: var(--on-dark); }
+    .links { display: flex; flex-wrap: wrap; gap: 8px 28px; margin: 18px 0 0; }
 
-    .gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
-    .gallery.g2 { grid-template-columns: repeat(2, 1fr); }
-    .gallery.g4 { grid-template-columns: repeat(4, 1fr); }
-    .gallery img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 10px; cursor: zoom-in; border: 1px solid var(--line); background: var(--surface); transition: transform .2s; }
-    .gallery img:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,.12); }
-    .gallery img.contain { object-fit: contain; }
-    .gallery img.tall { aspect-ratio: 3 / 4; }
-    .gallery .wide { grid-column: span 2; }
-    .gallery .full { grid-column: 1 / -1; }
-    .gallery .r-16-9 { aspect-ratio: 16 / 9; }
-    .gallery .r-16-10 { aspect-ratio: 16 / 10; }
-    .gallery .r-16-11 { aspect-ratio: 16 / 11; }
-    .gallery .fill { aspect-ratio: auto; height: 100%; }
+    /* Tentang */
+    .about { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 40px; align-items: start; }
+    .about .prose { max-width: 68ch; }
+    .focus { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+    .focus li { background: #fff; border: 1px solid var(--rule); border-left: 5px solid var(--yellow); border-radius: 6px; padding: 11px 16px; }
+    .focus b { display: block; font-family: var(--display); font-stretch: 125%; font-variation-settings: "wdth" 125; font-weight: 700; }
+    .focus span { color: var(--ink-2); font-size: var(--t-sm); }
+    .focus span.proof { display: block; margin-top: 6px; font-size: 13px; }
+    .focus .proof a { color: var(--yellow-text); font-weight: 700; text-underline-offset: 2px; }
+    .ready-title { font-size: var(--t-md); font-weight: 800; margin-bottom: 12px; }
 
-    /* Galeri yang diringkas: 4 item pertama tampil, sisanya lewat tombol "Lihat semua" */
+    /* Pengalaman: catatan kerja dengan foto lapangan besar */
+    .log { display: grid; grid-template-columns: 11rem minmax(0, 1fr); gap: 10px 36px; padding: 30px 0; border-top: 1px solid var(--rule); }
+    .log:first-of-type { border-top: 0; padding-top: 0; }
+    .log-meta { display: grid; gap: 6px; align-content: start; font-size: var(--t-sm); color: var(--ink-2); }
+    .when { display: inline-block; justify-self: start; background: var(--ink); color: #fff; font-weight: 700; font-size: var(--t-sm); padding: 4px 12px; border-radius: 999px; font-variant-numeric: tabular-nums; }
+    .where { display: inline-flex; gap: 6px; align-items: baseline; }
+    .log-body h3 { font-size: var(--t-xl); font-weight: 800; }
+    .log-body .role { color: var(--yellow-text); font-weight: 700; margin: 4px 0 12px; }
+    .log-body ul { padding-left: 1.2em; margin: 0 0 18px; max-width: 72ch; }
+    .log-body li { margin-bottom: 5px; }
+    .log-body li::marker { color: var(--yellow-text); }
+    .lead-photo { margin: 0 0 18px; max-width: 720px; }
+    /* Lebar maksimal 720px: foto tidak pernah ditampilkan lebih besar dari resolusi aslinya (≥1200px),
+       bahkan di layar dengan scaling 150%, jadi tidak blur */
+    .lead-photo img { width: 100%; aspect-ratio: var(--ratio, 16 / 9); object-fit: cover; object-position: var(--focus, 50% 50%); border-radius: 6px; cursor: zoom-in; }
+    .lead-photo figcaption { font-size: var(--t-sm); color: var(--ink-2); margin-top: 8px; }
+    .result { display: inline-flex; gap: 8px; align-items: center; font-weight: 700; background: #FFF6DC; border: 1px solid #F3DD9C; border-radius: 6px; padding: 8px 14px; margin: 0 0 18px; }
+    .result .ico { color: var(--yellow-text); }
+    .thumbs { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 160px)); gap: 8px; }
+    .thumbs img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 4px; border: 1px solid var(--rule); background: #fff; cursor: zoom-in; }
+    .thumbs img.contain { object-fit: contain; }
     .collapsible:not(.expanded) > :nth-child(n+5) { display: none; }
-    .show-more { margin-top: 16px; min-height: 44px; padding: 10px 20px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); font: 600 var(--fs-sm) "Inter", sans-serif; cursor: pointer; }
+    .show-more { margin-top: 14px; min-height: 44px; padding: 8px 18px; border-radius: 999px; border: 1px solid var(--rule); background: #fff; color: var(--ink); font: 700 var(--t-sm) var(--text); cursor: pointer; }
     .show-more:hover { border-color: var(--ink); }
+    .dark .show-more { background: transparent; color: var(--on-dark); border-color: var(--steel-600); }
+    .dark .show-more:hover { border-color: var(--on-dark); }
 
-    /* Achievement */
-    .award { display: grid; grid-template-columns: 1fr 1.1fr; gap: 36px; align-items: center; background: var(--dark); color: #fff; border-radius: 18px; padding: 36px; position: relative; overflow: hidden; }
-    .award::before { content: ""; position: absolute; right: 0; top: 0; bottom: 0; width: 10px; background: var(--stripe); }
-    .medal { display: inline-flex; align-items: center; gap: 8px; font-weight: 700; color: var(--dark); background: linear-gradient(135deg, #f4f5f7, #b8bec8); padding: 6px 14px; border-radius: 999px; font-size: var(--fs-sm); }
-    .award h3 { font-size: var(--fs-xl); margin: 14px 0 10px; }
-    .award p { color: #c9ccd3; margin: 0 0 8px; }
-    .award p b { color: #fff; }
-    .award .gallery img { border-color: rgba(255,255,255,.1); }
+    /* Project (latar gelap: dashboard lebih menonjol) */
+    .case { padding-bottom: 44px; margin-bottom: 44px; border-bottom: 1px solid var(--steel-600); }
+    .case-head { max-width: 72ch; }
+    .case-head h3 { font-size: var(--t-xl); font-weight: 800; margin-bottom: 10px; }
+    .tools { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; padding: 0; margin: 0 0 8px; }
+    .tools li { font-size: var(--t-sm); padding: 4px 12px; border-radius: 999px; border: 1px solid var(--steel-600); color: var(--on-dark-2); }
+    .note { border-left: 3px solid var(--annot); padding: 2px 0 2px 14px; color: var(--on-dark-2); font-style: italic; }
+    .tabs { display: flex; flex-wrap: wrap; gap: 8px; margin: 18px 0 0; }
+    .tabs button { min-height: 44px; padding: 8px 16px; border-radius: 6px; border: 1px solid var(--steel-600); background: transparent; color: var(--on-dark); font: 700 var(--t-sm) var(--text); cursor: pointer; }
+    .tabs button[aria-selected="true"] { background: var(--yellow); color: var(--yellow-ink); border-color: var(--yellow); }
+    /* Garis ukur menunjuk KPI yang dijelaskan (hanya halaman Overview) */
+    .annot { position: relative; margin: 0; padding-top: 96px; container-type: inline-size; max-width: 1040px; }
+    .annot[data-tab]:not([data-tab="overview"]) { padding-top: 20px; }
+    .annot[data-tab]:not([data-tab="overview"]) .ann { display: none; }
+    .annot img { width: 100%; border-radius: 6px; cursor: zoom-in; }
+    .ann { position: absolute; top: 0; left: var(--x); transform: translateX(-50%); width: 18cqw; max-width: 210px; height: 96px; }
+    .ann p { position: absolute; bottom: 30px; left: 0; right: 0; margin: 0; text-align: center; color: var(--annot); font-size: var(--t-sm); line-height: 1.3; }
+    .ann p b { display: block; font-size: var(--t-md); color: var(--on-dark); }
+    .ann::after { content: ""; position: absolute; left: 50%; top: 70px; border-left: 1.5px solid var(--annot); height: calc(26px + 100cqw * 1101 / 1920 * .195); }
+    .ann::before { content: ""; position: absolute; left: calc(50% - 4px); top: calc(92px + 100cqw * 1101 / 1920 * .195); width: 8px; height: 8px; border-radius: 50%; background: var(--annot); z-index: 1; }
+    .insight { margin: 16px 0 0; max-width: 72ch; }
+    .insight b { color: var(--yellow); }
+    .live { border: 1px solid var(--steel-600); border-radius: 8px; overflow: hidden; margin-top: 18px; max-width: 1040px; }
+    .live-bar { display: flex; gap: 12px; justify-content: space-between; padding: 10px 14px; background: var(--steel-800); font-size: var(--t-sm); color: var(--on-dark-2); }
+    .live-bar span:last-child { display: inline-flex; align-items: center; gap: 6px; color: var(--on-dark); font-weight: 700; }
+    .live-bar span:last-child::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--ok); }
+    .live iframe { display: block; width: 100%; height: 560px; border: 0; background: #fff; }
+    .more-work { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px; }
+    .more-work h3 { font-size: var(--t-md); font-weight: 800; margin-bottom: 8px; }
+    .more-work p { font-size: var(--t-sm); }
+    .more-work .thumbs img { border-color: var(--steel-600); }
+    .more-work .thumbs { grid-template-columns: repeat(2, minmax(0, 1fr)); max-width: 360px; }
+    .more-work .thumbs.tall img { aspect-ratio: 3 / 4; }
 
-    /* Projects */
-    .project + .project { margin-top: 28px; }
-    .project .num { font-family: "Barlow Semi Condensed", sans-serif; color: var(--accent-text); font-weight: 700; font-size: var(--fs-sm); letter-spacing: 1.5px; }
-    .project h3 { font-size: var(--fs-xl); margin: 2px 0 8px; }
-    .project > p { color: var(--muted); margin: 0 0 16px; }
-    .project .tags { margin-bottom: 18px; }
-    .tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
-    .tabs button { font: 600 var(--fs-sm) "Inter", sans-serif; min-height: 44px; padding: 10px 14px; border-radius: 8px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); cursor: pointer; }
-    .tabs button[aria-selected="true"] { background: var(--dark); color: #fff; border-color: var(--dark); }
-    .dash img { width: 100%; border-radius: 10px; border: 1px solid var(--line); cursor: zoom-in; }
-    /* Pratinjau langsung web app (iframe) — otomatis ikut versi terbaru website */
-    .live-frame { border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: var(--dark); }
-    .live-bar { display: flex; align-items: center; gap: 12px; padding: 10px 14px; background: var(--dark-2); color: #c9ccd3; font-size: var(--fs-xs); }
-    .live-dots { display: flex; gap: 6px; }
-    .live-dots i { width: 10px; height: 10px; border-radius: 50%; background: #3a3f48; }
-    .live-url { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .live-badge { display: inline-flex; align-items: center; gap: 6px; font-weight: 700; color: #fff; }
-    .live-badge::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--success); }
-    .live-frame iframe { display: block; width: 100%; height: 640px; border: 0; background: #f9f9f7; }
-    .live-links { display: flex; flex-wrap: wrap; gap: 12px 28px; }
-    .print-only { display: none; }
-    .data-note { margin: -4px 0 14px; padding: 8px 12px; border-left: 3px solid var(--accent); background: var(--accent-soft); border-radius: 8px; font-size: var(--fs-sm); color: var(--ink); }
-    .insight { margin: 12px 0 0; padding: 12px 16px; border-left: 4px solid var(--accent); background: var(--bg); border-radius: 8px; font-size: var(--fs-base); }
+    /* Temuan & rekomendasi (studi kasus Power BI) */
+    .findings { width: 100%; max-width: 1040px; margin-top: 28px; border-collapse: collapse; }
+    .findings caption { caption-side: top; text-align: left; font-family: var(--display); font-stretch: 125%; font-variation-settings: "wdth" 125; font-weight: 800; font-size: var(--t-lg); padding-bottom: 12px; }
+    .findings th { text-align: left; font-size: var(--t-sm); color: var(--on-dark-2); font-weight: 700; padding: 0 16px 8px 0; border-bottom: 1px solid var(--steel-600); }
+    .findings td { vertical-align: top; padding: 12px 16px 12px 0; border-bottom: 1px solid var(--steel-800); font-size: 15px; }
+    .findings td:first-child { width: 13%; font-weight: 700; }
+    .findings td:nth-child(2) { width: 40%; color: var(--on-dark-2); }
+    .findings .hl { color: var(--yellow); }
+    .findings-note { margin: 10px 0 0; font-size: var(--t-sm); }
 
-    /* Education */
-    .edu { display: flex; gap: 22px; align-items: center; }
-    .edu .badge { flex: none; width: 74px; height: 74px; border-radius: 16px; background: var(--dark); color: var(--accent); display: grid; place-items: center; font-family: "Barlow Semi Condensed", sans-serif; font-weight: 700; font-size: var(--fs-xl); }
-    .edu h3 { font-size: var(--fs-xl); }
-    .edu p { margin: 4px 0 0; color: var(--muted); }
-    .edu p b { color: var(--ink); }
+    /* Keahlian */
+    .skills { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 40px; }
+    .skills h3 { font-size: var(--t-md); font-weight: 800; padding-bottom: 10px; border-bottom: 3px solid var(--yellow); margin-bottom: 4px; }
+    .skills ul { list-style: none; margin: 0; padding: 0; }
+    .skills li { padding: 7px 0; border-bottom: 1px solid var(--rule); font-size: 15px; }
+    .used { display: block; margin-top: 2px; font-size: 13px; color: var(--ink-2); }
+    .used a { color: inherit; text-underline-offset: 2px; }
+    .used a:hover { color: var(--yellow-text); }
+    .software { margin-top: 28px; max-width: 84ch; }
+    .software h3 { font-size: var(--t-md); font-weight: 800; }
+    .software p { margin: 8px 0 0; }
 
-    /* Certificates */
-    .certs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
-    .cert { margin: 0; background: var(--bg); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
-    .cert img { width: 100%; aspect-ratio: 4 / 3; object-fit: contain; background: var(--surface); cursor: zoom-in; border-bottom: 1px solid var(--line); }
-    .cert figcaption { padding: 10px 12px 12px; font-size: var(--fs-sm); line-height: 1.4; }
-    .cert figcaption b { display: block; }
-    .cert figcaption span { color: var(--muted); }
+    /* Penghargaan, pelatihan, organisasi */
+    .award { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 32px; align-items: center; background: var(--steel-900); color: var(--on-dark); border-radius: 10px; padding: 28px; max-width: 1040px; position: relative; overflow: hidden; }
+    .award::after { content: ""; position: absolute; right: 0; top: 0; bottom: 0; width: 10px; background: var(--stripe); }
+    .medal { display: inline-flex; align-items: center; gap: 8px; font-weight: 700; color: var(--ink); background: linear-gradient(135deg, #f4f5f7, #b8bec8); padding: 6px 14px; border-radius: 999px; font-size: var(--t-sm); }
+    .award h3 { font-size: var(--t-xl); font-weight: 800; margin: 16px 0 12px; }
+    .award p { color: var(--on-dark-2); }
+    .award p b { color: var(--on-dark); }
+    .award img { border-radius: 6px; cursor: zoom-in; background: #fff; }
+    .sub { margin-top: 48px; }
+    .sub > h2 { font-size: var(--t-xl); font-weight: 800; margin-bottom: 8px; }
+    .log.compact { padding: 22px 0; }
+    .log.compact .log-body h3 { font-size: var(--t-lg); }
+    .org-head { display: flex; align-items: center; gap: 14px; margin: 4px 0 6px; }
+    .org-head p { margin: 0; }
+    .org-logo { flex: none; width: 88px; padding: 4px; background: #fff; border: 1px solid var(--rule); border-radius: 8px; }
+    .org-logo img { width: 100%; }
+    .cert-mini { grid-template-columns: 220px; }
+    .edu-head { display: flex; align-items: center; gap: 18px; }
+    .edu-logo { flex: none; width: 116px; padding: 6px; background: #fff; border: 1px solid var(--rule); border-radius: 8px; }
+    .edu-logo img { width: 100%; }
 
-    /* Contact */
-    .contact { background: var(--dark); color: #fff; position: relative; }
+    /* Sertifikat */
+    .certs { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; max-width: 900px; }
+    .cert { margin: 0; background: #fff; border: 1px solid var(--rule); border-radius: 8px; overflow: hidden; }
+    .cert img { width: 100%; aspect-ratio: 4 / 3; object-fit: contain; background: #fff; border-bottom: 1px solid var(--rule); cursor: zoom-in; }
+    .cert figcaption { padding: 8px 10px 10px; font-size: 13px; line-height: 1.4; }
+    .cert figcaption span { display: block; color: var(--ink-2); }
+    .cert-group + .cert-group { margin-top: 26px; }
+    .cert-group h3 { font-size: var(--t-md); font-weight: 800; margin-bottom: 10px; }
+    .collapsed-all:not(.expanded) > * { display: none; }
+
+    /* Kontak */
+    .contact { position: relative; padding-top: 68px; }
     .contact::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 12px; background: var(--stripe); }
-    .contact .eyebrow { color: rgba(255,255,255,.7); }
-    .contact .eyebrow b { color: var(--accent); }
-    .contact .sec-head p { color: rgba(255,255,255,.7); }
-    .contact-grid { display: grid; grid-template-columns: 1.5fr repeat(4, 1fr); gap: 16px; }
-    .contact-card { display: block; text-decoration: none; padding: 22px; border-radius: var(--radius); background: var(--dark-2); border: 1px solid rgba(255,255,255,.08); transition: transform .2s; }
-    a.contact-card:hover { border-color: var(--accent); transform: translateY(-2px); }
-    .contact-card small { display: block; color: var(--accent); font-weight: 600; letter-spacing: 1px; text-transform: uppercase; font-size: var(--fs-xs); margin-bottom: 6px; }
-    .contact-card span { word-break: break-word; }
-    .contact-card span.one-line { white-space: nowrap; word-break: normal; }
-    .contact .loc { margin: 24px 0 0; color: rgba(255,255,255,.6); font-size: var(--fs-sm); }
-    footer { background: var(--footer); color: rgba(255,255,255,.55); text-align: center; font-size: var(--fs-sm); padding: 22px 0; }
+    .contact h2 { font-size: var(--t-2xl); font-weight: 900; max-width: 18ch; }
+    .contact .lede { color: var(--on-dark-2); font-size: var(--t-base); max-width: 60ch; margin-top: 12px; }
+    .mail { display: inline-block; margin: 14px 0 24px; font-family: var(--display); font-stretch: 125%; font-variation-settings: "wdth" 125; font-weight: 700; font-size: clamp(16px, 1.6vw, 20px); color: var(--yellow); text-decoration: none; border-bottom: 2px solid var(--yellow); overflow-wrap: anywhere; }
+    .mail:hover { color: var(--on-dark); border-color: var(--on-dark); }
+    .contact-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+    .contact-grid a { display: block; padding: 14px 16px; border-radius: 8px; background: var(--steel-800); border: 1px solid var(--steel-600); text-decoration: none; transition: transform .2s; }
+    .contact-grid a:hover { border-color: var(--yellow); transform: translateY(-2px); }
+    .contact-grid small { display: block; color: var(--on-dark-2); font-size: var(--t-sm); margin-bottom: 4px; }
+    .contact-grid span { font-weight: 700; }
+    .contact .where { margin-top: 24px; color: var(--on-dark-2); font-size: var(--t-sm); }
+    footer { background: #151A1F; color: var(--on-dark-2); font-size: var(--t-sm); padding: 22px 0; }
 
-    /* Back to top */
-    .to-top { position: fixed; right: 18px; bottom: 18px; width: 44px; height: 44px; border-radius: 50%; border: 0; background: var(--accent); color: var(--accent-ink); font-size: 20px; font-weight: 700; cursor: pointer; box-shadow: 0 6px 18px rgba(0,0,0,.25); opacity: 0; visibility: hidden; pointer-events: none; transition: opacity .2s, visibility .2s; z-index: 40; }
-    .to-top.show { opacity: 1; visibility: visible; pointer-events: auto; }
+    /* Tombol ke atas */
+    .to-top { position: fixed; right: 18px; bottom: 18px; width: 44px; height: 44px; border-radius: 50%; border: 0; background: var(--yellow); color: var(--yellow-ink); font-size: 20px; font-weight: 700; cursor: pointer; box-shadow: 0 6px 18px rgba(0,0,0,.25); opacity: 0; visibility: hidden; transition: opacity .2s, visibility .2s; z-index: 40; }
+    .to-top.show { opacity: 1; visibility: visible; }
 
-    /* Lightbox */
+    /* Pratinjau gambar */
     dialog.lightbox { border: 0; padding: 0; background: transparent; max-width: 100vw; max-height: 100vh; width: 100vw; height: 100vh; overscroll-behavior: contain; }
     body:has(dialog.lightbox[open]) { overflow: hidden; }
-    dialog.lightbox::backdrop { background: rgba(8,9,11,.92); }
-    .lb-inner { height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 56px 64px 20px; }
-    .lb-inner img { max-width: 100%; max-height: calc(100vh - 120px); border-radius: 8px; background: var(--surface); }
-    .lb-inner p { color: #fff; text-align: center; margin: 12px 0 0; font-size: var(--fs-sm); }
-    .lb-inner p small { color: rgba(255,255,255,.55); margin-left: 8px; }
-    .lb-btn { position: fixed; background: rgba(255,255,255,.1); border: 0; color: #fff; width: 48px; height: 48px; border-radius: 50%; font-size: 26px; cursor: pointer; }
-    .lb-btn:hover { background: var(--accent); color: var(--accent-ink); }
+    dialog.lightbox::backdrop { background: rgba(21,26,31,.94); }
+    .lb-inner { height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 56px 64px 20px; margin: 0; }
+    .lb-inner img { max-width: 100%; max-height: calc(100vh - 120px); border-radius: 6px; background: #fff; }
+    .lb-inner figcaption { color: #fff; text-align: center; margin-top: 12px; font-size: var(--t-sm); }
+    .lb-inner small { color: rgba(255,255,255,.6); margin-left: 8px; }
+    .lb-btn { position: fixed; width: 48px; height: 48px; border-radius: 50%; border: 0; background: rgba(255,255,255,.1); color: #fff; font-size: 26px; cursor: pointer; }
+    .lb-btn:hover { background: var(--yellow); color: var(--yellow-ink); }
     .lb-close { top: 14px; right: 14px; }
     .lb-prev { left: 12px; top: 50%; transform: translateY(-50%); }
     .lb-next { right: 12px; top: 50%; transform: translateY(-50%); }
 
-    /* Animasi muncul saat di-scroll */
-    .js .reveal { opacity: 0; transform: translateY(24px); transition: opacity .6s ease, transform .6s ease; }
-    .js .reveal.in { opacity: 1; transform: none; }
     @media (prefers-reduced-motion: reduce) {
-      .js .reveal { opacity: 1; transform: none; transition: none; }
       html { scroll-behavior: auto; }
-      .btn:hover, .gallery img:hover, a.contact-card:hover { transform: none; }
+      .js .track .bar, .js .track .milestone .bar { animation: none; }
+      .btn:hover, .contact-grid a:hover { transform: none; }
     }
 
-    /* ---------- Responsive ---------- */
+    /* ---------- Responsif ---------- */
+    @media (max-width: 1100px) {
+      .brand-full { display: none; }
+      .brand-short { display: inline; }
+    }
+    @media (max-width: 1023px) and (min-width: 721px) {
+      .nav-cv { display: none; }
+    }
     @media (max-width: 960px) {
-      .grid-3, .contact-grid { grid-template-columns: repeat(2, 1fr); }
-      .contact-card:first-child { grid-column: 1 / -1; }
-      .job, .award, .about-grid { grid-template-columns: 1fr; }
+      .hero-top { grid-template-columns: minmax(0, 1fr) minmax(0, 220px); gap: 28px; }
+      .hero-bg { width: 70%; }
+      .about { grid-template-columns: 1fr; gap: 32px; }
+      .more-work { grid-template-columns: 1fr; }
+      .skills { grid-template-columns: 1fr 1fr; }
+      .award { grid-template-columns: 1fr; }
+      .contact-grid { grid-template-columns: 1fr 1fr; }
+      .life-axis, .lane { grid-template-columns: 7.5rem minmax(0, 1fr); }
+      .lanes-inner { left: 7.5rem; }
+      .certs { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .track .lbl small { display: none; }
+    }
+    @media (max-width: 760px) {
+      .annot, .annot[data-tab]:not([data-tab="overview"]) { padding-top: 0; display: flex; flex-direction: column; }
+      .annot img { order: -1; }
+      .ann { position: static; transform: none; width: auto; max-width: none; height: auto; padding: 8px 0 0 14px; border-left: 2px solid var(--annot); margin-top: 8px; }
+      .ann p { position: static; text-align: left; }
+      .ann::before, .ann::after { display: none; }
+      .findings thead { display: none; }
+      .findings, .findings tbody, .findings tr, .findings td { display: block; width: auto !important; }
+      .findings tr { padding: 10px 0; border-bottom: 1px solid var(--steel-600); }
+      .findings td { border: 0; padding: 3px 0; }
+      .findings td:not(:first-child)::before { content: attr(data-label) ": "; font-weight: 700; color: var(--on-dark); }
     }
     @media (max-width: 720px) {
       .menu-btn { display: block; }
-      .nav ul { display: none; position: absolute; top: 60px; left: 0; right: 0; flex-direction: column; gap: 0; background: var(--dark); padding: 8px 20px 16px; }
+      .nav-right { gap: 8px; }
+      .nav-cv { min-height: 44px; }
+      .nav ul { display: none; position: absolute; top: 56px; left: 0; right: 0; flex-direction: column; gap: 0; background: var(--steel-900); border-bottom: 1px solid var(--steel-600); padding: 4px var(--gutter) 12px; }
       .nav ul.open { display: flex; }
-      .nav ul a { display: block; padding: 10px 0; border: 0; }
-      .hero .wrap { grid-template-columns: 1fr; padding-top: 48px; padding-bottom: 64px; text-align: center; }
-      .hero-bg { width: 100%; bottom: auto; height: 340px; opacity: .6; background-position: center; -webkit-mask-image: linear-gradient(#000 60%, transparent); mask-image: linear-gradient(#000 60%, transparent); }
-      .photo-wrap { grid-row: 1; width: 210px; }
-      .chips, .btn-row { justify-content: center; }
-      .hero .tagline { margin-left: auto; margin-right: auto; }
-      .stats .wrap { grid-template-columns: repeat(2, 1fr); gap: 18px; }
-      section { padding: 64px 0; }
-      .grid-3, .grid-2, .contact-grid { grid-template-columns: 1fr; }
-      .gallery, .gallery.g4 { grid-template-columns: repeat(2, 1fr); }
-      .certs { grid-template-columns: repeat(2, 1fr); }
+      .nav ul a { display: block; padding: 12px 0; border-bottom: 1px solid var(--steel-800); }
+      .hero { padding-top: 32px; }
+      .hero-top { grid-template-columns: 1fr; }
+      .hero-bg { width: 100%; height: 360px; opacity: .55; }
+      .portrait { grid-row: 1; justify-self: center; width: 180px; margin: 14px auto 18px; }
+      .portrait figcaption { bottom: -4px; }
+      /* Di HP grafik riwayat berubah jadi daftar berurutan dengan tanggal */
+      .life-axis, .lanes-inner { display: none; }
+      .lane { display: block; border-top: 0; padding: 10px 0 4px; min-height: 0; }
+      .lane-name { display: block; margin-bottom: 4px; }
+      .track { background: none; }
+      .track li { position: static; width: auto; }
+      .track a { position: static; display: flex; gap: 10px; align-items: baseline; padding: 6px 0 6px 14px; border-left: 3px solid var(--h-bar); }
+      .lane-work .track a { border-left-color: var(--h-work); }
+      .track .bar { display: none; }
+      .track .lbl { position: static; white-space: normal; }
+      .track .lbl small, .lane-work .lbl small { display: inline; }
+      .track .date { position: static; width: auto; height: auto; overflow: visible; clip-path: none; white-space: nowrap; color: var(--h-fg-2); font-size: var(--t-sm); order: -1; min-width: 6.5rem; }
+      section { padding: 60px 0; }
+      .log { grid-template-columns: 1fr; padding: 32px 0; }
+      .lead-photo img { aspect-ratio: 16 / 10; }
+      .skills { grid-template-columns: 1fr; gap: 28px; }
+      .certs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .thumbs, .more-work .thumbs { grid-template-columns: repeat(2, minmax(0, 1fr)); max-width: none; }
+      .live iframe { height: 520px; }
       .award { padding: 24px; }
-      .live-frame iframe { height: 560px; }
+      .contact-grid { grid-template-columns: 1fr; }
       .lb-inner { padding: 64px 12px 84px; }
       .lb-prev, .lb-next { top: auto; bottom: 16px; transform: none; }
       .lb-prev { left: calc(50% - 60px); }
       .lb-next { right: calc(50% - 60px); }
-      .contact-card span.one-line { font-size: clamp(13px, 4.2vw, 16px); }
     }
 
     /* ---------- Versi cetak / PDF (Ctrl + P → Save as PDF) ---------- */
-    .dash-print { display: none; }
+    .dash-print, .print-only { display: none; }
     @media print {
-      @page { size: A4; margin: 12mm 0; }
+      @page { size: A4; margin: 10mm 0; }
       @page :first { margin-top: 0; }
       * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-      .nav, .to-top, .lightbox, .btns, .show-more, .tabs, .dash, .screen-only { display: none !important; }
-      .js .reveal { opacity: 1; transform: none; transition: none; }
-      .collapsible:not(.expanded) > :nth-child(n+5) { display: block; }
-      .hero .wrap { padding-top: 32px; padding-bottom: 44px; }
-      .photo-wrap { width: 220px; }
-      .stats .wrap { padding-top: 18px; padding-bottom: 18px; }
-      section { padding: 32px 0; break-before: page; }
-      #about { break-before: auto; }
-      .sub-head { margin: 36px 0 20px; }
-      .grid-3 { grid-template-columns: repeat(3, 1fr); }
-      .gallery img:hover { transform: none; box-shadow: none; }
-      .dash-print { display: grid; gap: 16px; }
+      html { scroll-behavior: auto; }
+      .nav, .to-top, .lightbox, .skip-link, .tabs, #dash-panel, .show-more, .live { display: none !important; }
+      .js .track .bar, .js .track .milestone .bar { animation: none; }
+      /* Sertifikat kegiatan kampus ikut tercetak; galeri karya lain cukup 4 gambar awal */
+      .collapsed-all:not(.expanded) > * { display: block; }
+      section { padding: 26px 0; }
+      #projects { break-before: page; }
+      .sec-head { break-inside: avoid; break-after: avoid; }
+      /* Grafik riwayat di kertas A4 (lebih sempit dari layar): label diperkecil supaya tidak bertabrakan */
+      .life-axis, .lane { grid-template-columns: 6.5rem minmax(0, 1fr); }
+      .lanes-inner { left: 6.5rem; }
+      .lane-name, .track .lbl { font-size: 11px; }
+      .track .lbl small { display: none; }
+      /* Label yang berdekatan ditaruh di sisi kiri batangnya (area itu kosong) */
+      .track .milestone .lbl { left: auto; right: 10px; }
+      .lane-org li:first-child .lbl { left: auto; right: 0; }
+      .case { padding-bottom: 20px; margin-bottom: 20px; }
+      .hero { padding-top: 28px; }
+      .about { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); }
+      .skills { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .more-work { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .award { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+      .certs { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+      .lead-photo { max-width: 380px; }
+      .log-body > .thumbs { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+      .cert-mini { grid-template-columns: 140px; }
+      /* Dashboard: kelima halaman dicetak berurutan beserta insight-nya */
+      .dash-print { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 16px; }
+      .dash-print figure { margin: 0; }
+      .dash-print img { width: 100%; border-radius: 6px; }
+      .dash-print figcaption { margin-top: 6px; font-size: 12.5px; color: var(--on-dark-2); }
+      .dash-print figcaption b { color: var(--yellow); }
       .print-only { display: block; }
-      .live-print { width: 100%; border-radius: 10px; border: 1px solid var(--line); margin-bottom: 8px; }
-      .live-links { display: none; }
-      .dash-print img { width: 100%; border-radius: 10px; border: 1px solid var(--line); }
-      .dash-print figcaption { margin-top: 8px; padding: 10px 14px; border-left: 4px solid var(--accent); background: var(--bg); border-radius: 8px; font-size: var(--fs-sm); }
-      .card, .cert, .focus li, .edu, .award, .note, .contact-card, .gallery img, .dash-print figure, .sec-head { break-inside: avoid; }
-      .project { break-inside: auto; }
-      .project + .project { break-inside: avoid; }
-      .grid-2 .gallery img { aspect-ratio: 16 / 9; }
-      h2, h3, .sec-head, .sub-head, .pos, .meta { break-after: avoid; }
-      /* Halaman A4 lebih sempit dari layar desktop: pertahankan layout 2 kolom agar tidak boros halaman */
-      body { background: #fff; }
-      #experience, #contact { break-before: auto; }
-      .about-grid { grid-template-columns: 1.6fr 1fr; }
-      .job { grid-template-columns: 1fr 1fr; gap: 24px; }
-      .award { grid-template-columns: 1fr 1.1fr; }
-      .tag { font-size: var(--fs-xs); padding: 4px 10px; }
-      .certs { grid-template-columns: repeat(6, 1fr); gap: 10px; }
-      .cert figcaption { font-size: var(--fs-xs); padding: 8px; }
+      .shot-print { width: 44%; margin-top: 14px; border-radius: 8px; border: 1px solid var(--steel-600); }
+      h2, h3, .sec-head, .case-head { break-after: avoid; }
+      .log-meta, .focus li, .findings tr, .cert, .award, .skills > div, .more-work article, figure, .result, .thumbs, li { break-inside: avoid; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Ikon SVG (Lucide) yang dipakai ulang lewat <use href="#..."> -->
   <svg class="sprite" aria-hidden="true">
     <symbol id="i-pin" viewBox="0 0 24 24"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></symbol>
     <symbol id="i-award" viewBox="0 0 24 24"><path d="m15.477 12.89 1.515 8.526a.5.5 0 0 1-.81.47l-3.58-2.687a1 1 0 0 0-1.197 0l-3.586 2.686a.5.5 0 0 1-.81-.469l1.514-8.526"/><circle cx="12" cy="8" r="6"/></symbol>
+    <symbol id="i-down" viewBox="0 0 24 24"><path d="M12 3v12m0 0-5-5m5 5 5-5M5 21h14"/></symbol>
   </svg>
 
   <a class="skip-link" href="#main">Langsung ke isi</a>
 
-  <!-- ===================== NAVBAR ===================== -->
-  <nav class="nav">
+  <nav class="nav" aria-label="Navigasi utama">
     <div class="wrap">
-      <a href="#top" class="brand" translate="no">RIZKY<span>.</span></a>
-      <button class="menu-btn" aria-label="Buka menu" aria-expanded="false" aria-controls="nav-menu">☰</button>
+      <a href="#top" class="brand" translate="no"><span class="brand-full">Rizky B. E. Sugiharto</span><span class="brand-short">Rizky</span></a>
+      <div class="nav-right">
       <ul id="nav-menu">
         <li><a href="#about">Tentang</a></li>
         <li><a href="#experience">Pengalaman</a></li>
@@ -366,449 +503,525 @@
         <li><a href="#education">Pendidikan</a></li>
         <li><a href="#contact">Kontak</a></li>
       </ul>
+      <a class="nav-cv" href="assets/CV-Rizky-Bagus-Eka-Sugiharto.pdf?v=20261013" target="_blank" rel="noopener"><svg class="ico" aria-hidden="true"><use href="#i-down"/></svg>Download CV</a>
+      <button class="menu-btn" aria-expanded="false" aria-controls="nav-menu">Menu</button>
+      </div>
     </div>
+    <div class="nav-progress" aria-hidden="true"><span></span></div>
   </nav>
 
   <main id="main">
 
-  <!-- ===================== HERO ===================== -->
-  <header class="hero" id="top">
-    <div class="hero-bg" aria-hidden="true"></div>
-    <div class="wrap">
-      <div class="photo-wrap">
-        <img class="photo" src="assets/img/profile.webp" width="900" height="900" fetchpriority="high" alt="Foto Rizky Bagus Eka Sugiharto">
-        <div class="open-badge"><i></i>Open to work</div>
-      </div>
-      <div>
-        <div class="eyebrow">Plant &amp; Maintenance · Heavy Equipment · Mining</div>
-        <h1 translate="no">Rizky Bagus Eka Sugiharto</h1>
-        <p class="role">Maintenance Engineer &nbsp;|&nbsp; Reliability Analyst &nbsp;|&nbsp; Heavy Equipment</p>
-        <p class="tagline">Heavy equipment data, organized for better maintenance planning.</p>
-        <div class="chips">
-          <span>PA · MTBF · MTTR</span><span>ERP Ellipse</span><span>Power BI</span><span>BMC Heavy Equipment</span><span>Dasar K3 Pertambangan</span>
-        </div>
-        <div class="btns">
-          <div class="btn-row">
-            <a class="btn primary" href="#contact">Hubungi Saya</a>
-            <a class="btn ghost" href="https://www.linkedin.com/in/rizkybagusekasugiharto" target="_blank" rel="noopener">LinkedIn</a>
+    <!-- ===================== HERO ===================== -->
+    <header class="hero" id="top">
+      <div class="hero-bg" aria-hidden="true"></div>
+      <div class="wrap">
+        <div class="hero-top">
+          <div>
+            <p class="kicker">Maintenance &amp; Reliability Engineer untuk alat berat tambang</p>
+            <h1 translate="no">Rizky Bagus Eka Sugiharto</h1>
+            <p class="tagline">Heavy equipment data, organized for better maintenance planning.</p>
+            <div class="btns">
+              <a class="btn primary" href="#contact">Hubungi saya</a>
+              <a class="btn" href="assets/CV-Rizky-Bagus-Eka-Sugiharto.pdf?v=20261013" target="_blank" rel="noopener"><svg class="ico" aria-hidden="true"><use href="#i-down"/></svg>Download CV</a>
+              <a class="btn" href="assets/Portfolio-Rizky-Bagus-Eka-Sugiharto.pdf?v=20261028" target="_blank" rel="noopener"><svg class="ico" aria-hidden="true"><use href="#i-down"/></svg>Download Portfolio</a>
+              <a class="btn" href="https://www.linkedin.com/in/rizkybagusekasugiharto" target="_blank" rel="noopener">LinkedIn</a>
+            </div>
           </div>
-          <div class="btn-row">
-            <a class="btn ghost" href="assets/CV-Rizky-Bagus-Eka-Sugiharto.pdf?v=20261013" target="_blank" rel="noopener">
-              <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0-5-5m5 5 5-5M5 21h14"/></svg>Download CV
-            </a>
-            <a class="btn ghost" href="assets/Portfolio-Rizky-Bagus-Eka-Sugiharto.pdf?v=20261016" target="_blank" rel="noopener">
-              <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0-5-5m5 5 5-5M5 21h14"/></svg>Download Portfolio
-            </a>
+          <figure class="portrait">
+            <img src="assets/img/profile.webp" width="900" height="900" fetchpriority="high" alt="Foto Rizky Bagus Eka Sugiharto">
+            <figcaption>Terbuka untuk kerja</figcaption>
+          </figure>
+        </div>
+
+        <!-- Riwayat karier sebagai component life chart. --s / --e = bulan ke-n sejak Jan 2021 -->
+        <div class="life" aria-labelledby="life-title">
+          <div class="life-head">
+            <h2 id="life-title">Riwayat servis</h2>
+            <p>Garis putus hijau menandai posisi sekarang (Okt 2026): siap kerja. Klik batang untuk melihat detailnya.</p>
           </div>
-        </div>
-      </div>
-    </div>
-  </header>
-
-  <div class="stats">
-    <div class="wrap">
-      <div><b>3.45</b><span>GPA S1 Teknik Mesin</span></div>
-      <div><b>3 Site</b><span>Data alat berat yang dianalisis</span></div>
-      <div><b>Perak</b><span>Medali NASPO 2023</span></div>
-      <div><b>15+</b><span>Sertifikat &amp; Pelatihan</span></div>
-    </div>
-  </div>
-
-  <!-- ===================== 01 TENTANG ===================== -->
-  <section id="about">
-    <div class="wrap">
-      <div class="sec-head reveal">
-        <div class="eyebrow"><b>01</b> / Tentang</div>
-        <h2>Halo, Saya Rizky</h2>
-      </div>
-      <div class="about-grid">
-        <div class="reveal">
-          <p>Sarjana Teknik Mesin dengan pengalaman di maintenance engineering, reliability analysis, dan pipeline integrity pada industri energi dan alat berat. Saya mengolah data teknis menjadi dasar keputusan perawatan — mulai dari KPI reliability (PA, MTBF, MTTR, Scheduled Maintenance) hingga evaluasi integritas pipa (Corrosion Rate, MAWP, Remaining Service Life) berdasarkan standar ASME.</p>
-          <p>Terbiasa memakai Advanced Excel dan ERP Ellipse untuk mengelola data operasional berskala besar, mengotomasi pelaporan, dan membangun database monitoring performa aset. Detail-oriented, cepat beradaptasi, dan fokus pada keselamatan, keandalan, serta continuous improvement.</p>
-        </div>
-        <ul class="focus reveal">
-          <li><b>Reliability Analysis</b><span>PA, MTBF, MTTR, Scheduled Maintenance, pareto problem</span></li>
-          <li><b>Asset &amp; Pipeline Integrity</b><span>UTT, Corrosion Rate, MAWP, RSL — ASME B31</span></li>
-          <li><b>Maintenance Data &amp; Reporting</b><span>ERP Ellipse, Advanced Excel, Power BI dashboard</span></li>
-        </ul>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===================== 02 PENGALAMAN ===================== -->
-  <section id="experience" class="alt">
-    <div class="wrap">
-      <div class="sec-head reveal">
-        <div class="eyebrow"><b>02</b> / Pengalaman</div>
-        <h2>Pengalaman Kerja</h2>
-      </div>
-
-      <article class="job">
-        <div class="reveal">
-          <h3>PT Darma Henwa Tbk</h3>
-          <div class="pos">Plant &amp; Maintenance — PLM Officer Intern</div>
-          <div class="meta"><span class="date">Nov 2025 – Mei 2026</span><span class="with-ico"><svg class="ico" aria-hidden="true"><use href="#i-pin"/></svg>Kebayoran Baru, Jakarta Selatan</span></div>
-          <p class="muted lead">Kontraktor pertambangan nasional, bagian dari Bakrie Group. Program Pemagangan Lulusan Perguruan Tinggi (Kemnaker).</p>
-          <ul>
-            <li>Mengelola dan menganalisis data perawatan alat berat dari <b>3 site</b> di Kalimantan Selatan &amp; Timur untuk mengidentifikasi pareto problem dan tren kegagalan komponen.</li>
-            <li>Menghitung serta memonitor KPI maintenance seperti Physical Availability (PA), MTBF, MTTR, dan Scheduled Maintenance (SM).</li>
-            <li>Menyusun laporan mingguan terkait Hours Meter (HM), utilisasi unit, dan performa operasional menggunakan Microsoft Excel dan ERP Ellipse.</li>
-            <li>Mengembangkan formula dan automasi pengolahan data untuk menghasilkan dataset yang terstruktur dan siap dianalisis.</li>
-            <li>Menyusun logika klasifikasi status komponen (In Service &amp; Scrap) dari hingga 20 siklus riwayat penggantian untuk analisis umur pakai komponen.</li>
-          </ul>
-          <div class="note"><svg class="ico" aria-hidden="true"><use href="#i-award"/></svg><span>Lulus program pemagangan dengan predikat <b>Sangat Baik</b></span></div>
-        </div>
-        <div class="gallery g2 reveal">
-          <img loading="lazy" class="wide r-16-10" src="assets/img/dh-team.webp" alt="Bersama tim di kantor PT Darma Henwa">
-          <img loading="lazy" class="tall" src="assets/img/dh-group.webp" alt="Bersama rekan peserta pemagangan PT Darma Henwa">
-          <img loading="lazy" class="tall" src="assets/img/dh-moment.webp" alt="Momen di PT Darma Henwa">
-          <img loading="lazy" class="contain wide r-16-10" src="assets/img/dh-cert.webp" alt="Sertifikat Pemagangan Kemnaker × PT Darma Henwa — PLM Officer">
-        </div>
-      </article>
-
-      <article class="job">
-        <div class="reveal">
-          <h3>PT PLN Indonesia Power — UBP Kamojang</h3>
-          <div class="pos">Field Practice Intern · PLTP Kamojang</div>
-          <div class="meta"><span class="date">September 2024</span><span class="with-ico"><svg class="ico" aria-hidden="true"><use href="#i-pin"/></svg>Ibun, Bandung, Jawa Barat</span></div>
-          <ul>
-            <li>Melakukan inspeksi lapangan pada fasilitas Pembangkit Listrik Tenaga Panas Bumi: Receiving Header, Separator, Condenser, Cooling Tower, Turbine, dan Generator.</li>
-            <li>Mengolah data Ultrasonic Thickness Testing (UTT) untuk mengevaluasi ketebalan pipa pada section lurus dan bend 90°.</li>
-            <li>Melakukan perhitungan Corrosion Rate (CR), Remaining Service Life (RSL), dan MAWP berdasarkan standar ASME B31 “Power Piping Code”.</li>
-            <li>Membaca dan menginterpretasikan P&amp;ID serta Piping Layout untuk mendukung kegiatan inspeksi dan analisis teknis.</li>
-            <li>Menyusun laporan hasil inspeksi sebagai dasar rekomendasi perawatan dan peningkatan keandalan aset.</li>
-          </ul>
-          <div class="note"><svg class="ico" aria-hidden="true"><use href="#i-award"/></svg><span>Nilai praktik kerja <b>85,92 (A – Baik Sekali)</b></span></div>
-        </div>
-        <div class="gallery reveal">
-          <img loading="lazy" class="full r-16-9" src="assets/img/pln-field-team.webp" alt="Bersama tim PKL di area cooling tower PLTP Kamojang">
-          <img loading="lazy" class="tall" src="assets/img/pln-site.webp" alt="Inspeksi lapangan di PLTP Kamojang">
-          <img loading="lazy" class="tall" src="assets/img/pln-presentation.webp" alt="Presentasi hasil praktik kerja lapangan">
-          <img loading="lazy" class="tall" src="assets/img/pln-team.webp" alt="Bersama tim PLN Indonesia Power UBP Kamojang">
-          <img loading="lazy" class="contain wide r-16-11" src="assets/img/pln-cert.webp" alt="Sertifikat Praktik Kerja Lapangan PLN Indonesia Power">
-          <img loading="lazy" class="contain fill" width="1800" height="1272" src="assets/img/pln-assessment.webp" alt="Lembar penilaian praktik kerja lapangan">
-        </div>
-      </article>
-    </div>
-  </section>
-
-  <!-- ===================== 03 PROJECT ===================== -->
-  <section id="projects">
-    <div class="wrap">
-      <div class="sec-head reveal">
-        <div class="eyebrow"><b>03</b> / Project</div>
-        <h2>Portofolio Project</h2>
-      </div>
-
-      <article class="project card reveal">
-        <div class="num">PROJECT 01</div>
-        <h3>Fleet Maintenance &amp; Reliability Dashboard — Power BI</h3>
-        <p>Dashboard interaktif untuk monitoring armada alat berat (data dummy, periode 2025): KPI reliability, backlog, biaya, dan kepatuhan jadwal PM — 5 halaman analisis.<span class="screen-only"> Klik tab untuk melihat tiap halaman.</span></p>
-        <p class="data-note">Data dummy sengaja disimulasikan sebagai armada dengan reliability rendah (PA 61,5%, di bawah target umum 85–90%) untuk latihan analisis akar masalah.</p>
-        <div class="tags"><span class="tag">Power BI</span><span class="tag">DAX &amp; Power Query</span><span class="tag">MTBF · MTTR · PA</span><span class="tag">Backlog &amp; Cost</span></div>
-        <div class="tabs" role="tablist" aria-label="Halaman dashboard Power BI">
-          <button role="tab" id="tab-overview" aria-controls="dash-panel" data-img="pbi-overview" data-insight="Physical Availability 61,5%. MTBF 97,6 jam, MTTR 15,6 jam, dari total 739 work order.">Overview</button>
-          <button role="tab" id="tab-reliability" aria-controls="dash-panel" data-img="pbi-reliability" data-insight="BD-001 memiliki MTBF terendah (56,8 jam). DT-001 memiliki MTTR tertinggi (17,9 jam). Breakdown Maintenance menyumbang 41,6% dari total downtime.">KPI Reliability</button>
-          <button role="tab" id="tab-compliance" aria-controls="dash-panel" data-img="pbi-compliance" data-insight="PM Completion Rate 88,4%. 93 WO belum selesai, 60 di antaranya (65%) berumur lebih dari 90 hari.">Compliance</button>
-          <button role="tab" id="tab-cost" aria-controls="dash-panel" data-img="pbi-cost" data-insight="EX-002 adalah unit termahal (Rp 467,4 jt, 43% dari biaya BM). Breakdown Maintenance menyumbang 43,3% biaya dari hanya 15,3% jumlah WO.">Cost</button>
-          <button role="tab" id="tab-pm-planning" aria-controls="dash-panel" data-img="pbi-pm-planning" data-insight="88,4% WO PM selesai, tetapi hanya 79,2% yang dikerjakan tepat waktu sesuai jadwal HM — selisih 9,2% jadi bahan evaluasi penjadwalan.">PM Planning</button>
-        </div>
-        <div class="dash" id="dash-panel" role="tabpanel">
-          <img loading="lazy" id="dash-img" width="1920" height="1101" src="assets/img/pbi-overview.webp" alt="Power BI — Overview">
-          <p class="insight" id="dash-insight"></p>
-        </div>
-        <p class="more-link"><a class="link" href="https://drive.google.com/drive/folders/1bbvt3K4FOZhL6Gi8IVPXEuaJYoMp8xnn?usp=drive_link" target="_blank" rel="noopener">Lihat file &amp; demo dashboard →</a></p>
-      </article>
-
-      <article class="project card reveal">
-        <div class="num">PROJECT 02</div>
-        <h3>Fleet Maintenance Dashboard — Web App</h3>
-        <p>Pengembangan dashboard Power BI di atas menjadi aplikasi web end-to-end: user menginput work order, lalu KPI (PA, MTBF, MTTR, backlog, biaya) dihitung otomatis dan tampil sebagai grafik interaktif. Dibangun dengan React dan open source di GitHub.<span class="screen-only"> Pratinjau di bawah adalah website aslinya, jadi selalu menampilkan versi terbaru.</span></p>
-        <div class="tags"><span class="tag">React &amp; JavaScript</span><span class="tag">Recharts</span><span class="tag">MTBF · MTTR · PA</span><span class="tag">GitHub Actions</span><span class="tag">Open Source</span></div>
-        <div class="live-frame screen-only">
-          <div class="live-bar">
-            <span class="live-dots" aria-hidden="true"><i></i><i></i><i></i></span>
-            <span class="live-url">rizkysugiharto-eng.github.io/fleet-maintenance-dashboard</span>
-            <span class="live-badge">Live</span>
+          <div class="life-axis" aria-hidden="true">
+            <span></span>
+            <div class="years"><span>2021</span><span>2022</span><span>2023</span><span>2024</span><span>2025</span><span>2026</span></div>
           </div>
-          <iframe src="https://rizkysugiharto-eng.github.io/fleet-maintenance-dashboard/" title="Pratinjau langsung Fleet Maintenance Dashboard" loading="lazy"></iframe>
-        </div>
-        <img loading="lazy" class="print-only live-print" src="assets/img/web-dashboard.webp" alt="Tampilan Fleet Maintenance Dashboard — Web App">
-        <p class="more-link live-links">
-          <a class="link" href="https://rizkysugiharto-eng.github.io/fleet-maintenance-dashboard/" target="_blank" rel="noopener">Buka website di tab baru →</a>
-          <a class="link" href="https://github.com/rizkysugiharto-eng/fleet-maintenance-dashboard" target="_blank" rel="noopener">Lihat source code di GitHub →</a>
-        </p>
-        <p class="print-only small muted">Website: rizkysugiharto-eng.github.io/fleet-maintenance-dashboard · Source code: github.com/rizkysugiharto-eng/fleet-maintenance-dashboard</p>
-      </article>
-
-      <article class="project card reveal">
-        <div class="num">PROJECT 03</div>
-        <h3>CFD Analysis Using Ansys Fluent</h3>
-        <p>Simulasi dan analisis aliran fluida menggunakan ANSYS Fluent melalui proses geometry, meshing, dan post-processing hasil CFD — termasuk distribusi tekanan aliran di sekitar kendaraan dan project UAS “Flow Over 2D Cylinder Transient Solution”.</p>
-        <div class="tags"><span class="tag">Ansys Fluent</span><span class="tag">Meshing</span><span class="tag">Post-processing</span></div>
-        <div class="gallery">
-          <img loading="lazy" src="assets/img/cfd-car.webp" alt="Kontur tekanan aliran pada permukaan mobil">
-          <img loading="lazy" src="assets/img/cfd-3.webp" alt="Fluent flow simulation on car">
-          <img loading="lazy" src="assets/img/cfd-2.webp" alt="Fluent flow pressure">
-          <img loading="lazy" src="assets/img/cfd-1.webp" alt="Different meshing format">
-          <img loading="lazy" src="assets/img/cfd-mesh.webp" alt="Meshing modeling">
-          <img loading="lazy" src="assets/img/cfd-uas.webp" alt="Project UAS: Flow Over 2D Cylinder Transient Solution">
-        </div>
-        <p class="more-link"><a class="link" href="https://drive.google.com/file/d/14mwAWI9StFwS8bvNi7oTARTxTiOLoPQV/view?usp=drive_link" target="_blank" rel="noopener">Lihat presentasi Project UAS →</a></p>
-      </article>
-
-      <article class="project card reveal">
-        <div class="num">PROJECT 04</div>
-        <h3>3D Mechanical Design Using SolidWorks</h3>
-        <p>Merancang komponen mekanikal, assembly, dan engineering drawing menggunakan SolidWorks untuk mendukung proses desain dan manufaktur — termasuk desain kursi roda untuk Project Capstone.</p>
-        <div class="tags"><span class="tag">SolidWorks</span><span class="tag">Assembly</span><span class="tag">Engineering Drawing</span></div>
-        <div class="gallery">
-          <img loading="lazy" src="assets/img/sw-wheelchair.webp" alt="Desain kursi roda Project Capstone (tampak belakang)">
-          <img loading="lazy" src="assets/img/sw-wheelchair-drawing.webp" alt="Explode drawing kursi roda Project Capstone">
-          <img loading="lazy" src="assets/img/sw-piston.webp" alt="Piston model assembly">
-          <img loading="lazy" src="assets/img/sw-vbelt.webp" alt="V-belt assembly model">
-          <img loading="lazy" src="assets/img/sw-fridge.webp" alt="Project model kulkas sederhana">
-          <img loading="lazy" src="assets/img/sw-spring-washer.webp" alt="Spring washer desain model">
-        </div>
-      </article>
-
-      <article class="project card reveal">
-        <div class="num">PROJECT 05</div>
-        <h3>Logo, Menu, Poster &amp; Banner Design</h3>
-        <p>Merancang berbagai media promosi visual untuk mendukung kebutuhan publikasi, branding, dan penyampaian informasi secara efektif.</p>
-        <div class="tags"><span class="tag">Canva</span><span class="tag">Branding</span><span class="tag">Visual Design</span></div>
-        <div class="gallery g4 collapsible">
-          <img loading="lazy" class="tall" src="assets/img/design-10.webp" alt="Logo FORCE — Festival of Remarkable Celebrations by Engineers">
-          <img loading="lazy" class="tall" src="assets/img/design-01.webp" alt="Poster cara penggunaan APAR">
-          <img loading="lazy" class="tall" src="assets/img/design-07.webp" alt="Poster nilai AKHLAK">
-          <img loading="lazy" class="tall" src="assets/img/design-11.webp" alt="Poster pengelolaan sampah makanan">
-          <img loading="lazy" class="tall" src="assets/img/design-02.webp" alt="Desain Singapolah">
-          <img loading="lazy" class="tall" src="assets/img/design-04.webp" alt="Desain menu makanan">
-          <img loading="lazy" class="tall" src="assets/img/design-03.webp" alt="Desain konten kedai">
-          <img loading="lazy" class="tall" src="assets/img/design-05.webp" alt="Desain konten kedai">
-          <img loading="lazy" class="tall" src="assets/img/design-06.webp" alt="Desain frame foto">
-          <img loading="lazy" class="tall" src="assets/img/design-09.webp" alt="Poster English Day">
-          <img loading="lazy" class="tall" src="assets/img/design-08.webp" alt="Desain Sarjana Turu">
-        </div>
-        <button class="show-more" aria-expanded="false">Lihat semua desain (11)</button>
-      </article>
-    </div>
-  </section>
-
-  <!-- ===================== 04 KEAHLIAN ===================== -->
-  <section id="skills" class="alt">
-    <div class="wrap">
-      <div class="sec-head reveal">
-        <div class="eyebrow"><b>04</b> / Keahlian</div>
-        <h2>Keahlian &amp; Software</h2>
-      </div>
-      <div class="grid-3">
-        <div class="card reveal">
-          <h3>Reliability &amp; Maintenance</h3>
-          <div class="tags">
-            <span class="tag">Maintenance &amp; Reliability Analysis</span>
-            <span class="tag">Physical Availability (PA) Analysis</span>
-            <span class="tag">MTBF, MTTR &amp; Scheduled Maintenance Analysis</span>
-            <span class="tag">Root Cause Analysis</span>
-            <span class="tag">Preventive &amp; Corrective Maintenance</span>
-            <span class="tag">BMC Heavy Equipment Maintenance</span>
-            <span class="tag">Mining Safety Awareness (K3 Pertambangan)</span>
-          </div>
-        </div>
-        <div class="card reveal">
-          <h3>Asset &amp; Pipeline Integrity</h3>
-          <div class="tags">
-            <span class="tag">Asset Integrity &amp; Corrosion Analysis</span>
-            <span class="tag">Pipeline Inspection &amp; Evaluation</span>
-            <span class="tag">ASME B31 Piping Standards</span>
-            <span class="tag">Piping Layout &amp; P&amp;ID Interpretation</span>
-          </div>
-        </div>
-        <div class="card reveal">
-          <h3>Data &amp; Reporting</h3>
-          <div class="tags">
-            <span class="tag">Microsoft Excel (Advanced)</span>
-            <span class="tag">Data Analysis &amp; Data Transformation</span>
-            <span class="tag">ERP System (Ellipse)</span>
-            <span class="tag">Technical Reporting</span>
-            <span class="tag">Data Visualization</span>
+          <div class="lanes">
+            <div class="lane lane-work">
+              <span class="lane-name">Pengalaman kerja</span>
+              <ol class="track">
+                <li style="--s: 44; --e: 45"><a href="#exp-pln"><span class="bar"></span><span class="lbl">PLN Kamojang <small>PKL</small></span><span class="date sr-only">Sep 2024</span></a></li>
+                <li style="--s: 58; --e: 65"><a href="#exp-dh"><span class="bar"></span><span class="lbl">Darma Henwa <small>PLM Officer Intern</small></span><span class="date sr-only">Nov 2025 – Mei 2026</span></a></li>
+              </ol>
+            </div>
+            <div class="lane lane-train">
+              <span class="lane-name">Pelatihan &amp; prestasi</span>
+              <ol class="track">
+                <li class="milestone" style="--s: 35.5; --e: 35.5"><a href="#achievements"><span class="bar"></span><span class="lbl">Medali perak NASPO</span><span class="date sr-only">Des 2023</span></a></li>
+                <li class="end" style="--s: 67; --e: 69"><a href="#training"><span class="bar"></span><span class="lbl">BMC alat berat &amp; K3 Pertambangan</span><span class="date sr-only">Agu – Sep 2026</span></a></li>
+              </ol>
+            </div>
+            <div class="lane lane-org">
+              <span class="lane-name">Organisasi</span>
+              <ol class="track">
+                <li style="--s: 25; --e: 32"><a href="#organization"><span class="bar"></span><span class="lbl">Staff Divisi Penelitian</span><span class="date sr-only">Feb – Agu 2023</span></a></li>
+                <li style="--s: 37; --e: 44"><a href="#organization"><span class="bar"></span><span class="lbl">Ketua Divisi Akademik</span><span class="date sr-only">Feb – Agu 2024</span></a></li>
+              </ol>
+            </div>
+            <div class="lane lane-edu">
+              <span class="lane-name">Pendidikan</span>
+              <ol class="track">
+                <li style="--s: 0; --e: 60"><a href="#education"><span class="bar"></span><span class="lbl">S1 Teknik Mesin, Universitas Pertamina <small>IPK 3,45</small></span><span class="date sr-only">2021 – 2025</span></a></li>
+              </ol>
+            </div>
+            <div class="lanes-inner" aria-hidden="true"><div class="now"></div></div>
           </div>
         </div>
       </div>
-      <div class="card software reveal">
-        <h3>Software</h3>
-        <div class="tags">
-          <span class="tag gray">Microsoft Excel</span>
-          <span class="tag gray">Power BI (DAX &amp; Power Query)</span>
-          <span class="tag gray">React &amp; JavaScript (dasar)</span>
-          <span class="tag gray">ERP Ellipse</span>
-          <span class="tag gray soon">SAP PM (in progress)</span>
-          <span class="tag gray">Ansys Fluent</span>
-          <span class="tag gray">SolidWorks</span>
-          <span class="tag gray">OriginPro</span>
-          <span class="tag gray">Denford</span>
-          <span class="tag gray">Microsoft Word &amp; PowerPoint</span>
-          <span class="tag gray">Google Workspace</span>
-          <span class="tag gray">Canva</span>
-          <span class="tag gray">CapCut</span>
-        </div>
-      </div>
-      <p class="soft-skills reveal"><b>Soft skills:</b> Analytical Thinking · Problem Solving · Critical Thinking · Attention to Detail · Communication Skills · Teamwork &amp; Collaboration · Time Management · Adaptability · Leadership · Continuous Improvement Mindset</p>
-    </div>
-  </section>
+    </header>
 
-  <!-- ===================== 05 PRESTASI ===================== -->
-  <section id="achievements">
-    <div class="wrap">
-      <div class="sec-head reveal">
-        <div class="eyebrow"><b>05</b> / Prestasi</div>
-        <h2>Penghargaan</h2>
-      </div>
-      <div class="award reveal">
-        <div>
-          <span class="medal"><svg class="ico" aria-hidden="true"><use href="#i-award"/></svg>Medali Perak</span>
-          <h3>National Applied Science Project Olympiad (NASPO) 2023</h3>
-          <p>Kategori Pengolahan Limbah — penelitian <b>“Batakok-Green”: inovasi pemanfaatan limbah cangkang kerang hijau (<i>Perna viridis</i>) sebagai batako penghasil energi listrik</b> di Cilincing, Jakarta Utara.</p>
-          <p class="small">Kompetisi daring · Surabaya · 19–22 Desember 2023</p>
+    <!-- ===================== TENTANG ===================== -->
+    <section id="about" class="light">
+      <div class="wrap">
+        <div class="sec-head">
+          <h2>Tentang saya</h2>
         </div>
-        <div class="gallery g2"><img loading="lazy" class="contain wide r-16-11" src="assets/img/naspo-award.webp" alt="Sertifikat Penghargaan Medali Perak NASPO 2023"></div>
+        <div class="about">
+          <div class="prose">
+            <p>Sarjana Teknik Mesin dengan pengalaman di maintenance engineering, reliability analysis, dan pipeline integrity pada industri energi dan alat berat. Saya mengolah data teknis menjadi dasar keputusan perawatan — mulai dari KPI reliability (PA, MTBF, MTTR, Scheduled Maintenance) hingga evaluasi integritas pipa (Corrosion Rate, MAWP, Remaining Service Life) berdasarkan standar ASME.</p>
+            <p>Terbiasa memakai Advanced Excel dan ERP Ellipse untuk mengelola data operasional berskala besar, mengotomasi pelaporan, dan membangun database monitoring performa aset. Detail-oriented, cepat beradaptasi, dan fokus pada keselamatan, keandalan, serta continuous improvement.</p>
+          </div>
+          <div>
+            <h3 class="ready-title">Bisa langsung saya kerjakan</h3>
+            <ul class="focus">
+              <li><b>Laporan KPI maintenance mingguan</b><span>Menghitung PA, MTBF, MTTR, dan Scheduled Maintenance dari data ERP Ellipse, lalu menyusun laporan HM dan utilisasi unit.</span><span class="proof">Sudah dikerjakan di <a href="#exp-dh">PT Darma Henwa</a></span></li>
+              <li><b>Evaluasi integritas pipa</b><span>Mengolah data UTT menjadi corrosion rate, remaining service life, dan MAWP sesuai ASME B31.</span><span class="proof">Sudah dikerjakan di <a href="#exp-pln">PLN Indonesia Power Kamojang</a></span></li>
+              <li><b>Dashboard maintenance</b><span>Membangun dashboard reliability, backlog, dan biaya dari data work order, di Power BI maupun web app.</span><span class="proof">Lihat <a href="#case-pbi">Dashboard Power BI</a> dan <a href="#case-web">Web App</a></span></li>
+            </ul>
+          </div>
+        </div>
       </div>
+    </section>
 
-      <!-- Training -->
-      <div class="sub-head reveal">
-        <h2>Pelatihan</h2>
-      </div>
-      <div class="grid-2">
-        <div class="card reveal">
-          <h3>BMC (Basic Mechanic Course) — Heavy Equipment</h3>
-          <div class="meta"><span class="date">Agustus – September 2026</span><span>BMC Dharmaditna Yogyakarta</span></div>
-          <p>Pelatihan dasar perawatan alat berat: engine, hydraulic system, electrical system, transmission, dan chassis. Nilai <b>83–90</b> pada 12 modul pelatihan.</p>
-          <div class="gallery g2"><img loading="lazy" class="contain wide" src="assets/img/bmc-cert.webp" alt="Sertifikat Basic Mechanic Course — BMC Dharmaditna Yogyakarta"></div>
+    <!-- ===================== PENGALAMAN ===================== -->
+    <section id="experience" class="light">
+      <div class="wrap">
+        <div class="sec-head">
+          <h2>Pengalaman kerja</h2>
+          <p>Data perawatan alat berat dari 3 site tambang, dan inspeksi integritas pipa di pembangkit panas bumi.</p>
         </div>
-        <div class="card reveal">
-          <h3>Dasar K3 Pertambangan</h3>
-          <div class="meta"><span class="date">September 2026</span><span>PT Borneo Indo Safety</span></div>
-          <p>Sertifikasi keselamatan kerja pertambangan: hazard identification &amp; risk control.</p>
-          <div class="gallery g2"><img loading="lazy" class="contain wide" src="assets/img/k3-cert.webp" alt="Sertifikat Dasar K3 Pertambangan — PT Borneo Indo Safety"></div>
-        </div>
-      </div>
 
-      <!-- Organization -->
-      <div class="sub-head reveal">
-        <h2>Organisasi</h2>
-        <p class="muted">Himpunan Mahasiswa Mesin (HMM) — Universitas Pertamina</p>
-      </div>
-      <div class="grid-2">
-        <div class="card reveal">
-          <h3>Ketua Divisi Akademik</h3>
-          <div class="meta"><span class="date">Feb – Agu 2024</span></div>
-          <ul>
-            <li>Memimpin pelaksanaan program kerja akademik untuk mendukung pengembangan kompetensi mahasiswa.</li>
-            <li>Mengoordinasikan tim dalam penyelenggaraan kegiatan akademik dan pengembangan keilmuan.</li>
-          </ul>
-        </div>
-        <div class="card reveal">
-          <h3>Staff Divisi Penelitian</h3>
-          <div class="meta"><span class="date">Feb – Agu 2023</span></div>
-          <ul>
-            <li>Mendukung pelaksanaan program penelitian dan pengembangan akademik mahasiswa.</li>
-            <li>Berpartisipasi dalam penyusunan serta pelaksanaan kegiatan yang berkaitan dengan riset dan pengembangan keilmuan.</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </section>
+        <article class="log" id="exp-dh">
+          <div class="log-meta">
+            <span class="when">Nov 2025 – Mei 2026</span>
+            <span class="where"><svg class="ico" aria-hidden="true"><use href="#i-pin"/></svg>Kebayoran Baru, Jakarta Selatan</span>
+            <span>Program Pemagangan Kemnaker</span>
+          </div>
+          <div class="log-body">
+            <h3>PT Darma Henwa Tbk</h3>
+            <p class="role">Plant &amp; Maintenance, PLM Officer Intern</p>
+            <figure class="lead-photo" style="--ratio: 4 / 3; --focus: 50% 40%">
+              <img loading="lazy" width="1200" height="1600" src="assets/img/dh-team.webp" alt="Bersama tim di kantor PT Darma Henwa">
+              <figcaption>Kontraktor pertambangan nasional, bagian dari Bakrie Group. Program Pemagangan Lulusan Perguruan Tinggi (Kemnaker).</figcaption>
+            </figure>
+            <ul>
+              <li>Mengelola dan menganalisis data perawatan alat berat dari <b>3 site</b> di Kalimantan Selatan &amp; Timur untuk mengidentifikasi pareto problem dan tren kegagalan komponen.</li>
+              <li>Menghitung serta memonitor KPI maintenance seperti Physical Availability (PA), MTBF, MTTR, dan Scheduled Maintenance (SM).</li>
+              <li>Menyusun laporan mingguan terkait Hours Meter (HM), utilisasi unit, dan performa operasional menggunakan Microsoft Excel dan ERP Ellipse.</li>
+              <li>Mengembangkan formula dan automasi pengolahan data untuk menghasilkan dataset yang terstruktur dan siap dianalisis.</li>
+              <li>Menyusun logika klasifikasi status komponen (In Service &amp; Scrap) dari hingga 20 siklus riwayat penggantian untuk analisis umur pakai komponen.</li>
+            </ul>
+            <p class="result"><svg class="ico" aria-hidden="true"><use href="#i-award"/></svg><span>Lulus program pemagangan dengan predikat Sangat Baik</span></p>
+            <div class="thumbs">
+              <img loading="lazy" src="assets/img/dh-group.webp" alt="Bersama rekan peserta pemagangan PT Darma Henwa">
+              <img loading="lazy" src="assets/img/dh-moment.webp" alt="Momen di PT Darma Henwa">
+              <img loading="lazy" class="contain" src="assets/img/dh-cert.webp" alt="Sertifikat Pemagangan Kemnaker × PT Darma Henwa — PLM Officer">
+            </div>
+          </div>
+        </article>
 
-  <!-- ===================== 06 PENDIDIKAN & SERTIFIKAT ===================== -->
-  <section id="education" class="alt">
-    <div class="wrap">
-      <div class="sec-head reveal">
-        <div class="eyebrow"><b>06</b> / Pendidikan</div>
-        <h2>Pendidikan &amp; Sertifikat</h2>
+        <article class="log" id="exp-pln">
+          <div class="log-meta">
+            <span class="when">September 2024</span>
+            <span class="where"><svg class="ico" aria-hidden="true"><use href="#i-pin"/></svg>Ibun, Bandung, Jawa Barat</span>
+            <span>Praktik kerja lapangan</span>
+          </div>
+          <div class="log-body">
+            <h3>PT PLN Indonesia Power — UBP Kamojang</h3>
+            <p class="role">Field Practice Intern, PLTP Kamojang</p>
+            <figure class="lead-photo" style="--ratio: 1435 / 811">
+              <img loading="lazy" width="1435" height="811" src="assets/img/pln-field-team.webp" alt="Bersama tim PKL di area cooling tower PLTP Kamojang">
+              <figcaption>Bersama tim PKL di area cooling tower PLTP Kamojang.</figcaption>
+            </figure>
+            <ul>
+              <li>Melakukan inspeksi lapangan pada fasilitas Pembangkit Listrik Tenaga Panas Bumi: Receiving Header, Separator, Condenser, Cooling Tower, Turbine, dan Generator.</li>
+              <li>Mengolah data Ultrasonic Thickness Testing (UTT) untuk mengevaluasi ketebalan pipa pada section lurus dan bend 90°.</li>
+              <li>Melakukan perhitungan Corrosion Rate (CR), Remaining Service Life (RSL), dan MAWP berdasarkan standar ASME B31 “Power Piping Code”.</li>
+              <li>Membaca dan menginterpretasikan P&amp;ID serta Piping Layout untuk mendukung kegiatan inspeksi dan analisis teknis.</li>
+              <li>Menyusun laporan hasil inspeksi sebagai dasar rekomendasi perawatan dan peningkatan keandalan aset.</li>
+            </ul>
+            <p class="result"><svg class="ico" aria-hidden="true"><use href="#i-award"/></svg><span>Nilai praktik kerja 85,92 (A – Baik Sekali)</span></p>
+            <div class="thumbs">
+              <img loading="lazy" src="assets/img/pln-site.webp" alt="Inspeksi lapangan di PLTP Kamojang">
+              <img loading="lazy" src="assets/img/pln-presentation.webp" alt="Presentasi hasil praktik kerja lapangan">
+              <img loading="lazy" src="assets/img/pln-team.webp" alt="Bersama tim PLN Indonesia Power UBP Kamojang">
+              <img loading="lazy" class="contain" src="assets/img/pln-cert.webp" alt="Sertifikat Praktik Kerja Lapangan PLN Indonesia Power">
+              <img loading="lazy" class="contain" src="assets/img/pln-assessment.webp" alt="Lembar penilaian praktik kerja lapangan">
+            </div>
+          </div>
+        </article>
       </div>
-      <div class="card edu reveal">
-        <div class="badge">S1</div>
-        <div>
-          <h3>Universitas Pertamina</h3>
-          <p>S1 Teknik Mesin · 2021 – 2025 · <b>GPA 3.45 / 4.00</b></p>
+    </section>
+
+    <!-- ===================== PROJECT (gelap) ===================== -->
+    <section id="projects" class="dark">
+      <div class="wrap">
+        <div class="sec-head">
+          <h2>Project</h2>
+          <p>Dua project utama tentang reliability armada alat berat, ditambah karya simulasi, desain teknik, dan desain visual.</p>
+        </div>
+
+        <article class="case" id="case-pbi">
+          <div class="case-head">
+            <h3>Fleet Maintenance &amp; Reliability Dashboard — Power BI</h3>
+            <p>Dashboard interaktif untuk monitoring armada alat berat (data dummy, periode 2025): KPI reliability, backlog, biaya, dan kepatuhan jadwal PM dalam 5 halaman analisis.</p>
+            <p class="note">Data dummy sengaja disimulasikan sebagai armada dengan reliability rendah (PA 61,5%, di bawah target umum 85–90%) untuk latihan analisis akar masalah.</p>
+            <ul class="tools"><li>Power BI</li><li>DAX &amp; Power Query</li><li>MTBF, MTTR, PA</li><li>Backlog &amp; Cost</li></ul>
+          </div>
+          <div class="tabs" role="tablist" aria-label="Halaman dashboard Power BI">
+            <button role="tab" id="tab-overview" aria-controls="dash-panel" data-tab="overview" data-img="pbi-overview" data-insight="Physical Availability 61,5%. MTBF 97,6 jam, MTTR 15,6 jam, dari total 739 work order.">Overview</button>
+            <button role="tab" id="tab-reliability" aria-controls="dash-panel" data-tab="reliability" data-img="pbi-reliability" data-insight="BD-001 memiliki MTBF terendah (56,8 jam). DT-001 memiliki MTTR tertinggi (17,9 jam). Breakdown Maintenance menyumbang 41,6% dari total downtime.">KPI Reliability</button>
+            <button role="tab" id="tab-compliance" aria-controls="dash-panel" data-tab="compliance" data-img="pbi-compliance" data-insight="PM Completion Rate 88,4%. 93 WO belum selesai, 60 di antaranya (65%) berumur lebih dari 90 hari.">Compliance</button>
+            <button role="tab" id="tab-cost" aria-controls="dash-panel" data-tab="cost" data-img="pbi-cost" data-insight="EX-002 adalah unit termahal (Rp 467,4 jt, 43% dari biaya BM). Breakdown Maintenance menyumbang 43,3% biaya dari hanya 15,3% jumlah WO.">Cost</button>
+            <button role="tab" id="tab-pm-planning" aria-controls="dash-panel" data-tab="pm-planning" data-img="pbi-pm-planning" data-insight="88,4% WO PM selesai, tetapi hanya 79,2% yang dikerjakan tepat waktu sesuai jadwal HM — selisih 9,2% jadi bahan evaluasi penjadwalan.">PM Planning</button>
+          </div>
+          <div id="dash-panel" role="tabpanel">
+            <figure class="annot" id="dash-figure" data-tab="overview">
+              <div class="ann" style="--x: 46.9%"><p><b>PA 61,5%</b>porsi waktu unit siap beroperasi</p></div>
+              <div class="ann" style="--x: 65.1%"><p><b>MTBF 97,6 jam</b>rata-rata jarak antar kerusakan</p></div>
+              <div class="ann" style="--x: 83.75%"><p><b>MTTR 15,6 jam</b>rata-rata lama perbaikan</p></div>
+              <img id="dash-img" loading="lazy" width="1920" height="1101" src="assets/img/pbi-overview.webp" alt="Power BI — Overview">
+            </figure>
+            <p class="insight" id="dash-insight"></p>
+          </div>
+          <table class="findings">
+            <caption>Temuan dan rekomendasi</caption>
+            <thead><tr><th scope="col">Area</th><th scope="col">Temuan dari data</th><th scope="col">Rekomendasi</th></tr></thead>
+            <tbody>
+              <tr>
+                <td>Biaya</td>
+                <td data-label="Temuan">Unit EX-002 menyerap <b class="hl">Rp 467,4 jt</b>, atau 43% dari seluruh biaya Breakdown Maintenance.</td>
+                <td data-label="Rekomendasi">Jadikan EX-002 prioritas root cause analysis, mulai dari komponen yang paling sering rusak, sebelum menambah anggaran perbaikan.</td>
+              </tr>
+              <tr>
+                <td>Reliability</td>
+                <td data-label="Temuan">BD-001 punya MTBF terendah (<b class="hl">56,8 jam</b>), dan breakdown menyumbang 41,6% dari total downtime.</td>
+                <td data-label="Rekomendasi">Perpendek interval inspeksi BD-001 dan pantau kondisinya secara rutin supaya kerusakan terdeteksi sebelum menjadi breakdown.</td>
+              </tr>
+              <tr>
+                <td>Backlog</td>
+                <td data-label="Temuan"><b class="hl">60 dari 93</b> work order yang belum selesai (65%) sudah berumur lebih dari 90 hari.</td>
+                <td data-label="Rekomendasi">Review backlog: tutup WO yang sudah tidak relevan, lalu jadwalkan ulang sisanya berdasarkan prioritas unit.</td>
+              </tr>
+              <tr>
+                <td>Jadwal PM</td>
+                <td data-label="Temuan">88,4% PM selesai, tetapi hanya <b class="hl">79,2%</b> yang dikerjakan tepat waktu sesuai jadwal HM.</td>
+                <td data-label="Rekomendasi">Selaraskan jadwal PM dengan pembacaan hour meter aktual supaya selisih 9,2% itu tertutup.</td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="findings-note muted">Rekomendasi disusun dari hasil analisis data dummy pada dashboard di atas.</p>
+          <p class="links"><a class="link" href="https://drive.google.com/drive/folders/1bbvt3K4FOZhL6Gi8IVPXEuaJYoMp8xnn?usp=drive_link" target="_blank" rel="noopener">Lihat file dan demo dashboard</a></p>
+        </article>
+
+        <article class="case" id="case-web">
+          <div class="case-head">
+            <h3>Fleet Maintenance Dashboard — Web App</h3>
+            <p>Pengembangan dashboard Power BI di atas menjadi aplikasi web end-to-end: user menginput work order, lalu KPI (PA, MTBF, MTTR, backlog, biaya) dihitung otomatis dan tampil sebagai grafik interaktif. Dibangun dengan React dan open source di GitHub.</p>
+            <ul class="tools"><li>React &amp; JavaScript</li><li>Recharts</li><li>MTBF, MTTR, PA</li><li>GitHub Actions</li><li>Open source</li></ul>
+          </div>
+          <div class="live">
+            <div class="live-bar"><span>rizkysugiharto-eng.github.io/fleet-maintenance-dashboard</span><span>Live</span></div>
+            <iframe src="https://rizkysugiharto-eng.github.io/fleet-maintenance-dashboard/" title="Pratinjau langsung Fleet Maintenance Dashboard" loading="lazy"></iframe>
+          </div>
+          <img class="print-only shot-print" loading="lazy" width="1120" height="1085" src="assets/img/web-dashboard.webp" alt="Tampilan Fleet Maintenance Dashboard — Web App">
+          <p class="links">
+            <a class="link" href="https://rizkysugiharto-eng.github.io/fleet-maintenance-dashboard/" target="_blank" rel="noopener">Buka web app di tab baru</a>
+            <a class="link" href="https://github.com/rizkysugiharto-eng/fleet-maintenance-dashboard" target="_blank" rel="noopener">Lihat source code di GitHub</a>
+          </p>
+        </article>
+
+        <div class="more-work">
+          <article>
+            <h3>CFD Analysis Using Ansys Fluent</h3>
+            <p class="muted">Simulasi dan analisis aliran fluida menggunakan ANSYS Fluent melalui proses geometry, meshing, dan post-processing hasil CFD — termasuk distribusi tekanan aliran di sekitar kendaraan dan project UAS “Flow Over 2D Cylinder Transient Solution”.</p>
+            <div class="thumbs collapsible">
+              <img loading="lazy" src="assets/img/cfd-car.webp" alt="Kontur tekanan aliran pada permukaan mobil">
+              <img loading="lazy" src="assets/img/cfd-3.webp" alt="Fluent flow simulation on car">
+              <img loading="lazy" src="assets/img/cfd-2.webp" alt="Fluent flow pressure">
+              <img loading="lazy" src="assets/img/cfd-1.webp" alt="Different meshing format">
+              <img loading="lazy" src="assets/img/cfd-mesh.webp" alt="Meshing modeling">
+              <img loading="lazy" src="assets/img/cfd-uas.webp" alt="Project UAS: Flow Over 2D Cylinder Transient Solution">
+            </div>
+            <button class="show-more" aria-expanded="false">Tampilkan semua 6 gambar</button>
+            <p class="links"><a class="link" href="https://drive.google.com/file/d/14mwAWI9StFwS8bvNi7oTARTxTiOLoPQV/view?usp=drive_link" target="_blank" rel="noopener">Lihat presentasi project UAS</a></p>
+          </article>
+          <article>
+            <h3>3D Mechanical Design Using SolidWorks</h3>
+            <p class="muted">Merancang komponen mekanikal, assembly, dan engineering drawing menggunakan SolidWorks untuk mendukung proses desain dan manufaktur — termasuk desain kursi roda untuk Project Capstone.</p>
+            <div class="thumbs collapsible">
+              <img loading="lazy" src="assets/img/sw-wheelchair.webp" alt="Desain kursi roda Project Capstone (tampak belakang)">
+              <img loading="lazy" src="assets/img/sw-wheelchair-drawing.webp" alt="Explode drawing kursi roda Project Capstone">
+              <img loading="lazy" src="assets/img/sw-piston.webp" alt="Piston model assembly">
+              <img loading="lazy" src="assets/img/sw-vbelt.webp" alt="V-belt assembly model">
+              <img loading="lazy" src="assets/img/sw-fridge.webp" alt="Project model kulkas sederhana">
+              <img loading="lazy" src="assets/img/sw-spring-washer.webp" alt="Spring washer desain model">
+            </div>
+            <button class="show-more" aria-expanded="false">Tampilkan semua 6 gambar</button>
+          </article>
+          <article>
+            <h3>Logo, Menu, Poster &amp; Banner Design</h3>
+            <p class="muted">Merancang berbagai media promosi visual untuk mendukung kebutuhan publikasi, branding, dan penyampaian informasi secara efektif.</p>
+            <div class="thumbs tall collapsible">
+              <img loading="lazy" src="assets/img/design-10.webp" alt="Logo FORCE — Festival of Remarkable Celebrations by Engineers">
+              <img loading="lazy" src="assets/img/design-01.webp" alt="Poster cara penggunaan APAR">
+              <img loading="lazy" src="assets/img/design-07.webp" alt="Poster nilai AKHLAK">
+              <img loading="lazy" src="assets/img/design-11.webp" alt="Poster pengelolaan sampah makanan">
+              <img loading="lazy" src="assets/img/design-02.webp" alt="Desain Singapolah">
+              <img loading="lazy" src="assets/img/design-04.webp" alt="Desain menu makanan">
+              <img loading="lazy" src="assets/img/design-03.webp" alt="Desain konten kedai">
+              <img loading="lazy" src="assets/img/design-05.webp" alt="Desain konten kedai">
+              <img loading="lazy" src="assets/img/design-06.webp" alt="Desain frame foto">
+              <img loading="lazy" src="assets/img/design-09.webp" alt="Poster English Day">
+              <img loading="lazy" src="assets/img/design-08.webp" alt="Desain Sarjana Turu">
+            </div>
+            <button class="show-more" aria-expanded="false">Tampilkan semua 11 desain</button>
+          </article>
         </div>
       </div>
+    </section>
 
-      <div class="sub-head reveal" id="certifications">
-        <h2>Sertifikat Tambahan</h2>
-        <p class="muted screen-only">Klik sertifikat untuk memperbesar. Gunakan tombol ‹ › atau panah keyboard untuk berpindah.</p>
+    <!-- ===================== KEAHLIAN ===================== -->
+    <section id="skills" class="light">
+      <div class="wrap">
+        <div class="sec-head">
+          <h2>Keahlian</h2>
+          <p>Dikelompokkan menurut jenis pekerjaan, lengkap dengan tempat saya memakainya. Klik untuk melihat buktinya.</p>
+        </div>
+        <div class="skills">
+          <div>
+            <h3>Reliability &amp; Maintenance</h3>
+            <ul>
+              <li>Maintenance &amp; Reliability Analysis<span class="used">Dipakai di <a href="#exp-dh">Darma Henwa</a>, <a href="#case-pbi">Dashboard Power BI</a></span></li>
+              <li>Physical Availability (PA) Analysis<span class="used">Dipakai di <a href="#exp-dh">Darma Henwa</a>, <a href="#case-pbi">Dashboard Power BI</a></span></li>
+              <li>MTBF, MTTR &amp; Scheduled Maintenance Analysis<span class="used">Dipakai di <a href="#exp-dh">Darma Henwa</a>, <a href="#case-pbi">Dashboard Power BI</a></span></li>
+              <li>Root Cause Analysis<span class="used">Dipakai di <a href="#exp-dh">Darma Henwa</a> (pareto problem)</span></li>
+              <li>Preventive &amp; Corrective Maintenance<span class="used">Dipakai di <a href="#training">Pelatihan BMC</a>, <a href="#case-pbi">Dashboard Power BI</a></span></li>
+              <li>BMC Heavy Equipment Maintenance<span class="used">Dipakai di <a href="#training">Pelatihan BMC</a></span></li>
+              <li>Mining Safety Awareness (K3 Pertambangan)<span class="used">Dipakai di <a href="#training">Pelatihan Dasar K3</a></span></li>
+            </ul>
+          </div>
+          <div>
+            <h3>Asset &amp; Pipeline Integrity</h3>
+            <ul>
+              <li>Asset Integrity &amp; Corrosion Analysis<span class="used">Dipakai di <a href="#exp-pln">PLN Kamojang</a></span></li>
+              <li>Pipeline Inspection &amp; Evaluation<span class="used">Dipakai di <a href="#exp-pln">PLN Kamojang</a></span></li>
+              <li>ASME B31 Piping Standards<span class="used">Dipakai di <a href="#exp-pln">PLN Kamojang</a></span></li>
+              <li>Piping Layout &amp; P&amp;ID Interpretation<span class="used">Dipakai di <a href="#exp-pln">PLN Kamojang</a></span></li>
+            </ul>
+          </div>
+          <div>
+            <h3>Data &amp; Reporting</h3>
+            <ul>
+              <li>Microsoft Excel (Advanced)<span class="used">Dipakai di <a href="#exp-dh">Darma Henwa</a></span></li>
+              <li>Data Analysis &amp; Data Transformation<span class="used">Dipakai di <a href="#exp-dh">Darma Henwa</a></span></li>
+              <li>ERP System (Ellipse)<span class="used">Dipakai di <a href="#exp-dh">Darma Henwa</a></span></li>
+              <li>Technical Reporting<span class="used">Dipakai di <a href="#exp-dh">Darma Henwa</a>, <a href="#exp-pln">PLN Kamojang</a></span></li>
+              <li>Data Visualization<span class="used">Dipakai di <a href="#case-pbi">Dashboard Power BI</a>, <a href="#case-web">Web App</a></span></li>
+            </ul>
+          </div>
+        </div>
+        <div class="software">
+          <h3>Software</h3>
+          <p>Microsoft Excel, Power BI (DAX &amp; Power Query), React &amp; JavaScript (dasar), ERP Ellipse, SAP PM (sedang dipelajari), Ansys Fluent, SolidWorks, OriginPro, Denford, Microsoft Word &amp; PowerPoint, Google Workspace, Canva, CapCut.</p>
+          <p class="muted"><b>Soft skills:</b> Analytical Thinking, Problem Solving, Critical Thinking, Attention to Detail, Communication Skills, Teamwork &amp; Collaboration, Time Management, Adaptability, Leadership, Continuous Improvement Mindset.</p>
+        </div>
       </div>
-      <div class="certs collapsible reveal">
-        <figure class="cert"><img loading="lazy" src="assets/img/cert-excel.webp" alt="Fundamental Excel — Coding Studio"><figcaption><b>Fundamental Excel</b><span>Coding Studio</span></figcaption></figure>
-        <figure class="cert"><img loading="lazy" src="assets/img/cert-python.webp" alt="Fundamental Python — Coding Studio"><figcaption><b>Fundamental Python</b><span>Coding Studio</span></figcaption></figure>
-        <figure class="cert"><img loading="lazy" src="assets/img/cert-mud.webp" alt="Training Introduction to Mud Engineering — Alpha Petroleum Indonesia"><figcaption><b>Introduction to Mud Engineering</b><span>Alpha Petroleum Indonesia</span></figcaption></figure>
-        <figure class="cert"><img loading="lazy" src="assets/img/cert-toefl.webp" alt="English Proficiency Test (TOEFL) — skor 530"><figcaption><b>TOEFL — Skor 530</b><span>Universitas Pertamina Language Lab</span></figcaption></figure>
-        <figure class="cert"><img loading="lazy" src="assets/img/cert-qhse.webp" alt="Quality Health Safety Management System (SMK3 PP 50 Th. 2012)"><figcaption><b>SMK3 — PP 50 Tahun 2012</b><span>PT Langitbiru Bumi Mataram, 2022</span></figcaption></figure>
-        <figure class="cert"><img loading="lazy" src="assets/img/cert-insitef.webp" alt="Certificate of Appreciation INSITEF 2022"><figcaption><b>INSITEF 2022</b><span>Panitia — Administration Division</span></figcaption></figure>
-        <figure class="cert"><img loading="lazy" src="assets/img/cert-abstract.webp" alt="Workshop How to Write an Abstract for Research"><figcaption><b>Workshop: Writing a Research Abstract</b><span>Universitas Pertamina</span></figcaption></figure>
-        <figure class="cert"><img loading="lazy" src="assets/img/cert-seminar.webp" alt="Seminar Keuangan Mahasiswa Mesin Universitas Pertamina 2021"><figcaption><b>Seminar Keuangan Mahasiswa Mesin</b><span>Universitas Pertamina, 2021</span></figcaption></figure>
-        <figure class="cert"><img loading="lazy" src="assets/img/cert-brightup.webp" alt="Bright UP Session — Pembuatan CV dan Job Interview"><figcaption><b>Bright UP Session: CV &amp; Job Interview</b><span>Universitas Pertamina, 2021</span></figcaption></figure>
-        <figure class="cert"><img loading="lazy" src="assets/img/cert-catchup.webp" alt="Peserta Webinar Catch Up"><figcaption><b>Webinar Catch Up</b><span>Universitas Pertamina</span></figcaption></figure>
-        <figure class="cert"><img loading="lazy" src="assets/img/cert-wisuda.webp" alt="Anggota Divisi Dokumentasi — Pelepasan Wisuda Teknik Mesin"><figcaption><b>Panitia Pelepasan Wisuda Teknik Mesin</b><span>Divisi Dokumentasi, 2023</span></figcaption></figure>
-      </div>
-      <button class="show-more" aria-expanded="false">Lihat semua sertifikat (11)</button>
-    </div>
-  </section>
+    </section>
 
-  <!-- ===================== 07 KONTAK ===================== -->
-  <section id="contact" class="contact">
-    <div class="wrap">
-      <div class="sec-head reveal">
-        <div class="eyebrow"><b>07</b> / Kontak</div>
-        <h2>Mari Bekerja Sama</h2>
-        <p>Terbuka untuk peluang kerja di bidang plant maintenance, reliability, dan alat berat — khususnya industri pertambangan.</p>
+    <!-- ===================== PRESTASI ===================== -->
+    <section id="achievements" class="light">
+      <div class="wrap">
+        <div class="sec-head">
+          <h2>Prestasi &amp; pelatihan</h2>
+        </div>
+        <div class="award">
+          <div>
+            <span class="medal"><svg class="ico" aria-hidden="true"><use href="#i-award"/></svg>Medali Perak</span>
+            <h3>National Applied Science Project Olympiad (NASPO) 2023</h3>
+            <p>Kategori Pengolahan Limbah — penelitian <b>“Batakok-Green”: inovasi pemanfaatan limbah cangkang kerang hijau (<i>Perna viridis</i>) sebagai batako penghasil energi listrik</b> di Cilincing, Jakarta Utara.</p>
+            <p>Kompetisi daring, Surabaya, 19–22 Desember 2023</p>
+          </div>
+          <img loading="lazy" src="assets/img/naspo-award.webp" alt="Sertifikat Penghargaan Medali Perak NASPO 2023">
+        </div>
+
+        <div class="sub" id="training">
+          <h2>Pelatihan</h2>
+          <article class="log compact">
+            <div class="log-meta"><span class="when">Agu – Sep 2026</span><span>BMC Dharmaditna Yogyakarta</span></div>
+            <div class="log-body">
+              <h3>BMC (Basic Mechanic Course) — Heavy Equipment</h3>
+              <p>Pelatihan dasar perawatan alat berat: engine, hydraulic system, electrical system, transmission, dan chassis. Nilai <b>83–90</b> pada 12 modul pelatihan.</p>
+              <div class="thumbs cert-mini"><img loading="lazy" class="contain" src="assets/img/bmc-cert.webp" alt="Sertifikat Basic Mechanic Course — BMC Dharmaditna Yogyakarta"></div>
+            </div>
+          </article>
+          <article class="log compact">
+            <div class="log-meta"><span class="when">September 2026</span><span>PT Borneo Indo Safety</span></div>
+            <div class="log-body">
+              <h3>Dasar K3 Pertambangan</h3>
+              <p>Sertifikasi keselamatan kerja pertambangan: hazard identification &amp; risk control.</p>
+              <div class="thumbs cert-mini"><img loading="lazy" class="contain" src="assets/img/k3-cert.webp" alt="Sertifikat Dasar K3 Pertambangan — PT Borneo Indo Safety"></div>
+            </div>
+          </article>
+        </div>
+
+        <div class="sub" id="organization">
+          <h2>Organisasi</h2>
+          <div class="org-head">
+            <div class="org-logo"><img loading="lazy" src="assets/img/logo-hmm.png" width="450" height="450" alt="Logo Himpunan Mahasiswa Mesin Universitas Pertamina (HMM-UP)"></div>
+            <p class="muted">Himpunan Mahasiswa Mesin (HMM) — Universitas Pertamina</p>
+          </div>
+          <article class="log compact">
+            <div class="log-meta"><span class="when">Feb – Agu 2024</span></div>
+            <div class="log-body">
+              <h3>Ketua Divisi Akademik</h3>
+              <ul>
+                <li>Memimpin pelaksanaan program kerja akademik untuk mendukung pengembangan kompetensi mahasiswa.</li>
+                <li>Mengoordinasikan tim dalam penyelenggaraan kegiatan akademik dan pengembangan keilmuan.</li>
+              </ul>
+            </div>
+          </article>
+          <article class="log compact">
+            <div class="log-meta"><span class="when">Feb – Agu 2023</span></div>
+            <div class="log-body">
+              <h3>Staff Divisi Penelitian</h3>
+              <ul>
+                <li>Mendukung pelaksanaan program penelitian dan pengembangan akademik mahasiswa.</li>
+                <li>Berpartisipasi dalam penyusunan serta pelaksanaan kegiatan yang berkaitan dengan riset dan pengembangan keilmuan.</li>
+              </ul>
+            </div>
+          </article>
+        </div>
       </div>
-      <div class="contact-grid reveal">
-        <a class="contact-card" href="mailto:rizkysugiharto20@gmail.com"><small>Email</small><span class="one-line">rizkysugiharto20@gmail.com</span></a>
-        <a class="contact-card" href="https://wa.me/6281231880494" target="_blank" rel="noopener"><small>WhatsApp</small><span>0812-3188-0494</span></a>
-        <a class="contact-card" href="https://www.linkedin.com/in/rizkybagusekasugiharto" target="_blank" rel="noopener"><small>LinkedIn</small><span translate="no">Rizky Bagus Eka Sugiharto</span></a>
-        <a class="contact-card" href="assets/CV-Rizky-Bagus-Eka-Sugiharto.pdf?v=20261013" target="_blank" rel="noopener"><small>CV</small><span>Download CV (PDF)</span></a>
-        <a class="contact-card" href="assets/Portfolio-Rizky-Bagus-Eka-Sugiharto.pdf?v=20261016" target="_blank" rel="noopener"><small>Portfolio</small><span>Download Portfolio (PDF)</span></a>
+    </section>
+
+    <!-- ===================== PENDIDIKAN & SERTIFIKAT ===================== -->
+    <section id="education" class="light">
+      <div class="wrap">
+        <div class="sec-head">
+          <h2>Pendidikan</h2>
+        </div>
+        <article class="log compact">
+          <div class="log-meta"><span class="when">2021 – 2025</span></div>
+          <div class="log-body edu-head">
+            <div class="edu-logo"><img loading="lazy" src="assets/img/logo-universitas-pertamina.webp" width="271" height="200" alt="Logo Universitas Pertamina"></div>
+            <div>
+              <h3>Universitas Pertamina</h3>
+              <p class="role">S1 Teknik Mesin, IPK 3,45 dari 4,00</p>
+            </div>
+          </div>
+        </article>
+
+        <div class="sub" id="certifications">
+          <h2>Sertifikat tambahan</h2>
+          <p class="muted">Klik sertifikat untuk memperbesar.</p>
+          <div class="cert-groups">
+            <div class="cert-group">
+              <h3>Teknis &amp; K3</h3>
+              <div class="certs">
+              <figure class="cert"><img loading="lazy" src="assets/img/cert-qhse.webp" alt="Quality Health Safety Management System (SMK3 PP 50 Th. 2012)"><figcaption><b>SMK3, PP 50 Tahun 2012</b><span>PT Langitbiru Bumi Mataram, 2022</span></figcaption></figure>
+              <figure class="cert"><img loading="lazy" src="assets/img/cert-mud.webp" alt="Training Introduction to Mud Engineering — Alpha Petroleum Indonesia"><figcaption><b>Introduction to Mud Engineering</b><span>Alpha Petroleum Indonesia</span></figcaption></figure>
+              <figure class="cert"><img loading="lazy" src="assets/img/cert-excel.webp" alt="Fundamental Excel — Coding Studio"><figcaption><b>Fundamental Excel</b><span>Coding Studio</span></figcaption></figure>
+              <figure class="cert"><img loading="lazy" src="assets/img/cert-python.webp" alt="Fundamental Python — Coding Studio"><figcaption><b>Fundamental Python</b><span>Coding Studio</span></figcaption></figure>
+              </div>
+            </div>
+            <div class="cert-group">
+              <h3>Bahasa</h3>
+              <div class="certs">
+              <figure class="cert"><img loading="lazy" src="assets/img/cert-toefl.webp" alt="English Proficiency Test (TOEFL) — skor 530"><figcaption><b>TOEFL, skor 530</b><span>Universitas Pertamina Language Lab</span></figcaption></figure>
+              </div>
+            </div>
+            <div class="cert-group">
+              <h3>Kegiatan kampus</h3>
+              <div class="certs collapsed-all">
+              <figure class="cert"><img loading="lazy" src="assets/img/cert-insitef.webp" alt="Certificate of Appreciation INSITEF 2022"><figcaption><b>INSITEF 2022</b><span>Panitia, Administration Division</span></figcaption></figure>
+              <figure class="cert"><img loading="lazy" src="assets/img/cert-wisuda.webp" alt="Anggota Divisi Dokumentasi — Pelepasan Wisuda Teknik Mesin"><figcaption><b>Panitia Pelepasan Wisuda Teknik Mesin</b><span>Divisi Dokumentasi, 2023</span></figcaption></figure>
+              <figure class="cert"><img loading="lazy" src="assets/img/cert-abstract.webp" alt="Workshop How to Write an Abstract for Research"><figcaption><b>Workshop: Writing a Research Abstract</b><span>Universitas Pertamina</span></figcaption></figure>
+              <figure class="cert"><img loading="lazy" src="assets/img/cert-seminar.webp" alt="Seminar Keuangan Mahasiswa Mesin Universitas Pertamina 2021"><figcaption><b>Seminar Keuangan Mahasiswa Mesin</b><span>Universitas Pertamina, 2021</span></figcaption></figure>
+              <figure class="cert"><img loading="lazy" src="assets/img/cert-brightup.webp" alt="Bright UP Session — Pembuatan CV dan Job Interview"><figcaption><b>Bright UP Session: CV &amp; Job Interview</b><span>Universitas Pertamina, 2021</span></figcaption></figure>
+              <figure class="cert"><img loading="lazy" src="assets/img/cert-catchup.webp" alt="Peserta Webinar Catch Up"><figcaption><b>Webinar Catch Up</b><span>Universitas Pertamina</span></figcaption></figure>
+              </div>
+              <button class="show-more" aria-expanded="false">Tampilkan 6 sertifikat kegiatan kampus</button>
+            </div>
+          </div>
+        </div>
       </div>
-      <p class="loc with-ico"><svg class="ico" aria-hidden="true"><use href="#i-pin"/></svg>Kebayoran Lama, Jakarta Selatan</p>
-    </div>
-  </section>
+    </section>
+
+    <!-- ===================== KONTAK ===================== -->
+    <section id="contact" class="dark contact">
+      <div class="wrap">
+        <h2>Sedang mencari posisi plant maintenance di pertambangan</h2>
+        <p class="lede">Terbuka untuk peran maintenance planning, reliability, dan data perawatan alat berat. Cara tercepat menghubungi saya lewat email atau WhatsApp.</p>
+        <a class="mail" href="mailto:rizkysugiharto20@gmail.com">rizkysugiharto20@gmail.com</a>
+        <div class="contact-grid">
+          <a href="https://wa.me/6281231880494" target="_blank" rel="noopener"><small>WhatsApp</small><span>0812-3188-0494</span></a>
+          <a href="https://www.linkedin.com/in/rizkybagusekasugiharto" target="_blank" rel="noopener"><small>LinkedIn</small><span translate="no">Rizky Bagus Eka Sugiharto</span></a>
+          <a href="assets/CV-Rizky-Bagus-Eka-Sugiharto.pdf?v=20261013" target="_blank" rel="noopener"><small>CV</small><span>Download CV (PDF)</span></a>
+          <a href="assets/Portfolio-Rizky-Bagus-Eka-Sugiharto.pdf?v=20261028" target="_blank" rel="noopener"><small>Portfolio</small><span>Download Portfolio (PDF)</span></a>
+        </div>
+        <p class="where"><svg class="ico" aria-hidden="true"><use href="#i-pin"/></svg> Kebayoran Lama, Jakarta Selatan</p>
+      </div>
+    </section>
 
   </main>
 
-  <footer translate="no">© 2026 Rizky Bagus Eka Sugiharto</footer>
+  <footer><div class="wrap" translate="no">© 2026 Rizky Bagus Eka Sugiharto</div></footer>
 
   <button class="to-top" aria-label="Kembali ke atas">↑</button>
 
-  <!-- Lightbox -->
   <dialog class="lightbox" id="lightbox" aria-label="Pratinjau gambar">
-    <div class="lb-inner">
+    <figure class="lb-inner">
       <img alt="">
-      <p></p>
-    </div>
+      <figcaption></figcaption>
+    </figure>
     <button class="lb-btn lb-close" aria-label="Tutup">×</button>
     <button class="lb-btn lb-prev" aria-label="Sebelumnya">‹</button>
     <button class="lb-btn lb-next" aria-label="Berikutnya">›</button>
   </dialog>
 
   <script>
+    const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
+
     // Menu mobile
     const menu = document.querySelector('.nav ul');
     const menuBtn = document.querySelector('.menu-btn');
     menuBtn.onclick = () => menuBtn.setAttribute('aria-expanded', menu.classList.toggle('open'));
     menu.onclick = () => { menu.classList.remove('open'); menuBtn.setAttribute('aria-expanded', false); };
 
-    // Tab dashboard Power BI (klik, atau panah kiri/kanan saat tab terfokus)
+    // Tab dashboard Power BI (klik, atau panah kiri/kanan); anotasi hanya untuk halaman Overview
     const tabs = [...document.querySelectorAll('.tabs button')];
     const dashPanel = document.getElementById('dash-panel');
+    const dashFigure = document.getElementById('dash-figure');
     const dashImg = document.getElementById('dash-img');
     const dashInsight = document.getElementById('dash-insight');
     function showTab(btn) {
       tabs.forEach(b => { b.setAttribute('aria-selected', b === btn); b.tabIndex = b === btn ? 0 : -1; });
       dashPanel.setAttribute('aria-labelledby', btn.id);
+      dashFigure.dataset.tab = btn.dataset.tab;
       dashImg.src = 'assets/img/' + btn.dataset.img + '.webp';
       dashImg.alt = 'Power BI — ' + btn.textContent;
-      dashInsight.textContent = btn.dataset.insight;
+      const label = document.createElement('b');
+      label.textContent = btn.textContent + ': ';
+      dashInsight.replaceChildren(label, btn.dataset.insight);
     }
     tabs.forEach((b, i) => {
       b.onclick = () => showTab(b);
@@ -825,13 +1038,23 @@
     // Versi cetak/PDF: kelima halaman dashboard ditampilkan berurutan beserta insight-nya
     const dashPrint = document.createElement('div');
     dashPrint.className = 'dash-print';
-    tabs.forEach(b => dashPrint.insertAdjacentHTML('beforeend',
-      `<figure><img loading="lazy" src="assets/img/${b.dataset.img}.webp" alt="Power BI — ${b.textContent}"><figcaption><b>${b.textContent}:</b> ${b.dataset.insight}</figcaption></figure>`));
+    tabs.forEach(b => {
+      const fig = document.createElement('figure');
+      const img = document.createElement('img');
+      img.loading = 'lazy';
+      img.src = 'assets/img/' + b.dataset.img + '.webp';
+      img.alt = 'Power BI — ' + b.textContent;
+      const cap = document.createElement('figcaption');
+      const label = document.createElement('b');
+      label.textContent = b.textContent + ': ';
+      cap.append(label, b.dataset.insight);
+      fig.append(img, cap);
+      dashPrint.append(fig);
+    });
     dashPanel.after(dashPrint);
-    // Pastikan semua gambar (termasuk yang lazy) dimuat sebelum dicetak
     addEventListener('beforeprint', () => document.querySelectorAll('img[loading="lazy"]').forEach(img => img.loading = 'eager'));
 
-    // Tombol "Lihat semua" untuk galeri yang diringkas
+    // Tombol "Tampilkan semua"
     document.querySelectorAll('.show-more').forEach(btn => {
       const list = btn.previousElementSibling, label = btn.textContent;
       btn.onclick = () => {
@@ -841,21 +1064,23 @@
       };
     });
 
-    // Lightbox: klik gambar untuk memperbesar, bisa geser antar gambar dalam satu grup
+    // Pratinjau gambar: klik / Enter / Spasi untuk memperbesar, panah atau geser untuk pindah
     const box = document.getElementById('lightbox');
-    const lbImg = box.querySelector('img'), lbCap = box.querySelector('p');
+    const lbImg = box.querySelector('img'), lbCap = box.querySelector('figcaption');
     let group = [], idx = 0;
     function show(i) {
       idx = (i + group.length) % group.length;
       lbImg.src = group[idx].src;
       lbImg.alt = group[idx].alt;
-      lbCap.innerHTML = '';
-      lbCap.append(group[idx].alt);
-      if (group.length > 1) lbCap.insertAdjacentHTML('beforeend', `<small>${idx + 1} / ${group.length}</small>`);
+      lbCap.textContent = group[idx].alt;
+      if (group.length > 1) {
+        const count = document.createElement('small');
+        count.textContent = `${idx + 1} / ${group.length}`;
+        lbCap.append(count);
+      }
       box.querySelector('.lb-prev').hidden = box.querySelector('.lb-next').hidden = group.length < 2;
     }
-    document.querySelectorAll('.gallery img, .cert img, .dash img').forEach(img => {
-      // Bisa dibuka lewat keyboard: Tab untuk fokus, Enter/Spasi untuk memperbesar
+    document.querySelectorAll('.thumbs img, .lead-photo img, .cert img, #dash-img, .award img, .org-logo img').forEach(img => {
       img.tabIndex = 0;
       img.setAttribute('role', 'button');
       img.addEventListener('keydown', e => {
@@ -866,7 +1091,9 @@
           group = tabs.map(b => ({ src: 'assets/img/' + b.dataset.img + '.webp', alt: 'Power BI — ' + b.textContent }));
           show(tabs.findIndex(b => b.getAttribute('aria-selected') === 'true'));
         } else {
-          group = [...img.closest('.gallery, .certs').querySelectorAll('img')];
+          // Satu grup = semua gambar dalam satu pengalaman / project / daftar sertifikat
+          const container = img.closest('.log-body, .more-work article, .cert-groups');
+          group = container ? [...container.querySelectorAll('img')] : [img];
           show(group.indexOf(img));
         }
         box.showModal();
@@ -888,22 +1115,28 @@
       if (Math.abs(dx) > 50 && group.length > 1) show(idx + (dx < 0 ? 1 : -1));
     });
 
-    // Animasi muncul saat di-scroll + highlight menu aktif
-    const io = new IntersectionObserver(entries => entries.forEach(en => {
-      if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); }
-    }), { threshold: 0.12 });
-    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
-
+    // Tandai menu sesuai section yang sedang dibaca
     const links = [...document.querySelectorAll('.nav ul a')];
     const spy = new IntersectionObserver(entries => entries.forEach(en => {
       if (en.isIntersecting) links.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + en.target.id));
     }), { rootMargin: '-45% 0px -50% 0px' });
-    document.querySelectorAll('section[id]').forEach(s => spy.observe(s));
+    // Hero juga diamati: saat kembali ke atas, tidak ada menu yang ditandai aktif
+    document.querySelectorAll('section[id], header.hero').forEach(s => spy.observe(s));
+
+    // Garis progres baca di bawah navbar
+    const progress = document.querySelector('.nav-progress span');
+    const updateProgress = () => {
+      const max = document.documentElement.scrollHeight - innerHeight;
+      progress.style.transform = `scaleX(${max > 0 ? Math.min(scrollY / max, 1) : 0})`;
+    };
+    addEventListener('scroll', updateProgress, { passive: true });
+    addEventListener('resize', updateProgress);
+    updateProgress();
 
     // Tombol kembali ke atas
     const toTop = document.querySelector('.to-top');
     addEventListener('scroll', () => toTop.classList.toggle('show', scrollY > 700), { passive: true });
-    toTop.onclick = () => scrollTo({ top: 0, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+    toTop.onclick = () => scrollTo({ top: 0, behavior: reduceMotion.matches ? 'auto' : 'smooth' });
   </script>
 </body>
 </html>
