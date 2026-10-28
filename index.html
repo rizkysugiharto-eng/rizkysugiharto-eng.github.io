@@ -3,6 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#121418">
+  <script>document.documentElement.classList.add('js')</script>
   <title>Rizky Bagus Eka Sugiharto | Portfolio</title>
   <meta name="description" content="Portfolio Rizky Bagus Eka Sugiharto — Maintenance Engineer, Reliability Analyst, Heavy Equipment. S1 Teknik Mesin Universitas Pertamina.">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23121418'/%3E%3Ctext x='32' y='45' font-family='Arial' font-weight='700' font-size='38' text-anchor='middle' fill='%23f2a900'%3ER%3C/text%3E%3C/svg%3E">
@@ -55,10 +57,13 @@
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; scroll-padding-top: 72px; }
     body { margin: 0; background: var(--bg); color: var(--ink); font: var(--fs-base)/1.65 "Inter", system-ui, sans-serif; }
-    img { max-width: 100%; display: block; }
+    img { max-width: 100%; height: auto; display: block; }
     a { color: inherit; }
     :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
-    h1, h2, h3 { font-family: "Barlow Semi Condensed", "Inter", sans-serif; line-height: 1.15; margin: 0; letter-spacing: .2px; }
+    h1, h2, h3 { font-family: "Barlow Semi Condensed", "Inter", sans-serif; line-height: 1.15; margin: 0; letter-spacing: .2px; text-wrap: balance; }
+    body { -webkit-tap-highlight-color: rgba(242,183,5,.25); }
+    .skip-link { position: absolute; left: 12px; top: -60px; z-index: 100; background: var(--accent); color: var(--accent-ink); font-weight: 600; padding: 10px 16px; border-radius: 8px; text-decoration: none; }
+    .skip-link:focus { top: 12px; }
     .wrap { max-width: var(--max); margin: 0 auto; padding: 0 20px; }
     .eyebrow { color: var(--muted); font-weight: 600; letter-spacing: 2px; text-transform: uppercase; font-size: var(--fs-xs); }
     .eyebrow b { color: var(--accent-text); }
@@ -93,7 +98,7 @@
     .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 30px; }
     .chips span { font-size: var(--fs-sm); padding: 5px 12px; border: 1px solid rgba(255,255,255,.18); border-radius: 6px; color: #dfe2e8; background: rgba(255,255,255,.04); }
     .btns { display: flex; flex-wrap: wrap; gap: 12px; }
-    .btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 22px; border-radius: 999px; font-weight: 600; font-size: var(--fs-base); text-decoration: none; border: 2px solid var(--accent); transition: transform .15s, filter .15s; }
+    .btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 22px; border-radius: 999px; font-weight: 600; font-size: var(--fs-base); text-decoration: none; border: 2px solid var(--accent); transition: transform .15s; }
     .btn.primary { background: var(--accent); color: var(--accent-ink); }
     .btn.ghost { color: #fff; }
     .btn:hover { filter: brightness(1.08); transform: translateY(-1px); }
@@ -160,7 +165,7 @@
     .gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
     .gallery.g2 { grid-template-columns: repeat(2, 1fr); }
     .gallery.g4 { grid-template-columns: repeat(4, 1fr); }
-    .gallery img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 10px; cursor: zoom-in; border: 1px solid var(--line); background: var(--surface); transition: transform .2s, box-shadow .2s; }
+    .gallery img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 10px; cursor: zoom-in; border: 1px solid var(--line); background: var(--surface); transition: transform .2s; }
     .gallery img:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,.12); }
     .gallery img.contain { object-fit: contain; }
     .gallery img.tall { aspect-ratio: 3 / 4; }
@@ -173,7 +178,7 @@
 
     /* Galeri yang diringkas: 4 item pertama tampil, sisanya lewat tombol "Lihat semua" */
     .collapsible:not(.expanded) > :nth-child(n+5) { display: none; }
-    .show-more { margin-top: 16px; min-height: 44px; padding: 10px 20px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); font: 600 var(--fs-sm) "Inter", sans-serif; cursor: pointer; transition: border-color .2s; }
+    .show-more { margin-top: 16px; min-height: 44px; padding: 10px 20px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); font: 600 var(--fs-sm) "Inter", sans-serif; cursor: pointer; }
     .show-more:hover { border-color: var(--ink); }
 
     /* Achievement */
@@ -219,7 +224,7 @@
     .contact .eyebrow b { color: var(--accent); }
     .contact .sec-head p { color: rgba(255,255,255,.7); }
     .contact-grid { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 16px; }
-    .contact-card { display: block; text-decoration: none; padding: 22px; border-radius: var(--radius); background: var(--dark-2); border: 1px solid rgba(255,255,255,.08); transition: border-color .2s, transform .2s; }
+    .contact-card { display: block; text-decoration: none; padding: 22px; border-radius: var(--radius); background: var(--dark-2); border: 1px solid rgba(255,255,255,.08); transition: transform .2s; }
     a.contact-card:hover { border-color: var(--accent); transform: translateY(-2px); }
     .contact-card small { display: block; color: var(--accent); font-weight: 600; letter-spacing: 1px; text-transform: uppercase; font-size: var(--fs-xs); margin-bottom: 6px; }
     .contact-card span { word-break: break-word; }
@@ -228,11 +233,12 @@
     footer { background: var(--footer); color: rgba(255,255,255,.55); text-align: center; font-size: var(--fs-sm); padding: 22px 0; }
 
     /* Back to top */
-    .to-top { position: fixed; right: 18px; bottom: 18px; width: 44px; height: 44px; border-radius: 50%; border: 0; background: var(--accent); color: var(--accent-ink); font-size: 20px; font-weight: 700; cursor: pointer; box-shadow: 0 6px 18px rgba(0,0,0,.25); opacity: 0; pointer-events: none; transition: opacity .2s; z-index: 40; }
-    .to-top.show { opacity: 1; pointer-events: auto; }
+    .to-top { position: fixed; right: 18px; bottom: 18px; width: 44px; height: 44px; border-radius: 50%; border: 0; background: var(--accent); color: var(--accent-ink); font-size: 20px; font-weight: 700; cursor: pointer; box-shadow: 0 6px 18px rgba(0,0,0,.25); opacity: 0; visibility: hidden; pointer-events: none; transition: opacity .2s, visibility .2s; z-index: 40; }
+    .to-top.show { opacity: 1; visibility: visible; pointer-events: auto; }
 
     /* Lightbox */
-    dialog.lightbox { border: 0; padding: 0; background: transparent; max-width: 100vw; max-height: 100vh; width: 100vw; height: 100vh; }
+    dialog.lightbox { border: 0; padding: 0; background: transparent; max-width: 100vw; max-height: 100vh; width: 100vw; height: 100vh; overscroll-behavior: contain; }
+    body:has(dialog.lightbox[open]) { overflow: hidden; }
     dialog.lightbox::backdrop { background: rgba(8,9,11,.92); }
     .lb-inner { height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 56px 64px 20px; }
     .lb-inner img { max-width: 100%; max-height: calc(100vh - 120px); border-radius: 8px; background: var(--surface); }
@@ -245,9 +251,13 @@
     .lb-next { right: 12px; top: 50%; transform: translateY(-50%); }
 
     /* Animasi muncul saat di-scroll */
-    .reveal { opacity: 0; transform: translateY(24px); transition: opacity .6s ease, transform .6s ease; }
-    .reveal.in { opacity: 1; transform: none; }
-    @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } html { scroll-behavior: auto; } }
+    .js .reveal { opacity: 0; transform: translateY(24px); transition: opacity .6s ease, transform .6s ease; }
+    .js .reveal.in { opacity: 1; transform: none; }
+    @media (prefers-reduced-motion: reduce) {
+      .js .reveal { opacity: 1; transform: none; transition: none; }
+      html { scroll-behavior: auto; }
+      .btn:hover, .gallery img:hover, a.contact-card:hover { transform: none; }
+    }
 
     /* ---------- Responsive ---------- */
     @media (max-width: 960px) {
@@ -284,7 +294,7 @@
       @page :first { margin-top: 0; }
       * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
       .nav, .to-top, .lightbox, .btns, .show-more, .tabs, .dash, .screen-only { display: none !important; }
-      .reveal { opacity: 1; transform: none; transition: none; }
+      .js .reveal { opacity: 1; transform: none; transition: none; }
       .collapsible:not(.expanded) > :nth-child(n+5) { display: block; }
       .hero .wrap { padding-top: 32px; padding-bottom: 44px; }
       .photo-wrap { width: 220px; }
@@ -322,10 +332,12 @@
     <symbol id="i-award" viewBox="0 0 24 24"><path d="m15.477 12.89 1.515 8.526a.5.5 0 0 1-.81.47l-3.58-2.687a1 1 0 0 0-1.197 0l-3.586 2.686a.5.5 0 0 1-.81-.469l1.514-8.526"/><circle cx="12" cy="8" r="6"/></symbol>
   </svg>
 
+  <a class="skip-link" href="#main">Langsung ke isi</a>
+
   <!-- ===================== NAVBAR ===================== -->
   <nav class="nav">
     <div class="wrap">
-      <a href="#top" class="brand">RIZKY<span>.</span></a>
+      <a href="#top" class="brand" translate="no">RIZKY<span>.</span></a>
       <button class="menu-btn" aria-label="Buka menu" aria-expanded="false" aria-controls="nav-menu">☰</button>
       <ul id="nav-menu">
         <li><a href="#about">Tentang</a></li>
@@ -339,17 +351,19 @@
     </div>
   </nav>
 
+  <main id="main">
+
   <!-- ===================== HERO ===================== -->
   <header class="hero" id="top">
     <div class="hero-bg" aria-hidden="true"></div>
     <div class="wrap">
       <div class="photo-wrap">
-        <img class="photo" src="assets/img/profile.webp" alt="Foto Rizky Bagus Eka Sugiharto">
+        <img class="photo" src="assets/img/profile.webp" width="900" height="900" fetchpriority="high" alt="Foto Rizky Bagus Eka Sugiharto">
         <div class="open-badge"><i></i>Open to work</div>
       </div>
       <div>
         <div class="eyebrow">Plant &amp; Maintenance · Heavy Equipment · Mining</div>
-        <h1>Rizky Bagus Eka Sugiharto</h1>
+        <h1 translate="no">Rizky Bagus Eka Sugiharto</h1>
         <p class="role">Maintenance Engineer &nbsp;|&nbsp; Reliability Analyst &nbsp;|&nbsp; Heavy Equipment</p>
         <p class="tagline">Heavy equipment data, organized for better maintenance planning.</p>
         <div class="chips">
@@ -358,7 +372,7 @@
         <div class="btns">
           <a class="btn primary" href="#contact">Hubungi Saya</a>
           <a class="btn ghost" href="assets/CV-Rizky-Bagus-Eka-Sugiharto.pdf" target="_blank" rel="noopener">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0-5-5m5 5 5-5M5 21h14"/></svg>Download CV
+            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0-5-5m5 5 5-5M5 21h14"/></svg>Download CV
           </a>
           <a class="btn ghost" href="https://www.linkedin.com/in/rizkybagusekasugiharto" target="_blank" rel="noopener">LinkedIn</a>
         </div>
@@ -420,10 +434,10 @@
           <div class="note"><svg class="ico" aria-hidden="true"><use href="#i-award"/></svg><span>Lulus program pemagangan dengan predikat <b>Sangat Baik</b></span></div>
         </div>
         <div class="gallery g2 reveal">
-          <img class="wide r-16-10" src="assets/img/dh-team.webp" alt="Bersama tim di kantor PT Darma Henwa">
-          <img class="tall" src="assets/img/dh-group.webp" alt="Bersama rekan peserta pemagangan PT Darma Henwa">
-          <img class="tall" src="assets/img/dh-moment.webp" alt="Momen di PT Darma Henwa">
-          <img class="contain wide r-16-10" src="assets/img/dh-cert.webp" alt="Sertifikat Pemagangan Kemnaker × PT Darma Henwa — PLM Officer">
+          <img loading="lazy" class="wide r-16-10" src="assets/img/dh-team.webp" alt="Bersama tim di kantor PT Darma Henwa">
+          <img loading="lazy" class="tall" src="assets/img/dh-group.webp" alt="Bersama rekan peserta pemagangan PT Darma Henwa">
+          <img loading="lazy" class="tall" src="assets/img/dh-moment.webp" alt="Momen di PT Darma Henwa">
+          <img loading="lazy" class="contain wide r-16-10" src="assets/img/dh-cert.webp" alt="Sertifikat Pemagangan Kemnaker × PT Darma Henwa — PLM Officer">
         </div>
       </article>
 
@@ -442,12 +456,12 @@
           <div class="note"><svg class="ico" aria-hidden="true"><use href="#i-award"/></svg><span>Nilai praktik kerja <b>85,92 (A – Baik Sekali)</b></span></div>
         </div>
         <div class="gallery reveal">
-          <img class="full r-16-9" src="assets/img/pln-field-team.webp" alt="Bersama tim PKL di area cooling tower PLTP Kamojang">
-          <img class="tall" src="assets/img/pln-site.webp" alt="Inspeksi lapangan di PLTP Kamojang">
-          <img class="tall" src="assets/img/pln-presentation.webp" alt="Presentasi hasil praktik kerja lapangan">
-          <img class="tall" src="assets/img/pln-team.webp" alt="Bersama tim PLN Indonesia Power UBP Kamojang">
-          <img class="contain wide r-16-11" src="assets/img/pln-cert.webp" alt="Sertifikat Praktik Kerja Lapangan PLN Indonesia Power">
-          <img class="contain fill" src="assets/img/pln-assessment.webp" alt="Lembar penilaian praktik kerja lapangan">
+          <img loading="lazy" class="full r-16-9" src="assets/img/pln-field-team.webp" alt="Bersama tim PKL di area cooling tower PLTP Kamojang">
+          <img loading="lazy" class="tall" src="assets/img/pln-site.webp" alt="Inspeksi lapangan di PLTP Kamojang">
+          <img loading="lazy" class="tall" src="assets/img/pln-presentation.webp" alt="Presentasi hasil praktik kerja lapangan">
+          <img loading="lazy" class="tall" src="assets/img/pln-team.webp" alt="Bersama tim PLN Indonesia Power UBP Kamojang">
+          <img loading="lazy" class="contain wide r-16-11" src="assets/img/pln-cert.webp" alt="Sertifikat Praktik Kerja Lapangan PLN Indonesia Power">
+          <img loading="lazy" class="contain fill" width="1800" height="1272" src="assets/img/pln-assessment.webp" alt="Lembar penilaian praktik kerja lapangan">
         </div>
       </article>
     </div>
@@ -474,7 +488,7 @@
           <button role="tab" id="tab-pm-planning" aria-controls="dash-panel" data-img="pbi-pm-planning" data-insight="88,4% WO PM selesai, tetapi hanya 79,2% yang dikerjakan tepat waktu sesuai jadwal HM — selisih 9,2% jadi bahan evaluasi penjadwalan.">PM Planning</button>
         </div>
         <div class="dash" id="dash-panel" role="tabpanel">
-          <img id="dash-img" src="assets/img/pbi-overview.webp" alt="Power BI — Overview">
+          <img loading="lazy" id="dash-img" width="1920" height="1101" src="assets/img/pbi-overview.webp" alt="Power BI — Overview">
           <p class="insight" id="dash-insight"></p>
         </div>
         <p class="more-link"><a class="link" href="https://drive.google.com/drive/folders/1bbvt3K4FOZhL6Gi8IVPXEuaJYoMp8xnn?usp=drive_link" target="_blank" rel="noopener">Lihat file &amp; demo dashboard →</a></p>
@@ -486,12 +500,12 @@
         <p>Simulasi dan analisis aliran fluida menggunakan ANSYS Fluent melalui proses geometry, meshing, dan post-processing hasil CFD — termasuk distribusi tekanan aliran di sekitar kendaraan dan project UAS “Flow Over 2D Cylinder Transient Solution”.</p>
         <div class="tags"><span class="tag">Ansys Fluent</span><span class="tag">Meshing</span><span class="tag">Post-processing</span></div>
         <div class="gallery">
-          <img src="assets/img/cfd-car.webp" alt="Kontur tekanan aliran pada permukaan mobil">
-          <img src="assets/img/cfd-3.webp" alt="Fluent flow simulation on car">
-          <img src="assets/img/cfd-2.webp" alt="Fluent flow pressure">
-          <img src="assets/img/cfd-1.webp" alt="Different meshing format">
-          <img src="assets/img/cfd-mesh.webp" alt="Meshing modeling">
-          <img src="assets/img/cfd-uas.webp" alt="Project UAS: Flow Over 2D Cylinder Transient Solution">
+          <img loading="lazy" src="assets/img/cfd-car.webp" alt="Kontur tekanan aliran pada permukaan mobil">
+          <img loading="lazy" src="assets/img/cfd-3.webp" alt="Fluent flow simulation on car">
+          <img loading="lazy" src="assets/img/cfd-2.webp" alt="Fluent flow pressure">
+          <img loading="lazy" src="assets/img/cfd-1.webp" alt="Different meshing format">
+          <img loading="lazy" src="assets/img/cfd-mesh.webp" alt="Meshing modeling">
+          <img loading="lazy" src="assets/img/cfd-uas.webp" alt="Project UAS: Flow Over 2D Cylinder Transient Solution">
         </div>
         <p class="more-link"><a class="link" href="https://drive.google.com/file/d/14mwAWI9StFwS8bvNi7oTARTxTiOLoPQV/view?usp=drive_link" target="_blank" rel="noopener">Lihat presentasi Project UAS →</a></p>
       </article>
@@ -502,12 +516,12 @@
         <p>Merancang komponen mekanikal, assembly, dan engineering drawing menggunakan SolidWorks untuk mendukung proses desain dan manufaktur — termasuk desain kursi roda untuk Project Capstone.</p>
         <div class="tags"><span class="tag">SolidWorks</span><span class="tag">Assembly</span><span class="tag">Engineering Drawing</span></div>
         <div class="gallery">
-          <img src="assets/img/sw-wheelchair.webp" alt="Desain kursi roda Project Capstone (tampak belakang)">
-          <img src="assets/img/sw-wheelchair-drawing.webp" alt="Explode drawing kursi roda Project Capstone">
-          <img src="assets/img/sw-piston.webp" alt="Piston model assembly">
-          <img src="assets/img/sw-vbelt.webp" alt="V-belt assembly model">
-          <img src="assets/img/sw-fridge.webp" alt="Project model kulkas sederhana">
-          <img src="assets/img/sw-spring-washer.webp" alt="Spring washer desain model">
+          <img loading="lazy" src="assets/img/sw-wheelchair.webp" alt="Desain kursi roda Project Capstone (tampak belakang)">
+          <img loading="lazy" src="assets/img/sw-wheelchair-drawing.webp" alt="Explode drawing kursi roda Project Capstone">
+          <img loading="lazy" src="assets/img/sw-piston.webp" alt="Piston model assembly">
+          <img loading="lazy" src="assets/img/sw-vbelt.webp" alt="V-belt assembly model">
+          <img loading="lazy" src="assets/img/sw-fridge.webp" alt="Project model kulkas sederhana">
+          <img loading="lazy" src="assets/img/sw-spring-washer.webp" alt="Spring washer desain model">
         </div>
       </article>
 
@@ -517,17 +531,17 @@
         <p>Merancang berbagai media promosi visual untuk mendukung kebutuhan publikasi, branding, dan penyampaian informasi secara efektif.</p>
         <div class="tags"><span class="tag">Canva</span><span class="tag">Branding</span><span class="tag">Visual Design</span></div>
         <div class="gallery g4 collapsible">
-          <img class="tall" src="assets/img/design-10.webp" alt="Logo FORCE — Festival of Remarkable Celebrations by Engineers">
-          <img class="tall" src="assets/img/design-01.webp" alt="Poster cara penggunaan APAR">
-          <img class="tall" src="assets/img/design-07.webp" alt="Poster nilai AKHLAK">
-          <img class="tall" src="assets/img/design-11.webp" alt="Poster pengelolaan sampah makanan">
-          <img class="tall" src="assets/img/design-02.webp" alt="Desain Singapolah">
-          <img class="tall" src="assets/img/design-04.webp" alt="Desain menu makanan">
-          <img class="tall" src="assets/img/design-03.webp" alt="Desain konten kedai">
-          <img class="tall" src="assets/img/design-05.webp" alt="Desain konten kedai">
-          <img class="tall" src="assets/img/design-06.webp" alt="Desain frame foto">
-          <img class="tall" src="assets/img/design-09.webp" alt="Poster English Day">
-          <img class="tall" src="assets/img/design-08.webp" alt="Desain Sarjana Turu">
+          <img loading="lazy" class="tall" src="assets/img/design-10.webp" alt="Logo FORCE — Festival of Remarkable Celebrations by Engineers">
+          <img loading="lazy" class="tall" src="assets/img/design-01.webp" alt="Poster cara penggunaan APAR">
+          <img loading="lazy" class="tall" src="assets/img/design-07.webp" alt="Poster nilai AKHLAK">
+          <img loading="lazy" class="tall" src="assets/img/design-11.webp" alt="Poster pengelolaan sampah makanan">
+          <img loading="lazy" class="tall" src="assets/img/design-02.webp" alt="Desain Singapolah">
+          <img loading="lazy" class="tall" src="assets/img/design-04.webp" alt="Desain menu makanan">
+          <img loading="lazy" class="tall" src="assets/img/design-03.webp" alt="Desain konten kedai">
+          <img loading="lazy" class="tall" src="assets/img/design-05.webp" alt="Desain konten kedai">
+          <img loading="lazy" class="tall" src="assets/img/design-06.webp" alt="Desain frame foto">
+          <img loading="lazy" class="tall" src="assets/img/design-09.webp" alt="Poster English Day">
+          <img loading="lazy" class="tall" src="assets/img/design-08.webp" alt="Desain Sarjana Turu">
         </div>
         <button class="show-more" aria-expanded="false">Lihat semua desain (11)</button>
       </article>
@@ -609,7 +623,7 @@
           <p>Kategori Pengolahan Limbah — penelitian <b>“Batakok-Green”: inovasi pemanfaatan limbah cangkang kerang hijau (<i>Perna viridis</i>) sebagai batako penghasil energi listrik</b> di Cilincing, Jakarta Utara.</p>
           <p class="small">Kompetisi daring · Surabaya · 19–22 Desember 2023</p>
         </div>
-        <div class="gallery g2"><img class="contain wide r-16-11" src="assets/img/naspo-award.webp" alt="Sertifikat Penghargaan Medali Perak NASPO 2023"></div>
+        <div class="gallery g2"><img loading="lazy" class="contain wide r-16-11" src="assets/img/naspo-award.webp" alt="Sertifikat Penghargaan Medali Perak NASPO 2023"></div>
       </div>
 
       <!-- Training -->
@@ -621,13 +635,13 @@
           <h3>BMC (Basic Mechanic Course) — Heavy Equipment</h3>
           <div class="meta"><span class="date">Agustus – September 2026</span><span>BMC Dharmaditna Yogyakarta</span></div>
           <p>Pelatihan dasar perawatan alat berat: engine, hydraulic system, electrical system, transmission, dan chassis. Nilai <b>83–90</b> pada 12 modul pelatihan.</p>
-          <div class="gallery g2"><img class="contain wide" src="assets/img/bmc-cert.webp" alt="Sertifikat Basic Mechanic Course — BMC Dharmaditna Yogyakarta"></div>
+          <div class="gallery g2"><img loading="lazy" class="contain wide" src="assets/img/bmc-cert.webp" alt="Sertifikat Basic Mechanic Course — BMC Dharmaditna Yogyakarta"></div>
         </div>
         <div class="card reveal">
           <h3>Dasar K3 Pertambangan</h3>
           <div class="meta"><span class="date">September 2026</span><span>PT Borneo Indo Safety</span></div>
           <p>Sertifikasi keselamatan kerja pertambangan: hazard identification &amp; risk control.</p>
-          <div class="gallery g2"><img class="contain wide" src="assets/img/k3-cert.webp" alt="Sertifikat Dasar K3 Pertambangan — PT Borneo Indo Safety"></div>
+          <div class="gallery g2"><img loading="lazy" class="contain wide" src="assets/img/k3-cert.webp" alt="Sertifikat Dasar K3 Pertambangan — PT Borneo Indo Safety"></div>
         </div>
       </div>
 
@@ -677,17 +691,17 @@
         <p class="muted screen-only">Klik sertifikat untuk memperbesar. Gunakan tombol ‹ › atau panah keyboard untuk berpindah.</p>
       </div>
       <div class="certs collapsible reveal">
-        <figure class="cert"><img src="assets/img/cert-excel.webp" alt="Fundamental Excel — Coding Studio"><figcaption><b>Fundamental Excel</b><span>Coding Studio</span></figcaption></figure>
-        <figure class="cert"><img src="assets/img/cert-python.webp" alt="Fundamental Python — Coding Studio"><figcaption><b>Fundamental Python</b><span>Coding Studio</span></figcaption></figure>
-        <figure class="cert"><img src="assets/img/cert-mud.webp" alt="Training Introduction to Mud Engineering — Alpha Petroleum Indonesia"><figcaption><b>Introduction to Mud Engineering</b><span>Alpha Petroleum Indonesia</span></figcaption></figure>
-        <figure class="cert"><img src="assets/img/cert-toefl.webp" alt="English Proficiency Test (TOEFL) — skor 530"><figcaption><b>TOEFL — Skor 530</b><span>Universitas Pertamina Language Lab</span></figcaption></figure>
-        <figure class="cert"><img src="assets/img/cert-qhse.webp" alt="Quality Health Safety Management System (SMK3 PP 50 Th. 2012)"><figcaption><b>SMK3 — PP 50 Tahun 2012</b><span>PT Langitbiru Bumi Mataram, 2022</span></figcaption></figure>
-        <figure class="cert"><img src="assets/img/cert-insitef.webp" alt="Certificate of Appreciation INSITEF 2022"><figcaption><b>INSITEF 2022</b><span>Panitia — Administration Division</span></figcaption></figure>
-        <figure class="cert"><img src="assets/img/cert-abstract.webp" alt="Workshop How to Write an Abstract for Research"><figcaption><b>Workshop: Writing a Research Abstract</b><span>Universitas Pertamina</span></figcaption></figure>
-        <figure class="cert"><img src="assets/img/cert-seminar.webp" alt="Seminar Keuangan Mahasiswa Mesin Universitas Pertamina 2021"><figcaption><b>Seminar Keuangan Mahasiswa Mesin</b><span>Universitas Pertamina, 2021</span></figcaption></figure>
-        <figure class="cert"><img src="assets/img/cert-brightup.webp" alt="Bright UP Session — Pembuatan CV dan Job Interview"><figcaption><b>Bright UP Session: CV &amp; Job Interview</b><span>Universitas Pertamina, 2021</span></figcaption></figure>
-        <figure class="cert"><img src="assets/img/cert-catchup.webp" alt="Peserta Webinar Catch Up"><figcaption><b>Webinar Catch Up</b><span>Universitas Pertamina</span></figcaption></figure>
-        <figure class="cert"><img src="assets/img/cert-wisuda.webp" alt="Anggota Divisi Dokumentasi — Pelepasan Wisuda Teknik Mesin"><figcaption><b>Panitia Pelepasan Wisuda Teknik Mesin</b><span>Divisi Dokumentasi, 2023</span></figcaption></figure>
+        <figure class="cert"><img loading="lazy" src="assets/img/cert-excel.webp" alt="Fundamental Excel — Coding Studio"><figcaption><b>Fundamental Excel</b><span>Coding Studio</span></figcaption></figure>
+        <figure class="cert"><img loading="lazy" src="assets/img/cert-python.webp" alt="Fundamental Python — Coding Studio"><figcaption><b>Fundamental Python</b><span>Coding Studio</span></figcaption></figure>
+        <figure class="cert"><img loading="lazy" src="assets/img/cert-mud.webp" alt="Training Introduction to Mud Engineering — Alpha Petroleum Indonesia"><figcaption><b>Introduction to Mud Engineering</b><span>Alpha Petroleum Indonesia</span></figcaption></figure>
+        <figure class="cert"><img loading="lazy" src="assets/img/cert-toefl.webp" alt="English Proficiency Test (TOEFL) — skor 530"><figcaption><b>TOEFL — Skor 530</b><span>Universitas Pertamina Language Lab</span></figcaption></figure>
+        <figure class="cert"><img loading="lazy" src="assets/img/cert-qhse.webp" alt="Quality Health Safety Management System (SMK3 PP 50 Th. 2012)"><figcaption><b>SMK3 — PP 50 Tahun 2012</b><span>PT Langitbiru Bumi Mataram, 2022</span></figcaption></figure>
+        <figure class="cert"><img loading="lazy" src="assets/img/cert-insitef.webp" alt="Certificate of Appreciation INSITEF 2022"><figcaption><b>INSITEF 2022</b><span>Panitia — Administration Division</span></figcaption></figure>
+        <figure class="cert"><img loading="lazy" src="assets/img/cert-abstract.webp" alt="Workshop How to Write an Abstract for Research"><figcaption><b>Workshop: Writing a Research Abstract</b><span>Universitas Pertamina</span></figcaption></figure>
+        <figure class="cert"><img loading="lazy" src="assets/img/cert-seminar.webp" alt="Seminar Keuangan Mahasiswa Mesin Universitas Pertamina 2021"><figcaption><b>Seminar Keuangan Mahasiswa Mesin</b><span>Universitas Pertamina, 2021</span></figcaption></figure>
+        <figure class="cert"><img loading="lazy" src="assets/img/cert-brightup.webp" alt="Bright UP Session — Pembuatan CV dan Job Interview"><figcaption><b>Bright UP Session: CV &amp; Job Interview</b><span>Universitas Pertamina, 2021</span></figcaption></figure>
+        <figure class="cert"><img loading="lazy" src="assets/img/cert-catchup.webp" alt="Peserta Webinar Catch Up"><figcaption><b>Webinar Catch Up</b><span>Universitas Pertamina</span></figcaption></figure>
+        <figure class="cert"><img loading="lazy" src="assets/img/cert-wisuda.webp" alt="Anggota Divisi Dokumentasi — Pelepasan Wisuda Teknik Mesin"><figcaption><b>Panitia Pelepasan Wisuda Teknik Mesin</b><span>Divisi Dokumentasi, 2023</span></figcaption></figure>
       </div>
       <button class="show-more" aria-expanded="false">Lihat semua sertifikat (11)</button>
     </div>
@@ -704,19 +718,21 @@
       <div class="contact-grid reveal">
         <a class="contact-card" href="mailto:rizkysugiharto20@gmail.com"><small>Email</small><span class="one-line">rizkysugiharto20@gmail.com</span></a>
         <a class="contact-card" href="https://wa.me/6281231880494" target="_blank" rel="noopener"><small>WhatsApp</small><span>0812-3188-0494</span></a>
-        <a class="contact-card" href="https://www.linkedin.com/in/rizkybagusekasugiharto" target="_blank" rel="noopener"><small>LinkedIn</small><span>Rizky Bagus Eka Sugiharto</span></a>
+        <a class="contact-card" href="https://www.linkedin.com/in/rizkybagusekasugiharto" target="_blank" rel="noopener"><small>LinkedIn</small><span translate="no">Rizky Bagus Eka Sugiharto</span></a>
         <a class="contact-card" href="assets/CV-Rizky-Bagus-Eka-Sugiharto.pdf" target="_blank" rel="noopener"><small>CV</small><span>Download CV (PDF)</span></a>
       </div>
       <p class="loc with-ico"><svg class="ico" aria-hidden="true"><use href="#i-pin"/></svg>Kebayoran Lama, Jakarta Selatan</p>
     </div>
   </section>
 
-  <footer>© 2026 Rizky Bagus Eka Sugiharto</footer>
+  </main>
+
+  <footer translate="no">© 2026 Rizky Bagus Eka Sugiharto</footer>
 
   <button class="to-top" aria-label="Kembali ke atas">↑</button>
 
   <!-- Lightbox -->
-  <dialog class="lightbox" id="lightbox">
+  <dialog class="lightbox" id="lightbox" aria-label="Pratinjau gambar">
     <div class="lb-inner">
       <img alt="">
       <p></p>
@@ -783,13 +799,13 @@
     function show(i) {
       idx = (i + group.length) % group.length;
       lbImg.src = group[idx].src;
+      lbImg.alt = group[idx].alt;
       lbCap.innerHTML = '';
       lbCap.append(group[idx].alt);
       if (group.length > 1) lbCap.insertAdjacentHTML('beforeend', `<small>${idx + 1} / ${group.length}</small>`);
       box.querySelector('.lb-prev').hidden = box.querySelector('.lb-next').hidden = group.length < 2;
     }
     document.querySelectorAll('.gallery img, .cert img, .dash img').forEach(img => {
-      img.loading = 'lazy';
       // Bisa dibuka lewat keyboard: Tab untuk fokus, Enter/Spasi untuk memperbesar
       img.tabIndex = 0;
       img.setAttribute('role', 'button');
@@ -838,7 +854,7 @@
     // Tombol kembali ke atas
     const toTop = document.querySelector('.to-top');
     addEventListener('scroll', () => toTop.classList.toggle('show', scrollY > 700), { passive: true });
-    toTop.onclick = () => scrollTo({ top: 0, behavior: 'smooth' });
+    toTop.onclick = () => scrollTo({ top: 0, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
   </script>
 </body>
 </html>
