@@ -8,7 +8,7 @@ Website portfolio statis (HTML + CSS), di-hosting gratis lewat GitHub Pages.
 - `assets/img/` — foto, screenshot project, sertifikat, dan logo (format WebP/PNG)
 - `assets/img/og-cover-2026.jpg` — gambar preview saat link dibagikan di LinkedIn/WhatsApp
 - `assets/CV-Rizky-Bagus-Eka-Sugiharto.pdf` — CV yang bisa diunduh dari website
-- `assets/Portfolio-Rizky-Bagus-Eka-Sugiharto.pdf` — versi PDF portfolio (A4, 12 halaman) untuk tombol **Download Portfolio**
+- `assets/Portfolio-Rizky-Bagus-Eka-Sugiharto.pdf` — versi PDF portfolio (A4, 9 halaman: satu bagian per halaman) untuk tombol **Download Portfolio**
 - `tools/build_portfolio_pdf.py` — membuat ulang PDF portfolio dari `index.html`
 
 ## Memperbarui PDF portfolio

@@ -364,6 +364,11 @@
     }
 
     /* ---------- Responsif ---------- */
+    /* Laptop & desktop: seluruh halaman ditampilkan 75% (setara zoom browser 75%) */
+    @media screen and (min-width: 1024px) {
+      html { zoom: .75; }
+      dialog.lightbox { zoom: calc(4 / 3); }  /* pratinjau gambar tetap penuh layar */
+    }
     @media (max-width: 1100px) {
       .brand-full { display: none; }
       .brand-short { display: inline; }
@@ -384,7 +389,7 @@
       .certs { grid-template-columns: repeat(3, minmax(0, 1fr)); }
       .track .lbl small { display: none; }
     }
-    @media (max-width: 760px) {
+    @media screen and (max-width: 760px) {
       .annot, .annot[data-tab]:not([data-tab="overview"]) { padding-top: 0; display: flex; flex-direction: column; }
       .annot img { order: -1; }
       .ann { position: static; transform: none; width: auto; max-width: none; height: auto; padding: 8px 0 0 14px; border-left: 2px solid var(--annot); margin-top: 8px; }
@@ -438,37 +443,49 @@
     /* ---------- Versi cetak / PDF (Ctrl + P → Save as PDF) ---------- */
     .dash-print, .print-only { display: none; }
     @media print {
-      @page { size: A4; margin: 10mm 0; }
-      @page :first { margin-top: 0; }
+      /* Satu bagian = satu halaman A4 penuh (tanpa margin putih), isi tidak terpotong ke halaman lain.
+         Halaman: 1 profil + tentang · 2 Darma Henwa · 3 PLN · 4 Power BI · 5 web app & karya lain
+                  6 keahlian · 7 prestasi & pelatihan · 8 pendidikan & sertifikat · 9 kontak */
+      @page { size: A4; margin: 0; }
+      html { zoom: .72; scroll-behavior: auto; }  /* A4 (794px) jadi selebar ±1100px seperti layar laptop */
+      :root { --page: calc(297mm / .72); }
       * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-      html { scroll-behavior: auto; }
-      .nav, .to-top, .lightbox, .skip-link, .tabs, #dash-panel, .show-more, .live { display: none !important; }
+      .nav, .to-top, .lightbox, .skip-link, .tabs, #dash-panel, .show-more, .live, footer { display: none !important; }
       .js .track .bar, .js .track .milestone .bar { animation: none; }
       /* Sertifikat kegiatan kampus ikut tercetak; galeri karya lain cukup 4 gambar awal */
       .collapsed-all:not(.expanded) > * { display: block; }
-      section { padding: 26px 0; }
-      #projects { break-before: page; }
+      section { padding: 48px 0; }
+      #experience, #projects, #skills, #achievements, #education, #contact { break-before: page; }
+      #exp-pln, #case-web { break-before: page; padding-top: 56px; border-top: 0; }
+      /* Bagian gelap mengisi halamannya sampai bawah */
+      #projects { min-height: calc(2 * var(--page)); }
+      #contact { min-height: var(--page); display: flex; flex-direction: column; justify-content: center; }
       .sec-head { break-inside: avoid; break-after: avoid; }
-      /* Grafik riwayat di kertas A4 (lebih sempit dari layar): label diperkecil supaya tidak bertabrakan */
-      .life-axis, .lane { grid-template-columns: 6.5rem minmax(0, 1fr); }
-      .lanes-inner { left: 6.5rem; }
-      .lane-name, .track .lbl { font-size: 11px; }
-      .track .lbl small { display: none; }
-      /* Label yang berdekatan ditaruh di sisi kiri batangnya (area itu kosong) */
-      .track .milestone .lbl { left: auto; right: 10px; }
-      .lane-org li:first-child .lbl { left: auto; right: 0; }
-      .case { padding-bottom: 20px; margin-bottom: 20px; }
-      .hero { padding-top: 28px; }
-      .about { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); }
+      /* Pelatihan & organisasi dua kolom supaya prestasi, pelatihan, dan organisasi muat satu halaman */
+      #training, #organization { display: grid; grid-template-columns: 1fr 1fr; gap: 0 40px; }
+      #training > h2, #organization > h2, .org-head { grid-column: 1 / -1; }
+      #training .log, #organization .log { grid-template-columns: 1fr; border-top: 0; }
+      .findings td { padding: 8px 16px 8px 0; }
+      /* Kembalikan tata letak laptop (lebar A4 terbaca sebagai layar ≤960px) */
+      .hero-top { grid-template-columns: minmax(0, 1.9fr) minmax(0, 1fr); gap: 40px; }
+      .hero-bg { width: 58%; }
+      .life-axis, .lane { grid-template-columns: 10rem minmax(0, 1fr); }
+      .lanes-inner { left: 10rem; }
+      .track .lbl small { display: inline; }
+      .lane-work .lbl small { display: none; }
+      .about { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 40px; }
       .skills { grid-template-columns: repeat(3, minmax(0, 1fr)); }
       .more-work { grid-template-columns: repeat(3, minmax(0, 1fr)); }
       .award { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
-      .certs { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-      .lead-photo { max-width: 380px; }
+      .contact-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+      .certs { grid-template-columns: repeat(6, minmax(0, 1fr)); max-width: none; }
+      .case { padding-bottom: 0; margin-bottom: 0; border-bottom: 0; }
+      .more-work { margin-top: 44px; padding-top: 32px; border-top: 1px solid var(--steel-600); }
+      .lead-photo { max-width: 640px; }
       .log-body > .thumbs { grid-template-columns: repeat(6, minmax(0, 1fr)); }
-      .cert-mini { grid-template-columns: 140px; }
+      .cert-mini { grid-template-columns: 160px; }
       /* Dashboard: kelima halaman dicetak berurutan beserta insight-nya */
-      .dash-print { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 16px; }
+      .dash-print { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 16px; }
       .dash-print figure { margin: 0; }
       .dash-print img { width: 100%; border-radius: 6px; }
       .dash-print figcaption { margin-top: 6px; font-size: 12.5px; color: var(--on-dark-2); }
@@ -524,7 +541,7 @@
             <div class="btns">
               <a class="btn primary" href="#contact">Hubungi saya</a>
               <a class="btn" href="assets/CV-Rizky-Bagus-Eka-Sugiharto.pdf?v=20261013" target="_blank" rel="noopener"><svg class="ico" aria-hidden="true"><use href="#i-down"/></svg>Download CV</a>
-              <a class="btn" href="assets/Portfolio-Rizky-Bagus-Eka-Sugiharto.pdf?v=20261028" target="_blank" rel="noopener"><svg class="ico" aria-hidden="true"><use href="#i-down"/></svg>Download Portfolio</a>
+              <a class="btn" href="assets/Portfolio-Rizky-Bagus-Eka-Sugiharto.pdf?v=20261028b" target="_blank" rel="noopener"><svg class="ico" aria-hidden="true"><use href="#i-down"/></svg>Download Portfolio</a>
               <a class="btn" href="https://www.linkedin.com/in/rizkybagusekasugiharto" target="_blank" rel="noopener">LinkedIn</a>
             </div>
           </div>
@@ -976,7 +993,7 @@
           <a href="https://wa.me/6281231880494" target="_blank" rel="noopener"><small>WhatsApp</small><span>0812-3188-0494</span></a>
           <a href="https://www.linkedin.com/in/rizkybagusekasugiharto" target="_blank" rel="noopener"><small>LinkedIn</small><span translate="no">Rizky Bagus Eka Sugiharto</span></a>
           <a href="assets/CV-Rizky-Bagus-Eka-Sugiharto.pdf?v=20261013" target="_blank" rel="noopener"><small>CV</small><span>Download CV (PDF)</span></a>
-          <a href="assets/Portfolio-Rizky-Bagus-Eka-Sugiharto.pdf?v=20261028" target="_blank" rel="noopener"><small>Portfolio</small><span>Download Portfolio (PDF)</span></a>
+          <a href="assets/Portfolio-Rizky-Bagus-Eka-Sugiharto.pdf?v=20261028b" target="_blank" rel="noopener"><small>Portfolio</small><span>Download Portfolio (PDF)</span></a>
         </div>
         <p class="where"><svg class="ico" aria-hidden="true"><use href="#i-pin"/></svg> Kebayoran Lama, Jakarta Selatan</p>
       </div>
