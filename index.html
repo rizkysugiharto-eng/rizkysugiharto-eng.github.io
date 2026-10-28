@@ -97,7 +97,8 @@
     .hero .tagline { font-size: clamp(var(--fs-md), 2.2vw, var(--fs-lg)); font-weight: 600; margin: 0 0 22px; max-width: 560px; }
     .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 30px; }
     .chips span { font-size: var(--fs-sm); padding: 5px 12px; border: 1px solid rgba(255,255,255,.18); border-radius: 6px; color: #dfe2e8; background: rgba(255,255,255,.04); }
-    .btns { display: flex; flex-wrap: wrap; gap: 12px; }
+    .btns { display: grid; gap: 12px; }
+    .btn-row { display: flex; flex-wrap: wrap; gap: 12px; }
     .btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 22px; border-radius: 999px; font-weight: 600; font-size: var(--fs-base); text-decoration: none; border: 2px solid var(--accent); transition: transform .15s; }
     .btn.primary { background: var(--accent); color: var(--accent-ink); }
     .btn.ghost { color: #fff; }
@@ -200,6 +201,18 @@
     .tabs button { font: 600 var(--fs-sm) "Inter", sans-serif; min-height: 44px; padding: 10px 14px; border-radius: 8px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); cursor: pointer; }
     .tabs button[aria-selected="true"] { background: var(--dark); color: #fff; border-color: var(--dark); }
     .dash img { width: 100%; border-radius: 10px; border: 1px solid var(--line); cursor: zoom-in; }
+    /* Pratinjau langsung web app (iframe) — otomatis ikut versi terbaru website */
+    .live-frame { border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: var(--dark); }
+    .live-bar { display: flex; align-items: center; gap: 12px; padding: 10px 14px; background: var(--dark-2); color: #c9ccd3; font-size: var(--fs-xs); }
+    .live-dots { display: flex; gap: 6px; }
+    .live-dots i { width: 10px; height: 10px; border-radius: 50%; background: #3a3f48; }
+    .live-url { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .live-badge { display: inline-flex; align-items: center; gap: 6px; font-weight: 700; color: #fff; }
+    .live-badge::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--success); }
+    .live-frame iframe { display: block; width: 100%; height: 640px; border: 0; background: #f9f9f7; }
+    .live-links { display: flex; flex-wrap: wrap; gap: 12px 28px; }
+    .print-only { display: none; }
+    .data-note { margin: -4px 0 14px; padding: 8px 12px; border-left: 3px solid var(--accent); background: var(--accent-soft); border-radius: 8px; font-size: var(--fs-sm); color: var(--ink); }
     .insight { margin: 12px 0 0; padding: 12px 16px; border-left: 4px solid var(--accent); background: var(--bg); border-radius: 8px; font-size: var(--fs-base); }
 
     /* Education */
@@ -223,7 +236,7 @@
     .contact .eyebrow { color: rgba(255,255,255,.7); }
     .contact .eyebrow b { color: var(--accent); }
     .contact .sec-head p { color: rgba(255,255,255,.7); }
-    .contact-grid { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 16px; }
+    .contact-grid { display: grid; grid-template-columns: 1.5fr repeat(4, 1fr); gap: 16px; }
     .contact-card { display: block; text-decoration: none; padding: 22px; border-radius: var(--radius); background: var(--dark-2); border: 1px solid rgba(255,255,255,.08); transition: transform .2s; }
     a.contact-card:hover { border-color: var(--accent); transform: translateY(-2px); }
     .contact-card small { display: block; color: var(--accent); font-weight: 600; letter-spacing: 1px; text-transform: uppercase; font-size: var(--fs-xs); margin-bottom: 6px; }
@@ -262,6 +275,7 @@
     /* ---------- Responsive ---------- */
     @media (max-width: 960px) {
       .grid-3, .contact-grid { grid-template-columns: repeat(2, 1fr); }
+      .contact-card:first-child { grid-column: 1 / -1; }
       .job, .award, .about-grid { grid-template-columns: 1fr; }
     }
     @media (max-width: 720px) {
@@ -272,7 +286,7 @@
       .hero .wrap { grid-template-columns: 1fr; padding-top: 48px; padding-bottom: 64px; text-align: center; }
       .hero-bg { width: 100%; bottom: auto; height: 340px; opacity: .6; background-position: center; -webkit-mask-image: linear-gradient(#000 60%, transparent); mask-image: linear-gradient(#000 60%, transparent); }
       .photo-wrap { grid-row: 1; width: 210px; }
-      .chips, .btns { justify-content: center; }
+      .chips, .btn-row { justify-content: center; }
       .hero .tagline { margin-left: auto; margin-right: auto; }
       .stats .wrap { grid-template-columns: repeat(2, 1fr); gap: 18px; }
       section { padding: 64px 0; }
@@ -280,6 +294,7 @@
       .gallery, .gallery.g4 { grid-template-columns: repeat(2, 1fr); }
       .certs { grid-template-columns: repeat(2, 1fr); }
       .award { padding: 24px; }
+      .live-frame iframe { height: 560px; }
       .lb-inner { padding: 64px 12px 84px; }
       .lb-prev, .lb-next { top: auto; bottom: 16px; transform: none; }
       .lb-prev { left: calc(50% - 60px); }
@@ -305,6 +320,9 @@
       .grid-3 { grid-template-columns: repeat(3, 1fr); }
       .gallery img:hover { transform: none; box-shadow: none; }
       .dash-print { display: grid; gap: 16px; }
+      .print-only { display: block; }
+      .live-print { width: 100%; border-radius: 10px; border: 1px solid var(--line); margin-bottom: 8px; }
+      .live-links { display: none; }
       .dash-print img { width: 100%; border-radius: 10px; border: 1px solid var(--line); }
       .dash-print figcaption { margin-top: 8px; padding: 10px 14px; border-left: 4px solid var(--accent); background: var(--bg); border-radius: 8px; font-size: var(--fs-sm); }
       .card, .cert, .focus li, .edu, .award, .note, .contact-card, .gallery img, .dash-print figure, .sec-head { break-inside: avoid; }
@@ -370,11 +388,18 @@
           <span>PA · MTBF · MTTR</span><span>ERP Ellipse</span><span>Power BI</span><span>BMC Heavy Equipment</span><span>Dasar K3 Pertambangan</span>
         </div>
         <div class="btns">
-          <a class="btn primary" href="#contact">Hubungi Saya</a>
-          <a class="btn ghost" href="assets/CV-Rizky-Bagus-Eka-Sugiharto.pdf" target="_blank" rel="noopener">
-            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0-5-5m5 5 5-5M5 21h14"/></svg>Download CV
-          </a>
-          <a class="btn ghost" href="https://www.linkedin.com/in/rizkybagusekasugiharto" target="_blank" rel="noopener">LinkedIn</a>
+          <div class="btn-row">
+            <a class="btn primary" href="#contact">Hubungi Saya</a>
+            <a class="btn ghost" href="https://www.linkedin.com/in/rizkybagusekasugiharto" target="_blank" rel="noopener">LinkedIn</a>
+          </div>
+          <div class="btn-row">
+            <a class="btn ghost" href="assets/CV-Rizky-Bagus-Eka-Sugiharto.pdf?v=20261013" target="_blank" rel="noopener">
+              <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0-5-5m5 5 5-5M5 21h14"/></svg>Download CV
+            </a>
+            <a class="btn ghost" href="assets/Portfolio-Rizky-Bagus-Eka-Sugiharto.pdf?v=20261016" target="_blank" rel="noopener">
+              <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0-5-5m5 5 5-5M5 21h14"/></svg>Download Portfolio
+            </a>
+          </div>
         </div>
       </div>
     </div>
@@ -479,6 +504,7 @@
         <div class="num">PROJECT 01</div>
         <h3>Fleet Maintenance &amp; Reliability Dashboard — Power BI</h3>
         <p>Dashboard interaktif untuk monitoring armada alat berat (data dummy, periode 2025): KPI reliability, backlog, biaya, dan kepatuhan jadwal PM — 5 halaman analisis.<span class="screen-only"> Klik tab untuk melihat tiap halaman.</span></p>
+        <p class="data-note">Data dummy sengaja disimulasikan sebagai armada dengan reliability rendah (PA 61,5%, di bawah target umum 85–90%) untuk latihan analisis akar masalah.</p>
         <div class="tags"><span class="tag">Power BI</span><span class="tag">DAX &amp; Power Query</span><span class="tag">MTBF · MTTR · PA</span><span class="tag">Backlog &amp; Cost</span></div>
         <div class="tabs" role="tablist" aria-label="Halaman dashboard Power BI">
           <button role="tab" id="tab-overview" aria-controls="dash-panel" data-img="pbi-overview" data-insight="Physical Availability 61,5%. MTBF 97,6 jam, MTTR 15,6 jam, dari total 739 work order.">Overview</button>
@@ -496,6 +522,27 @@
 
       <article class="project card reveal">
         <div class="num">PROJECT 02</div>
+        <h3>Fleet Maintenance Dashboard — Web App</h3>
+        <p>Pengembangan dashboard Power BI di atas menjadi aplikasi web end-to-end: user menginput work order, lalu KPI (PA, MTBF, MTTR, backlog, biaya) dihitung otomatis dan tampil sebagai grafik interaktif. Dibangun dengan React dan open source di GitHub.<span class="screen-only"> Pratinjau di bawah adalah website aslinya, jadi selalu menampilkan versi terbaru.</span></p>
+        <div class="tags"><span class="tag">React &amp; JavaScript</span><span class="tag">Recharts</span><span class="tag">MTBF · MTTR · PA</span><span class="tag">GitHub Actions</span><span class="tag">Open Source</span></div>
+        <div class="live-frame screen-only">
+          <div class="live-bar">
+            <span class="live-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+            <span class="live-url">rizkysugiharto-eng.github.io/fleet-maintenance-dashboard</span>
+            <span class="live-badge">Live</span>
+          </div>
+          <iframe src="https://rizkysugiharto-eng.github.io/fleet-maintenance-dashboard/" title="Pratinjau langsung Fleet Maintenance Dashboard" loading="lazy"></iframe>
+        </div>
+        <img loading="lazy" class="print-only live-print" src="assets/img/web-dashboard.webp" alt="Tampilan Fleet Maintenance Dashboard — Web App">
+        <p class="more-link live-links">
+          <a class="link" href="https://rizkysugiharto-eng.github.io/fleet-maintenance-dashboard/" target="_blank" rel="noopener">Buka website di tab baru →</a>
+          <a class="link" href="https://github.com/rizkysugiharto-eng/fleet-maintenance-dashboard" target="_blank" rel="noopener">Lihat source code di GitHub →</a>
+        </p>
+        <p class="print-only small muted">Website: rizkysugiharto-eng.github.io/fleet-maintenance-dashboard · Source code: github.com/rizkysugiharto-eng/fleet-maintenance-dashboard</p>
+      </article>
+
+      <article class="project card reveal">
+        <div class="num">PROJECT 03</div>
         <h3>CFD Analysis Using Ansys Fluent</h3>
         <p>Simulasi dan analisis aliran fluida menggunakan ANSYS Fluent melalui proses geometry, meshing, dan post-processing hasil CFD — termasuk distribusi tekanan aliran di sekitar kendaraan dan project UAS “Flow Over 2D Cylinder Transient Solution”.</p>
         <div class="tags"><span class="tag">Ansys Fluent</span><span class="tag">Meshing</span><span class="tag">Post-processing</span></div>
@@ -511,7 +558,7 @@
       </article>
 
       <article class="project card reveal">
-        <div class="num">PROJECT 03</div>
+        <div class="num">PROJECT 04</div>
         <h3>3D Mechanical Design Using SolidWorks</h3>
         <p>Merancang komponen mekanikal, assembly, dan engineering drawing menggunakan SolidWorks untuk mendukung proses desain dan manufaktur — termasuk desain kursi roda untuk Project Capstone.</p>
         <div class="tags"><span class="tag">SolidWorks</span><span class="tag">Assembly</span><span class="tag">Engineering Drawing</span></div>
@@ -526,7 +573,7 @@
       </article>
 
       <article class="project card reveal">
-        <div class="num">PROJECT 04</div>
+        <div class="num">PROJECT 05</div>
         <h3>Logo, Menu, Poster &amp; Banner Design</h3>
         <p>Merancang berbagai media promosi visual untuk mendukung kebutuhan publikasi, branding, dan penyampaian informasi secara efektif.</p>
         <div class="tags"><span class="tag">Canva</span><span class="tag">Branding</span><span class="tag">Visual Design</span></div>
@@ -593,6 +640,7 @@
         <div class="tags">
           <span class="tag gray">Microsoft Excel</span>
           <span class="tag gray">Power BI (DAX &amp; Power Query)</span>
+          <span class="tag gray">React &amp; JavaScript (dasar)</span>
           <span class="tag gray">ERP Ellipse</span>
           <span class="tag gray soon">SAP PM (in progress)</span>
           <span class="tag gray">Ansys Fluent</span>
@@ -719,7 +767,8 @@
         <a class="contact-card" href="mailto:rizkysugiharto20@gmail.com"><small>Email</small><span class="one-line">rizkysugiharto20@gmail.com</span></a>
         <a class="contact-card" href="https://wa.me/6281231880494" target="_blank" rel="noopener"><small>WhatsApp</small><span>0812-3188-0494</span></a>
         <a class="contact-card" href="https://www.linkedin.com/in/rizkybagusekasugiharto" target="_blank" rel="noopener"><small>LinkedIn</small><span translate="no">Rizky Bagus Eka Sugiharto</span></a>
-        <a class="contact-card" href="assets/CV-Rizky-Bagus-Eka-Sugiharto.pdf" target="_blank" rel="noopener"><small>CV</small><span>Download CV (PDF)</span></a>
+        <a class="contact-card" href="assets/CV-Rizky-Bagus-Eka-Sugiharto.pdf?v=20261013" target="_blank" rel="noopener"><small>CV</small><span>Download CV (PDF)</span></a>
+        <a class="contact-card" href="assets/Portfolio-Rizky-Bagus-Eka-Sugiharto.pdf?v=20261016" target="_blank" rel="noopener"><small>Portfolio</small><span>Download Portfolio (PDF)</span></a>
       </div>
       <p class="loc with-ico"><svg class="ico" aria-hidden="true"><use href="#i-pin"/></svg>Kebayoran Lama, Jakarta Selatan</p>
     </div>
