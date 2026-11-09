@@ -1,9 +1,10 @@
 /* Layar Tancap — kertas abu muda, tinta navy, abu batu (palet dari Rizky). */
-/* Semua warna cuma dari 3 warna referensi Rizky; sisanya campuran/transparansi dari ketiganya. */
+/* Abu-abu natural dengan aksen gelap (arang). Warna lain cuma campuran/transparansi dari empat warna ini. */
 :root{
-  --c-kertas:#F3F4F6;
-  --c-tinta:#1D2846;
+  --c-kertas:#EEEEEC;
+  --c-tinta:#1C1C1B;
   --c-batu:#949492;
+  --c-abu:#2A2A29;
   --paper:var(--c-kertas);
   --ink:var(--c-tinta);
   --stone:var(--c-batu);
@@ -23,9 +24,9 @@
   color-scheme:light;
 }
 @media (prefers-color-scheme: dark){
-  :root:not([data-theme="light"]){ --paper:var(--c-tinta); --ink:var(--c-kertas); color-scheme:dark; }
+  :root:not([data-theme="light"]){ --paper:var(--c-abu); --ink:var(--c-kertas); color-scheme:dark; }
 }
-:root[data-theme="dark"]{ --paper:var(--c-tinta); --ink:var(--c-kertas); color-scheme:dark; }
+:root[data-theme="dark"]{ --paper:var(--c-abu); --ink:var(--c-kertas); color-scheme:dark; }
 
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}

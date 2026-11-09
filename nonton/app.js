@@ -895,7 +895,7 @@ function openForm(id = null, preset = {}) {
   $('#tmdb-hasil').innerHTML = '';
   $('#f-cari').value = '';
   const hasKey = !!store.get(K.tmdb, '');
-  $('#tmdb-search').hidden = !!id;
+  $('#tmdb-search').hidden = false;
   $('#f-cari').disabled = !hasKey;
   $('#btn-cari').disabled = !hasKey;
   $('#tmdb-hint').textContent = hasKey
@@ -1132,10 +1132,98 @@ async function pilihTmdb(ref) {
     const keep = { status: $('#f-status').value, catatan: $('#f-catatan').value, koleksi: $('#f-koleksi').value.trim() || undefined,
       tagAlur: uniq([...parseList($('#f-tag').value), ...(it.tagAlur || [])]) };
     if (S.editingId === null && $('#f-belum') && !$('#f-belum').checked) keep.nilai = parseFloat($('#f-nilai').value);
-    fillForm({ ...it, ...keep });
+    const cur = S.editingId ? findItem(S.editingId) : null;
+    if (cur) {
+      // Lagi ngubah judul yang udah ada: progres, nilai, tanggal, dan genre lama tetap dipertahankan.
+      fillForm({ ...cur, ...it, ...keep, genre: cur.genre?.length ? cur.genre : it.genre, progres: cur.progres, nilai: cur.nilai, selesai: cur.selesai, judulAsli: cur.judulAsli, urutanKoleksi: cur.urutanKoleksi });
+    } else {
+      fillForm({ ...it, ...keep });
+    }
     ul.innerHTML = `<li class="sub">Terisi dari TMDB: ${esc(it.judul)}. Tinggal cek, kasih nilai atau tag alur, lalu Simpan.</li>`;
   } catch (e) { ul.innerHTML = `<li class="err">${esc(netMsg(e, 'TMDB'))}</li>`; }
 }
+function tmdbDetail(type, d) {
+  const out = {
+    tmdbId: d.id,
+    poster: d.poster_path || undefined,
+    backdrop: d.backdrop_path || undefined,
+    ratingPublik: d.vote_average ? Math.round(d.vote_average * 10) / 10 : undefined,
+    genre: genresFromTmdb(d.genres),
+  };
+  if (type === 'movie') {
+    out.durasi = d.runtime || undefined;
+    out.sutradara = (d.credits?.crew || []).filter((c) => c.job === 'Director').map((c) => c.name).slice(0, 2).join(', ') || undefined;
+  } else {
+    out.totalEpisode = d.number_of_episodes || undefined;
+    out.durasiEpisode = (d.episode_run_time || [])[0] || d.last_episode_to_air?.runtime || undefined;
+    const eps = (d.seasons || []).filter((x) => x.season_number > 0 && x.episode_count > 0).map((x) => x.episode_count);
+    out.episodePerSeason = eps.length ? eps : undefined;
+    out.sutradara = (d.created_by || []).map((c) => c.name).slice(0, 2).join(', ') || undefined;
+  }
+  return out;
+}
+function pickResult(results, it) {
+  const list = (results || []).filter(Boolean);
+  if (!list.length) return null;
+  const yearOf = (r) => parseInt((r.release_date || r.first_air_date || '').slice(0, 4), 10) || 0;
+  const exact = list.filter((r) => norm(r.title || r.name) === norm(it.judul) || norm(r.original_title || r.original_name) === norm(it.judulAsli || it.judul));
+  const pool = exact.length ? exact : list;
+  if (!it.tahun) return pool[0];
+  return pool.slice().sort((a, b) => Math.abs(yearOf(a) - it.tahun) - Math.abs(yearOf(b) - it.tahun))[0];
+}
+function belumLengkap() { return items().filter((i) => !i.tmdbId); }
+async function lengkapiTmdb() {
+  if (!store.get(K.tmdb, '')) { toast('Masukin token TMDB dulu, terus klik Simpan key'); $('#s-tmdb').focus(); return; }
+  const target = belumLengkap();
+  if (!target.length) { toast('Semua judul udah nyambung ke TMDB'); return; }
+  const btn = $('#s-lengkapi');
+  btn.disabled = true;
+  let ok = 0;
+  const gagal = [];
+  try {
+    for (const [n, it] of target.entries()) {
+      btn.textContent = `Ngambil data ${n + 1}/${target.length}…`;
+      const type = it.jenis === 'series' ? 'tv' : 'movie';
+      try {
+        const q = { query: it.judul, include_adult: 'false' };
+        if (it.tahun) q[type === 'tv' ? 'first_air_date_year' : 'year'] = it.tahun;
+        let r = pickResult((await tmdb(`/search/${type}`, q)).results, it);
+        if (!r && it.tahun) r = pickResult((await tmdb(`/search/${type}`, { query: it.judul, include_adult: 'false' })).results, it);
+        if (!r) { gagal.push(it.judul); continue; }
+        const d = tmdbDetail(type, await tmdb(`/${type}/${r.id}`, type === 'movie' ? { append_to_response: 'credits' } : {}));
+        // Cuma ngisi yang masih kosong; poster TMDB dipakai kalau belum ada link poster sendiri.
+        it.tmdbId = d.tmdbId;
+        if (!it.poster && d.poster) { it.poster = d.poster; delete it.wiki; }
+        for (const k of ['backdrop', 'ratingPublik', 'durasi', 'totalEpisode', 'durasiEpisode', 'episodePerSeason', 'sutradara']) {
+          if (it[k] == null && d[k] != null) it[k] = d[k];
+        }
+        if (!it.genre?.length && d.genre.length) it.genre = d.genre;
+        ok++;
+      } catch (err) {
+        if (/ditolak/.test(err.message)) throw err;
+        gagal.push(it.judul);
+      }
+    }
+  } catch (e) {
+    toast(netMsg(e, 'TMDB'));
+  } finally {
+    btn.disabled = false;
+    updateLengkapiBtn();
+  }
+  if (ok) {
+    save(`${ok} judul dilengkapi dari TMDB${gagal.length ? `, ${gagal.length} gak ketemu` : ''}. Jangan lupa Simpan ke GitHub.`);
+    updateEditStatus();
+  } else if (gagal.length) {
+    toast(`Gak ketemu di TMDB: ${gagal.slice(0, 3).join(', ')}${gagal.length > 3 ? '…' : ''}. Coba lewat Ubah → Cari di TMDB.`);
+  }
+  if (gagal.length) $('#s-lengkapi-info').textContent = `Gak ketemu: ${gagal.join(', ')}. Buka judulnya → Ubah → Cari di TMDB.`;
+}
+function updateLengkapiBtn() {
+  const n = belumLengkap().length;
+  $('#s-lengkapi').textContent = n ? `Lengkapi poster & data dari TMDB (${n} judul)` : 'Semua judul udah nyambung ke TMDB';
+  $('#s-lengkapi').disabled = !n;
+}
+
 async function tmdbKandidat() {
   if (!store.get(K.tmdb, '')) { openEdit(); toast('Masukin API key TMDB dulu'); return; }
   const p = profil();
@@ -1259,6 +1347,7 @@ function updateEditStatus() {
     ? `Ada perubahan yang baru tersimpan di browser ini (${n} judul). Klik “Simpan ke GitHub” biar orang lain juga lihat.`
     : `Semua data sama dengan yang di GitHub (${n} judul).`;
   $('#s-contoh-wrap').hidden = !items().some((i) => i.contoh);
+  updateLengkapiBtn();
 }
 function keyStatus() {
   const gh = store.get(K.gh, ''), tm = store.get(K.tmdb, '');
@@ -1447,6 +1536,7 @@ function bindGlobal() {
   $('#s-export').addEventListener('click', exportJSON);
   $('#s-import').addEventListener('change', (e) => { const f = e.target.files[0]; if (f) importJSON(f); e.target.value = ''; });
   $('#s-hapus-contoh').addEventListener('click', () => { $('#s-confirm').hidden = false; });
+  $('#s-lengkapi').addEventListener('click', lengkapiTmdb);
   $('#s-confirm-no').addEventListener('click', () => { $('#s-confirm').hidden = true; });
   $('#s-confirm-yes').addEventListener('click', () => {
     S.data.judul = items().filter((i) => !i.contoh);
