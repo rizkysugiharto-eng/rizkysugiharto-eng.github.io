@@ -42,7 +42,8 @@ Web catatan nonton pribadi: Arsip (yang udah tamat + nilai 1–10), Lagi Ditonto
 (progres episode/menit), Watchlist, dan Rekomendasi dari selera sendiri.
 Konsep lengkap ada di `nonton/KONSEP.md`.
 
-- `nonton/index.html`, `style.css`, `app.js` — halaman dan logika (tanpa build, tanpa library)
+- `nonton/index.html`, `style.css`, `app.js` — halaman dan logika (tanpa build, tanpa library).
+  Tiap kali `style.css`/`app.js` diubah, naikkan angka `?v=` di `index.html` biar browser gak pakai versi lama.
 - `nonton/data/tontonan.json` — semua data tontonan
 - `nonton/data/kandidat.json` — kandidat bawaan untuk Rekomendasi
 - Mode Edit di web menyimpan perubahan ke browser dulu, lalu ke repo lewat
