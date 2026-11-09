@@ -1,6 +1,6 @@
 {
  "versi": 1,
- "diperbarui": "2026-11-09T09:00:00.000Z",
+ "diperbarui": "2026-11-09T10:00:00.000Z",
  "judul": [
   {
    "id": "mcu-iron-man",
@@ -937,15 +937,17 @@
    "wiki": "Insidious: The Red Door"
   },
   {
-   "id": "doctor-x",
+   "id": "doctor-x-2026",
    "jenis": "series",
-   "judul": "Doctor-X: Surgeon Michiko Daimon",
-   "tahun": 2012,
+   "judul": "Doctor X",
+   "judulAsli": "닥터X",
+   "tahun": 2026,
    "genre": [
     "Drama"
    ],
    "tagAlur": [
-    "medis"
+    "medis",
+    "drakor"
    ],
    "status": "ditonton",
    "progres": {
@@ -953,7 +955,7 @@
    },
    "mulai": "2026-11-09",
    "diupdate": "2026-11-09",
-   "wiki": "Doctor-X: Surgeon Michiko Daimon"
+   "wiki": "Doctor X (South Korean TV series)"
   },
   {
    "id": "dexter",
@@ -1035,7 +1037,8 @@
     "Aksi"
    ],
    "tagAlur": [
-    "mitologi"
+    "mitologi",
+    "petualangan epik"
    ],
    "sutradara": "Christopher Nolan",
    "status": "ditonton",

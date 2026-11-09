@@ -7,7 +7,7 @@
   <meta name="description" content="Catatan pribadi Rizky: film dan series yang udah tamat, yang lagi dikejar, dan rekomendasi tontonan berikutnya.">
   <meta name="robots" content="noindex, nofollow">
   <meta name="theme-color" content="#F3F4F6" media="(prefers-color-scheme: light)">
-  <meta name="theme-color" content="#111829" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#1D2846" media="(prefers-color-scheme: dark)">
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,7 +20,7 @@
   <header class="top">
     <div class="top-in">
       <a class="brand" href="#beranda" aria-label="Layar Tancap, ke Beranda">
-        <span class="stamp" aria-hidden="true">観</span>
+        <svg class="logo" viewBox="0 0 40 40" aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="1.5" y="1.5" width="37" height="37" rx="7" stroke-width="2.5"/><rect x="8" y="8.5" width="24" height="15" rx="1.5" stroke-width="2.2"/><path d="M11.5 20.5l4.5-5.5 3.5 3.5 2.5-2.5 5 4.5" stroke-width="1.8"/><circle cx="26.5" cy="12.5" r="1.6" fill="currentColor" stroke="none"/><path d="M11 23.5v8M29 23.5v8M6.5 31.5h27" stroke-width="2.2"/></svg>
         <span class="brand-name">Layar Tancap</span>
       </a>
       <nav aria-label="Menu utama">
@@ -32,7 +32,10 @@
           <li><a href="#rekomendasi" data-nav="rekomendasi">Rekomendasi</a></li>
         </ul>
       </nav>
-      <button class="pill" id="btn-edit" type="button" aria-haspopup="dialog">Mode Edit</button>
+      <div class="top-actions">
+        <a class="icon-btn" href="#cari" data-nav="cari" aria-label="Cari judul"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21"/></svg></a>
+        <button class="pill" id="btn-edit" type="button" aria-haspopup="dialog">Mode Edit</button>
+      </div>
     </div>
   </header>
 
@@ -44,7 +47,7 @@
 
   <footer class="foot">
     <div class="foot-in">
-      <span class="stamp sm" aria-hidden="true">観</span>
+      <svg class="logo sm" viewBox="0 0 40 40" aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="1.5" y="1.5" width="37" height="37" rx="7" stroke-width="2.5"/><rect x="8" y="8.5" width="24" height="15" rx="1.5" stroke-width="2.2"/><path d="M11.5 20.5l4.5-5.5 3.5 3.5 2.5-2.5 5 4.5" stroke-width="1.8"/><circle cx="26.5" cy="12.5" r="1.6" fill="currentColor" stroke="none"/><path d="M11 23.5v8M29 23.5v8M6.5 31.5h27" stroke-width="2.2"/></svg>
       <p>Catatan nonton pribadi Rizky. Data film dan poster dari <a href="https://www.themoviedb.org/" target="_blank" rel="noopener">TMDB</a> dan Wikipedia. Web ini memakai TMDB API tapi tidak didukung atau disertifikasi oleh TMDB.</p>
     </div>
   </footer>

@@ -42,6 +42,7 @@ const S = {
   editingId: null,
   filter: { q: '', jenis: 'semua', genre: '', era: '', koleksi: '', tahunNonton: '', status: 'selesai', urut: 'nilai' },
   pilih: null,
+  cari: '',
   pilihConfirm: false,
   visibleIds: [],
 };
@@ -294,29 +295,30 @@ function rekomendasi(limit = 12) {
 }
 
 /* ---------- render ---------- */
-const ROUTES = ['beranda', 'arsip', 'lagi', 'watchlist', 'rekomendasi'];
+const ROUTES = ['beranda', 'arsip', 'lagi', 'watchlist', 'rekomendasi', 'cari'];
 function route() { const h = location.hash.replace('#', ''); return ROUTES.includes(h) ? h : 'beranda'; }
 
 function render(navigated = false) {
   if (!S.data) return;
   const r = route();
-  $$('nav a').forEach((a) => { if (a.dataset.nav === r) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
+  $$('[data-nav]').forEach((a) => { if (a.dataset.nav === r) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
   const btn = $('#btn-edit');
   btn.setAttribute('aria-pressed', String(S.edit));
   btn.textContent = S.edit ? (S.dirty ? 'Mode Edit •' : 'Mode Edit') : 'Mode Edit';
   btn.title = S.dirty ? 'Ada perubahan yang belum disimpan ke GitHub' : '';
   renderBanner();
-  const view = { beranda: viewBeranda, arsip: viewArsip, lagi: viewLagi, watchlist: viewWatchlist, rekomendasi: viewRekomendasi }[r];
+  const view = { beranda: viewBeranda, arsip: viewArsip, lagi: viewLagi, watchlist: viewWatchlist, rekomendasi: viewRekomendasi, cari: viewCari }[r];
   const app = $('#app');
   const keepFocus = !navigated && document.activeElement && app.contains(document.activeElement) ? document.activeElement.id : null;
   app.innerHTML = view();
-  const titles = { beranda: 'Layar Tancap', arsip: 'Arsip', lagi: 'Lagi Ditonton', watchlist: 'Watchlist', rekomendasi: 'Rekomendasi' };
+  const titles = { beranda: 'Layar Tancap', arsip: 'Arsip', lagi: 'Lagi Ditonton', watchlist: 'Watchlist', rekomendasi: 'Rekomendasi', cari: 'Cari' };
   document.title = r === 'beranda' ? 'Layar Tancap · Catatan Nonton Rizky' : `${titles[r]} · Layar Tancap`;
   if (keepFocus && document.getElementById(keepFocus)) {
     const el = document.getElementById(keepFocus);
     el.focus();
     if (el.setSelectionRange && el.type === 'search') el.setSelectionRange(el.value.length, el.value.length);
   } else if (navigated && location.hash) { window.scrollTo(0, 0); }
+  if (navigated && r === 'cari') $('#cari-q')?.focus();
   hydratePosters(app);
 }
 
@@ -360,22 +362,65 @@ function statsHTML() {
   </div>`;
 }
 
+function rail(id, title, list, { more = '', render = (x) => tile(x), empty = '' } = {}) {
+  if (!list.length && !empty) return '';
+  return `<section class="sec" aria-labelledby="h-${id}">
+    <div class="sec-head"><h2 id="h-${id}">${esc(title)}</h2>
+      <div class="rail-nav">${more}${list.length > 2 ? `
+        <button class="icon-btn sm" type="button" data-act="rail" data-target="r-${id}" data-dir="-1" aria-label="Geser ${esc(title)} ke kiri">‹</button>
+        <button class="icon-btn sm" type="button" data-act="rail" data-target="r-${id}" data-dir="1" aria-label="Geser ${esc(title)} ke kanan">›</button>` : ''}</div></div>
+    ${list.length ? `<div class="rail" id="r-${id}">${list.map(render).join('')}</div>` : empty}
+  </section>`;
+}
+
+function tileRek(x) {
+  const c = x.c;
+  return `<a class="tile" href="#rekomendasi">
+    ${posterHTML(c, `<span class="label">${c.jenis === 'series' ? 'Series' : 'Film'}</span><span class="badge match">${x.total}%</span><span class="hov" aria-hidden="true">Lihat alasannya</span>`)}
+    <div><h3>${esc(c.judul)}</h3><p class="sub">${esc([c.tahun, (c.genre || [])[0]].filter(Boolean).join(' · '))}</p></div>
+  </a>`;
+}
+
 function viewBeranda() {
-  const lagi = byStatus('ditonton').sort((a, b) => (b.diupdate || '').localeCompare(a.diupdate || '')).slice(0, 3);
-  const tamat = byStatus('selesai').sort((a, b) => (b.selesai || '').localeCompare(a.selesai || '')).slice(0, 6);
-  const { p, list } = rekomendasi(3);
+  const lagi = byStatus('ditonton').sort((a, b) => (b.diupdate || '').localeCompare(a.diupdate || ''));
+  const tamat = byStatus('selesai').slice().sort((a, b) => (b.selesai || '').localeCompare(a.selesai || '') || (b.diupdate || '').localeCompare(a.diupdate || '') || (b.tahun || 0) - (a.tahun || 0)).slice(0, 15);
+  const koleksi = uniq(items().filter((i) => i.koleksi && i.status !== 'watchlist').map((i) => i.koleksi));
+  const watch = byStatus('watchlist').sort((a, b) => (b.diupdate || '').localeCompare(a.diupdate || ''));
+  const { p, list } = rekomendasi(12);
+  const genreCount = {};
+  items().forEach((i) => (i.genre || []).forEach((g) => { genreCount[g] = (genreCount[g] || 0) + 1; }));
+  const genres = Object.entries(genreCount).sort((a, b) => b[1] - a[1]);
+  const kol = koleksi.map((k) => rail('k-' + norm(k).replace(/ /g, '-'), k,
+    items().filter((i) => i.koleksi === k && i.status !== 'watchlist').sort((a, b) => (a.tahun || 0) - (b.tahun || 0) || (a.urutanKoleksi || 0) - (b.urutanKoleksi || 0)),
+    { more: `<a class="more" href="#arsip" data-act="go-koleksi" data-v="${esc(k)}">Semua</a>` })).join('');
   return `${hero()}${statsHTML()}
   <section class="sec" aria-labelledby="h-lagi">
-    <div class="sec-head"><h2 id="h-lagi">Lagi ditonton</h2><a class="more" href="#lagi">Semua progres →</a></div>
-    ${lagi.length ? `<div class="cards">${lagi.map(cardProgres).join('')}</div>` : emptyHTML('Belum ada yang lagi ditonton', 'Pindahin judul dari Watchlist, atau tambah judul baru dengan status “Lagi ditonton”.')}
+    <div class="sec-head"><h2 id="h-lagi">Lanjutin nonton</h2><a class="more" href="#lagi">Semua progres →</a></div>
+    ${lagi.length ? `<div class="cards">${lagi.slice(0, 4).map(cardProgres).join('')}</div>` : emptyHTML('Belum ada yang lagi ditonton', 'Pindahin judul dari Watchlist, atau tambah judul baru dengan status “Lagi ditonton”.')}
   </section>
-  <section class="sec" aria-labelledby="h-tamat">
-    <div class="sec-head"><h2 id="h-tamat">Terakhir tamat</h2><a class="more" href="#arsip">Buka Arsip →</a></div>
-    ${tamat.length ? `<div class="grid">${tamat.map(tile).join('')}</div>` : emptyHTML('Arsip masih kosong', 'Judul yang udah lu tamatin bakal muncul di sini lengkap dengan nilainya.')}
-  </section>
-  <section class="sec" aria-labelledby="h-rek">
-    <div class="sec-head"><h2 id="h-rek">Coba tonton ini</h2><a class="more" href="#rekomendasi">Semua rekomendasi →</a></div>
-    ${p ? `<div class="cards">${list.map(cardRek).join('')}</div>` : emptyHTML('Rekomendasi belum siap', 'Kasih nilai minimal 3 judul yang udah tamat, nanti saran muncul di sini.')}
+  ${genres.length ? `<section class="sec" aria-labelledby="h-genre"><div class="sec-head"><h2 id="h-genre">Jelajah genre</h2></div>
+    <div class="genre-row">${genres.map(([g, n]) => `<a class="genre" href="#arsip" data-act="go-genre" data-v="${esc(g)}"><span>${esc(g)}</span><b>${n}</b></a>`).join('')}</div></section>` : ''}
+  ${rail('tamat', 'Baru masuk Arsip', tamat, { more: '<a class="more" href="#arsip">Buka Arsip →</a>', empty: emptyHTML('Arsip masih kosong', 'Judul yang udah lu tamatin bakal muncul di sini lengkap dengan nilainya.') })}
+  ${kol}
+  ${rail('watch', 'Watchlist', watch, { more: '<a class="more" href="#watchlist">Semua →</a>' })}
+  ${rail('rek', 'Rekomendasi buat lu', p ? list : [], { render: tileRek, more: '<a class="more" href="#rekomendasi">Semua →</a>', empty: emptyHTML('Rekomendasi belum siap', 'Kasih nilai minimal 3 judul yang udah tamat, nanti saran muncul di sini.') })}`;
+}
+
+function viewCari() {
+  const q = norm(S.cari);
+  const hits = q ? items().filter((i) => norm([i.judul, i.judulAsli, i.sutradara, i.koleksi, ...(i.genre || []), ...(i.tagAlur || [])].join(' ')).includes(q)) : [];
+  const order = { ditonton: 0, watchlist: 1, selesai: 2, berhenti: 3 };
+  hits.sort((a, b) => order[a.status] - order[b.status] || (a.tahun || 0) - (b.tahun || 0));
+  const taken = new Set(items().map((i) => norm(i.judul)));
+  const luar = q ? allKandidat().filter((c) => !taken.has(norm(c.judul)) && norm([c.judul, c.sutradara, ...(c.genre || []), ...(c.tagAlur || [])].join(' ')).includes(q)).slice(0, 12) : [];
+  return `<div class="page-title"><h1>Cari</h1><p>Cari di semua catatan lu: yang tamat, lagi ditonton, watchlist, dan yang di-drop.</p></div>
+  <section class="sec">
+    <div class="field bigsearch"><label for="cari-q" class="sr">Kata kunci</label>
+      <input id="cari-q" type="search" placeholder="Judul, sutradara, genre, koleksi…" value="${esc(S.cari)}" autocomplete="off"></div>
+    ${!q ? '<p class="sub">Contoh: “marvel”, “horor”, “nolan”, “time travel”.</p>'
+      : hits.length ? `<p class="summary"><span><b>${hits.length}</b> judul di catatan lu</span></p><div class="grid">${hits.map((x) => tile(x, { status: true })).join('')}</div>`
+      : emptyHTML(`Gak ada “${S.cari}” di catatan lu`, S.edit ? 'Mau ditambahin? Klik tombol di bawah.' : 'Coba kata kunci lain.', S.edit ? `<button class="pill solid" type="button" data-act="add-from-search">+ Tambah “${esc(S.cari)}”</button>` : '')}
+    ${luar.length ? `<div class="sec-head"><h2>Belum pernah lu tonton</h2></div><div class="grid">${luar.map((c) => tileRek({ c, total: (profil() ? skor(c, profil()).total : '–') })).join('')}</div>` : ''}
   </section>`;
 }
 
@@ -383,16 +428,19 @@ function emptyHTML(title, text, action = '') {
   return `<div class="empty"><h3>${esc(title)}</h3><p>${esc(text)}</p>${action}</div>`;
 }
 
-function tile(it) {
-  const badge = typeof it.nilai === 'number' ? `<span class="badge" aria-label="Nilai ${angka(it.nilai)}">${angka(it.nilai)}</span>`
+function tile(it, opts = {}) {
+  if (typeof opts !== 'object') opts = {};
+  const badge = typeof it.nilai === 'number' ? `<span class="badge" aria-label="Nilai ${angka(it.nilai)} dari 10"><i aria-hidden="true">★</i>${angka(it.nilai)}</span>`
     : it.status === 'selesai' ? '<span class="badge muted">belum dinilai</span>' : '';
-  const flag = it.status === 'berhenti' ? '<span class="flag">Drop</span>' : '';
+  const labelText = opts.status ? STATUS_LABEL[it.status] : it.status === 'berhenti' ? 'Drop' : (it.jenis === 'series' ? 'Series' : 'Film');
+  const label = `<span class="label${opts.status || it.status === 'berhenti' ? ' strong' : ''}">${esc(labelText)}</span>`;
   const meta = [it.jenis === 'series' ? 'Series' : 'Film', it.tahun].filter(Boolean).join(' · ');
   const picking = S.edit && S.pilih && route() === 'arsip';
   const on = picking && S.pilih.has(it.id);
   const tick = picking ? `<span class="tick" aria-hidden="true">${on ? '✓' : ''}</span>` : '';
+  const hov = picking ? '' : '<span class="hov" aria-hidden="true">Detail</span>';
   return `<button class="tile${on ? ' on' : ''}" type="button" data-act="${picking ? 'pilih' : 'detail'}" data-id="${esc(it.id)}"${picking ? ` aria-pressed="${on}"` : ''}>
-    ${posterHTML(it, badge + flag + tick)}
+    ${posterHTML(it, badge + (picking ? tick : label) + hov)}
     <div><h3>${esc(it.judul)}</h3><p class="sub">${esc(meta)}</p></div>
   </button>`;
 }
@@ -535,7 +583,7 @@ function viewArsip() {
       </div>
     </div>
     ${tools}
-    ${list.length ? `<div class="grid${pilih && S.edit ? ' picking' : ''}">${list.map(tile).join('')}</div>` : emptyHTML('Gak ada yang cocok', 'Coba longgarin filternya, atau hapus kata kunci pencarian.')}
+    ${list.length ? `<div class="grid${pilih && S.edit ? ' picking' : ''}">${list.map((x) => tile(x)).join('')}</div>` : emptyHTML('Gak ada yang cocok', 'Coba longgarin filternya, atau hapus kata kunci pencarian.')}
   </section>`;
 }
 
@@ -630,11 +678,13 @@ function openDetail(id) {
     it.ratingPublik && ['Rating publik', angka(it.ratingPublik)],
   ].filter(Boolean);
   $('#detail-body').innerHTML = `
-    <div class="dlg-head"><span class="sub">${it.contoh ? 'Data contoh' : ''}</span><button type="button" class="x" data-close aria-label="Tutup">×</button></div>
+    ${it.backdrop ? `<div class="detail-bd"><img src="${esc(TMDB_IMG + 'w780' + it.backdrop)}" alt="" loading="lazy"></div>` : ''}
+    <div class="dlg-head"><span class="sub">${esc(it.koleksi || (it.contoh ? 'Data contoh' : ''))}</span><button type="button" class="x" data-close aria-label="Tutup">×</button></div>
     <div class="detail">
       ${posterHTML(it)}
       <div class="info">
         <h2 id="detail-title">${esc(it.judul)}</h2>
+        ${it.judulAsli ? `<p class="sub">${esc(it.judulAsli)}</p>` : ''}
         ${typeof it.nilai === 'number' ? `<div class="big">${angka(it.nilai)}<small>dari 10</small></div>` : ''}
         <div class="chips">${(it.genre || []).map((g) => `<span class="chip">${esc(g)}</span>`).join('')}${(it.tagAlur || []).map((t) => `<span class="chip plot">${esc(t)}</span>`).join('')}</div>
         ${it.catatan ? `<p class="note">“${esc(it.catatan)}”</p>` : ''}
@@ -687,7 +737,7 @@ function openForm(id = null, preset = {}) {
 
 let formExtra = {};
 function fillForm(it) {
-  formExtra = { tmdbId: it.tmdbId, ratingPublik: it.ratingPublik, wiki: it.wiki };
+  formExtra = { tmdbId: it.tmdbId, ratingPublik: it.ratingPublik, wiki: it.wiki, backdrop: it.backdrop };
   $('#f-judul').value = it.judul || '';
   $('#f-jenis').value = it.jenis || 'film';
   $('#f-tahun').value = it.tahun || '';
@@ -748,7 +798,7 @@ function readForm() {
     tagAlur: uniq(parseList(v('#f-tag')).map((t) => t.toLowerCase())),
     catatan: v('#f-catatan') || undefined,
     poster: posterUrl || formExtra.posterPath || undefined,
-    tmdbId: formExtra.tmdbId, ratingPublik: formExtra.ratingPublik,
+    tmdbId: formExtra.tmdbId, ratingPublik: formExtra.ratingPublik, backdrop: formExtra.backdrop,
     wiki: posterUrl || formExtra.posterPath ? undefined : formExtra.wiki,
   };
   if (jenis === 'film') {
@@ -888,6 +938,7 @@ async function pilihTmdb(ref) {
       status: $('#f-status').value,
       tmdbId: d.id,
       poster: d.poster_path || undefined,
+      backdrop: d.backdrop_path || undefined,
       ratingPublik: d.vote_average ? Math.round(d.vote_average * 10) / 10 : undefined,
     };
     if (type === 'movie') {
@@ -1100,12 +1151,21 @@ function bindGlobal() {
         break;
       }
       case 'tmdb-rek': tmdbKandidat(); break;
+      case 'rail': {
+        const el = document.getElementById(t.dataset.target);
+        if (el) el.scrollBy({ left: Number(t.dataset.dir) * el.clientWidth * 0.85, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+        break;
+      }
+      case 'go-genre': S.filter = { ...S.filter, status: 'selesai', genre: v, koleksi: '', q: '' }; break;
+      case 'go-koleksi': S.filter = { ...S.filter, status: 'selesai', koleksi: v, genre: '', q: '', urut: 'rilisLama' }; break;
+      case 'add-from-search': openForm(null, { judul: S.cari }); setTimeout(() => { $('#f-judul').value = S.cari; if (!$('#f-cari').disabled) { $('#f-cari').value = S.cari; cariTmdb(); } }, 60); break;
       default: break;
     }
   });
 
   $('#app').addEventListener('input', (e) => {
     if (e.target.id === 'f-q') { S.filter.q = e.target.value; render(); }
+    if (e.target.id === 'cari-q') { S.cari = e.target.value; render(); }
   });
   $('#app').addEventListener('change', (e) => {
     const k = e.target.dataset.filter;
