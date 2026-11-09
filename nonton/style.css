@@ -131,7 +131,7 @@ main:focus{outline:none}
 .ph::after{content:"";position:absolute;left:10px;right:10px;bottom:38%;height:22%;border-bottom:1.5px solid var(--stone);
   clip-path:polygon(0 100%,22% 35%,38% 70%,62% 0,82% 60%,100% 30%,100% 100%);background:var(--line)}
 .badge{position:absolute;top:8px;right:8px;z-index:2;min-width:40px;height:40px;padding:0 6px;border-radius:999px;background:var(--ink);color:var(--on-ink);display:grid;place-items:center;font-family:var(--display);font-size:1.25rem;line-height:1;font-variant-numeric:tabular-nums;border:2px solid var(--paper)}
-.badge.muted{background:var(--stone);color:#1D2846;font-family:var(--body);font-size:.66rem;font-weight:700;padding:0 8px}
+.badge.muted{min-width:0;height:22px;background:var(--paper);color:var(--ink-soft);border:1px dashed var(--stone);font-family:var(--body);font-size:.62rem;font-weight:700;padding:0 8px}
 .flag{position:absolute;left:8px;top:8px;z-index:2;font-size:.66rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;background:var(--paper);color:var(--ink);border:1px solid var(--ink);border-radius:999px;padding:1px 8px}
 
 /* ---------- chips ---------- */
@@ -233,6 +233,17 @@ hr{border:0;border-top:1.5px solid var(--line);margin:4px 0;width:100%}
 .why i{color:var(--ink)}
 .toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between}
 .tabs{display:flex;gap:8px;flex-wrap:wrap}
+
+/* ---------- pilih beberapa ---------- */
+.selectbar{position:sticky;top:calc(env(safe-area-inset-top,0px) + 64px);z-index:5;display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:10px 12px;border:2px solid var(--ink);border-radius:var(--radius);background:var(--surface);font-size:.88rem}
+.selectbar .grow{flex:1}
+.selectbar .confirm.full{flex-basis:100%}
+@media (max-width:860px){.selectbar{top:calc(env(safe-area-inset-top,0px) + 100px)}}
+.tick{position:absolute;left:8px;top:8px;z-index:2;width:28px;height:28px;border-radius:6px;border:2px solid var(--ink);background:var(--paper);display:grid;place-items:center;font-weight:700;font-size:1rem;color:var(--ink)}
+.tile.on .tick{background:var(--ink);color:var(--on-ink)}
+.tile.on .poster{outline:3px solid var(--ink);outline-offset:2px}
+.grid.picking .tile:not(.on) .poster{opacity:.75}
+.grid.picking .ph b,.grid.picking .flag{visibility:hidden}
 
 /* ---------- footer, toast ---------- */
 .foot{border-top:1.5px solid var(--line)}

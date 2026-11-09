@@ -40,7 +40,10 @@ const S = {
   melebar: false,
   lagiTab: 'ditonton',
   editingId: null,
-  filter: { q: '', jenis: 'semua', genre: '', era: '', tahunNonton: '', status: 'selesai', urut: 'nilai' },
+  filter: { q: '', jenis: 'semua', genre: '', era: '', koleksi: '', tahunNonton: '', status: 'selesai', urut: 'nilai' },
+  pilih: null,
+  pilihConfirm: false,
+  visibleIds: [],
 };
 
 /* ---------- util ---------- */
@@ -114,7 +117,8 @@ async function init() {
   try { S.kandidat = (await loadJSON('data/kandidat.json')).kandidat || []; } catch (e) { console.warn('Gagal memuat kandidat', e); }
 
   const local = store.get(K.data, null);
-  const localNewer = local && (!remote || S.dirty || (local.diperbarui || '') >= (remote.diperbarui || ''));
+  const contohLama = local && remote && local.judul?.some((i) => i.contoh) && !remote.judul?.some((i) => i.contoh);
+  const localNewer = local && !contohLama && (!remote || S.dirty || (local.diperbarui || '') >= (remote.diperbarui || ''));
   S.data = localNewer ? local : (remote || { versi: 1, judul: [], ditolak: [], kandidatTmdb: [] });
   S.data.judul ||= [];
   S.data.ditolak ||= [];
@@ -384,8 +388,11 @@ function tile(it) {
     : it.status === 'selesai' ? '<span class="badge muted">belum dinilai</span>' : '';
   const flag = it.status === 'berhenti' ? '<span class="flag">Drop</span>' : '';
   const meta = [it.jenis === 'series' ? 'Series' : 'Film', it.tahun].filter(Boolean).join(' · ');
-  return `<button class="tile" type="button" data-act="detail" data-id="${esc(it.id)}">
-    ${posterHTML(it, badge + flag)}
+  const picking = S.edit && S.pilih && route() === 'arsip';
+  const on = picking && S.pilih.has(it.id);
+  const tick = picking ? `<span class="tick" aria-hidden="true">${on ? '✓' : ''}</span>` : '';
+  return `<button class="tile${on ? ' on' : ''}" type="button" data-act="${picking ? 'pilih' : 'detail'}" data-id="${esc(it.id)}"${picking ? ` aria-pressed="${on}"` : ''}>
+    ${posterHTML(it, badge + flag + tick)}
     <div><h3>${esc(it.judul)}</h3><p class="sub">${esc(meta)}</p></div>
   </button>`;
 }
@@ -461,26 +468,52 @@ function viewArsip() {
   const base = items().filter((i) => i.status === f.status);
   const genres = uniq(base.flatMap((i) => i.genre || [])).sort((a, b) => a.localeCompare(b, 'id'));
   const eras = uniq(base.map((i) => eraOf(i.tahun)).filter(Boolean)).sort((a, b) => (a === 'klasik' ? -1 : b === 'klasik' ? 1 : b - a));
-  const years = uniq(base.map((i) => (i.selesai || i.diupdate || '').slice(0, 4)).filter(Boolean)).sort().reverse();
+  const years = uniq(base.map((i) => (i.selesai || '').slice(0, 4)).filter(Boolean)).sort().reverse();
+  const koleksi = uniq(base.map((i) => i.koleksi).filter(Boolean)).sort((a, b) => a.localeCompare(b, 'id'));
   const q = norm(f.q);
   let list = base.filter((i) =>
     (f.jenis === 'semua' || i.jenis === f.jenis) &&
     (!f.genre || (i.genre || []).includes(f.genre)) &&
     (!f.era || eraOf(i.tahun) === f.era) &&
-    (!f.tahunNonton || (i.selesai || i.diupdate || '').startsWith(f.tahunNonton)) &&
-    (!q || norm([i.judul, i.sutradara, ...(i.tagAlur || [])].join(' ')).includes(q)));
+    (!f.koleksi || i.koleksi === f.koleksi) &&
+    (!f.tahunNonton || (i.selesai || '').startsWith(f.tahunNonton)) &&
+    (!q || norm([i.judul, i.sutradara, i.koleksi, ...(i.tagAlur || [])].join(' ')).includes(q)));
+  const urutRilis = (a, b) => (a.tahun || 9999) - (b.tahun || 9999) || (a.urutanKoleksi || 0) - (b.urutanKoleksi || 0);
   const sorters = {
-    nilai: (a, b) => (b.nilai ?? -1) - (a.nilai ?? -1) || a.judul.localeCompare(b.judul),
-    terbaru: (a, b) => (b.selesai || b.diupdate || '').localeCompare(a.selesai || a.diupdate || ''),
-    rilis: (a, b) => (b.tahun || 0) - (a.tahun || 0),
-    rilisLama: (a, b) => (a.tahun || 9999) - (b.tahun || 9999),
+    nilai: (a, b) => (b.nilai ?? -1) - (a.nilai ?? -1) || urutRilis(a, b),
+    terbaru: (a, b) => (b.selesai || '').localeCompare(a.selesai || '') || urutRilis(a, b),
+    rilis: (a, b) => -urutRilis(a, b),
+    rilisLama: urutRilis,
     az: (a, b) => a.judul.localeCompare(b.judul, 'id'),
   };
   list.sort(sorters[f.urut] || sorters.nilai);
+  S.visibleIds = list.map((i) => i.id);
   const rated = list.filter((i) => typeof i.nilai === 'number');
   const avg = rated.length ? (rated.reduce((a, i) => a + i.nilai, 0) / rated.length).toFixed(1) : '–';
   const opt = (v, label, cur) => `<option value="${esc(v)}"${v === cur ? ' selected' : ''}>${esc(label)}</option>`;
   const eraLabel = (e) => (e === 'klasik' ? 'Klasik (sebelum 1960)' : `${e}-an`);
+  const pilih = S.pilih;
+  let tools;
+  if (S.edit && pilih) {
+    const n = pilih.size;
+    tools = `<div class="selectbar" role="region" aria-label="Pilih beberapa judul">
+      <span><b>${n}</b> dipilih</span>
+      <button class="pill sm" type="button" data-act="pilih-semua">Pilih semua yang tampil (${list.length})</button>
+      ${n ? '<button class="pill sm" type="button" data-act="pilih-kosong">Kosongkan</button>' : ''}
+      <span class="grow"></span>
+      <button class="pill sm solid" type="button" data-act="pilih-watchlist"${n ? '' : ' disabled'}>Pindah ke Watchlist</button>
+      <button class="pill sm danger" type="button" data-act="pilih-tanya-hapus"${n ? '' : ' disabled'}>Hapus</button>
+      <button class="pill sm" type="button" data-act="pilih-off">Selesai milih</button>
+      ${S.pilihConfirm && n ? `<div class="confirm full"><p>Hapus ${n} judul dari catatan?</p><div class="actions">
+        <button class="pill sm" type="button" data-act="pilih-batal-hapus">Gak jadi</button>
+        <button class="pill sm danger solid" type="button" data-act="pilih-hapus">Ya, hapus ${n} judul</button></div></div>` : ''}
+    </div>`;
+  } else {
+    tools = `<div class="toolbar">
+      <div class="summary"><span><b>${list.length}</b> judul</span><span>rata-rata nilai <b>${angka(avg)}</b></span><span><b>${Math.round(jamTotal(list))}</b> jam</span></div>
+      ${S.edit ? '<div class="actions"><button class="pill" type="button" data-act="pilih-on">Pilih beberapa</button><button class="pill solid" type="button" data-act="add">+ Tambah judul</button></div>' : ''}
+    </div>`;
+  }
   return `<div class="page-title"><h1>Arsip</h1><p>Semua yang udah lu tamatin, plus nilai pribadi lu. Tahunnya bebas, dari film jadul sampai rilisan terbaru.</p></div>
   <section class="sec">
     <div class="filters" role="search">
@@ -489,8 +522,9 @@ function viewArsip() {
         <button class="pill sm" type="button" data-act="f-status" data-v="berhenti" aria-pressed="${f.status === 'berhenti'}">Di-drop (${byStatus('berhenti').length})</button>
       </div>
       <div class="row">
-        <div class="field search"><label for="f-q">Cari</label><input id="f-q" type="search" placeholder="Judul, sutradara, atau tag alur" value="${esc(f.q)}"></div>
+        <div class="field search"><label for="f-q">Cari</label><input id="f-q" type="search" placeholder="Judul, sutradara, koleksi, atau tag alur" value="${esc(f.q)}"></div>
         <div class="field"><label for="f-jenis2">Jenis</label><select id="f-jenis2" data-filter="jenis">${opt('semua', 'Film & series', f.jenis)}${opt('film', 'Film', f.jenis)}${opt('series', 'Series', f.jenis)}</select></div>
+        ${koleksi.length ? `<div class="field"><label for="f-kol">Koleksi</label><select id="f-kol" data-filter="koleksi">${opt('', 'Semua', f.koleksi || '')}${koleksi.map((k) => opt(k, k, f.koleksi || '')).join('')}</select></div>` : ''}
         <div class="field"><label for="f-era">Era rilis</label><select id="f-era" data-filter="era">${opt('', 'Semua era', f.era)}${eras.map((e) => opt(e, eraLabel(e), f.era)).join('')}</select></div>
         <div class="field"><label for="f-tn">Ditonton tahun</label><select id="f-tn" data-filter="tahunNonton">${opt('', 'Kapan aja', f.tahunNonton)}${years.map((y) => opt(y, y, f.tahunNonton)).join('')}</select></div>
         <div class="field"><label for="f-urut">Urutkan</label><select id="f-urut" data-filter="urut">${opt('nilai', 'Nilai tertinggi', f.urut)}${opt('terbaru', 'Terakhir ditonton', f.urut)}${opt('rilis', 'Rilis terbaru', f.urut)}${opt('rilisLama', 'Rilis terlama', f.urut)}${opt('az', 'Judul A–Z', f.urut)}</select></div>
@@ -500,11 +534,8 @@ function viewArsip() {
         ${genres.map((g) => `<button class="pill sm" type="button" data-act="f-genre" data-v="${esc(g)}" aria-pressed="${f.genre === g}">${esc(g)}</button>`).join('')}
       </div>
     </div>
-    <div class="toolbar">
-      <div class="summary"><span><b>${list.length}</b> judul</span><span>rata-rata nilai <b>${angka(avg)}</b></span><span><b>${Math.round(jamTotal(list))}</b> jam</span></div>
-      ${S.edit ? '<button class="pill solid" type="button" data-act="add">+ Tambah judul</button>' : ''}
-    </div>
-    ${list.length ? `<div class="grid">${list.map(tile).join('')}</div>` : emptyHTML('Gak ada yang cocok', 'Coba longgarin filternya, atau hapus kata kunci pencarian.')}
+    ${tools}
+    ${list.length ? `<div class="grid${pilih && S.edit ? ' picking' : ''}">${list.map(tile).join('')}</div>` : emptyHTML('Gak ada yang cocok', 'Coba longgarin filternya, atau hapus kata kunci pencarian.')}
   </section>`;
 }
 
@@ -589,6 +620,7 @@ function openDetail(id) {
     ['Status', STATUS_LABEL[it.status]],
     ['Jenis', it.jenis === 'series' ? 'Series' : 'Film'],
     it.tahun && ['Rilis', it.tahun],
+    it.koleksi && ['Koleksi', it.koleksi],
     it.sutradara && [it.jenis === 'series' ? 'Kreator' : 'Sutradara', it.sutradara],
     it.jenis === 'film' && it.durasi && ['Durasi', fmtDur(it.durasi)],
     it.jenis === 'series' && it.totalEpisode && ['Episode', `${it.totalEpisode}${it.episodePerSeason ? ` (${it.episodePerSeason.length} season)` : ''}`],
@@ -608,7 +640,8 @@ function openDetail(id) {
         ${it.catatan ? `<p class="note">“${esc(it.catatan)}”</p>` : ''}
         <dl>${rows.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('')}</dl>
         ${S.edit ? `<div class="actions">
-          <button class="pill sm solid" type="button" data-act="edit" data-id="${esc(it.id)}">Ubah</button>
+          ${it.status === 'selesai' && typeof it.nilai !== 'number' ? `<button class="pill sm solid" type="button" data-act="rate" data-id="${esc(it.id)}">Kasih nilai</button>` : ''}
+          <button class="pill sm${it.status === 'selesai' && typeof it.nilai !== 'number' ? '' : ' solid'}" type="button" data-act="edit" data-id="${esc(it.id)}">Ubah</button>
           ${it.status === 'watchlist' ? `<button class="pill sm" type="button" data-act="start" data-id="${esc(it.id)}">Mulai nonton</button>` : ''}
           <button class="pill sm danger" type="button" data-act="ask-del" data-id="${esc(it.id)}">Hapus</button>
         </div>
@@ -660,6 +693,8 @@ function fillForm(it) {
   $('#f-tahun').value = it.tahun || '';
   $('#f-status').value = it.status || 'selesai';
   $('#f-sutradara').value = it.sutradara || '';
+  $('#f-koleksi').value = it.koleksi || '';
+  $('#dl-koleksi').innerHTML = uniq(items().map((i) => i.koleksi).filter(Boolean)).map((k) => `<option value="${esc(k)}">`).join('');
   $('#f-genre').innerHTML = uniq([...GENRES, ...(it.genre || [])]).map((g, n) =>
     `<label><input type="checkbox" id="g-${n}" value="${esc(g)}"${(it.genre || []).includes(g) ? ' checked' : ''}><span>${esc(g)}</span></label>`).join('');
   $('#f-tag').value = (it.tagAlur || []).join(', ');
@@ -708,6 +743,7 @@ function readForm() {
   const out = {
     judul, jenis, status, tahun,
     sutradara: v('#f-sutradara') || undefined,
+    koleksi: v('#f-koleksi') || undefined,
     genre: $$('#f-genre input:checked').map((x) => x.value),
     tagAlur: uniq(parseList(v('#f-tag')).map((t) => t.toLowerCase())),
     catatan: v('#f-catatan') || undefined,
@@ -743,7 +779,7 @@ function submitForm(e) {
     const keep = { id: it.id, mulai: it.mulai };
     if (out.status !== 'selesai') { delete it.nilai; delete it.selesai; }
     if (out.status === 'watchlist') delete it.progres;
-    for (const k of ['durasi', 'totalEpisode', 'durasiEpisode', 'episodePerSeason', 'sutradara', 'catatan', 'poster', 'wiki', 'nilai', 'progres']) delete it[k];
+    for (const k of ['koleksi', 'durasi', 'totalEpisode', 'durasiEpisode', 'episodePerSeason', 'sutradara', 'catatan', 'poster', 'wiki', 'nilai', 'progres']) delete it[k];
     Object.assign(it, clean(out), { id: keep.id, diupdate: today() });
     if (keep.mulai) it.mulai = keep.mulai;
     delete it.contoh;
@@ -766,9 +802,12 @@ function askFinish(id) {
   const it = findItem(id);
   if (!it) return;
   pendingFinish = id;
+  const udahTamat = it.status === 'selesai';
+  $('#nilai-title').textContent = udahTamat ? 'Kasih nilai' : 'Tamat! Kasih nilai';
+  $('#form-nilai button[type=submit]').textContent = udahTamat ? 'Simpan nilai' : 'Pindah ke Arsip';
   $('#nilai-judul').textContent = `${it.judul}${it.tahun ? ` (${it.tahun})` : ''}`;
-  $('#n-nilai').value = 8;
-  $('#n-nilai-out').textContent = '8';
+  $('#n-nilai').value = it.nilai ?? 8;
+  $('#n-nilai-out').textContent = angka(it.nilai ?? 8);
   $('#n-tag').value = (it.tagAlur || []).join(', ');
   $('#n-catatan').value = it.catatan || '';
   openDlg('#dlg-nilai');
@@ -777,17 +816,20 @@ function submitNilai(e) {
   e.preventDefault();
   const it = findItem(pendingFinish);
   if (!it) return;
+  const udahTamat = it.status === 'selesai';
   it.status = 'selesai';
   it.nilai = parseFloat($('#n-nilai').value);
   it.tagAlur = uniq(parseList($('#n-tag').value).map((t) => t.toLowerCase()));
   const cat = $('#n-catatan').value.trim();
   if (cat) it.catatan = cat; else delete it.catatan;
-  it.selesai = today();
   it.diupdate = today();
-  if (it.jenis === 'film') it.progres = { menit: it.durasi || 0 };
-  else it.progres = { episode: it.totalEpisode || it.progres?.episode || 0 };
   delete it.contoh;
   closeDlg($('#dlg-nilai'));
+  closeDlg($('#dlg-detail'));
+  if (udahTamat) { save(`${it.judul} dapat nilai ${angka(it.nilai)}`); return; }
+  it.selesai = today();
+  if (it.jenis === 'film') it.progres = { menit: it.durasi || 0 };
+  else it.progres = { episode: it.totalEpisode || it.progres?.episode || 0 };
   save(`${it.judul} masuk Arsip dengan nilai ${angka(it.nilai)}`);
 }
 function setProgress(it, patch) {
@@ -1005,7 +1047,33 @@ function bindGlobal() {
         if (it && Number.isFinite(m)) setProgress(it, { menit: clamp(m, 0, it.durasi || m) });
         break;
       }
-      case 'finish': askFinish(id); break;
+      case 'finish': case 'rate': askFinish(id); break;
+      case 'pilih-on': S.pilih = new Set(); S.pilihConfirm = false; render(); break;
+      case 'pilih-off': S.pilih = null; S.pilihConfirm = false; render(); break;
+      case 'pilih': if (S.pilih) { if (S.pilih.has(id)) S.pilih.delete(id); else S.pilih.add(id); S.pilihConfirm = false; render(); } break;
+      case 'pilih-semua': if (S.pilih) { S.visibleIds.forEach((x) => S.pilih.add(x)); render(); } break;
+      case 'pilih-kosong': if (S.pilih) { S.pilih.clear(); S.pilihConfirm = false; render(); } break;
+      case 'pilih-tanya-hapus': S.pilihConfirm = true; render(); break;
+      case 'pilih-batal-hapus': S.pilihConfirm = false; render(); break;
+      case 'pilih-hapus': {
+        const n = S.pilih.size;
+        S.data.judul = items().filter((i) => !S.pilih.has(i.id));
+        S.pilih = new Set(); S.pilihConfirm = false;
+        save(`${n} judul dihapus`);
+        break;
+      }
+      case 'pilih-watchlist': {
+        let n = 0;
+        for (const i of items()) {
+          if (!S.pilih.has(i.id)) continue;
+          i.status = 'watchlist'; i.diupdate = today();
+          delete i.nilai; delete i.selesai; delete i.progres; delete i.mulai; delete i.contoh;
+          n++;
+        }
+        S.pilih = new Set(); S.pilihConfirm = false;
+        save(`${n} judul dipindah ke Watchlist`);
+        break;
+      }
       case 'drop': if (it) { it.status = 'berhenti'; it.diupdate = today(); delete it.contoh; save(`${it.judul} dipindah ke Berhenti`); } break;
       case 'resume': if (it) { it.status = 'ditonton'; it.diupdate = today(); delete it.contoh; S.lagiTab = 'ditonton'; save(`Lanjut nonton ${it.judul}`); } break;
       case 'start': if (it) {
