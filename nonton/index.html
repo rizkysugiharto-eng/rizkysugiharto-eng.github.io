@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Layar Tancap · Catatan Nonton Rizky</title>
+  <meta name="description" content="Catatan pribadi Rizky: film dan series yang udah tamat, yang lagi dikejar, dan rekomendasi tontonan berikutnya.">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#F3F4F6" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#111829" media="(prefers-color-scheme: dark)">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat+Brush&family=Quicksand:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a class="skip" href="#app">Langsung ke isi</a>
+
+  <header class="top">
+    <div class="top-in">
+      <a class="brand" href="#beranda" aria-label="Layar Tancap, ke Beranda">
+        <span class="stamp" aria-hidden="true">観</span>
+        <span class="brand-name">Layar Tancap</span>
+      </a>
+      <nav aria-label="Menu utama">
+        <ul>
+          <li><a href="#beranda" data-nav="beranda">Beranda</a></li>
+          <li><a href="#arsip" data-nav="arsip">Arsip</a></li>
+          <li><a href="#lagi" data-nav="lagi">Lagi Ditonton</a></li>
+          <li><a href="#watchlist" data-nav="watchlist">Watchlist</a></li>
+          <li><a href="#rekomendasi" data-nav="rekomendasi">Rekomendasi</a></li>
+        </ul>
+      </nav>
+      <button class="pill" id="btn-edit" type="button" aria-haspopup="dialog">Mode Edit</button>
+    </div>
+  </header>
+
+  <div id="banner" class="banner" hidden></div>
+
+  <main id="app" tabindex="-1">
+    <p class="loading">Lagi nyiapin layar…</p>
+  </main>
+
+  <footer class="foot">
+    <div class="foot-in">
+      <span class="stamp sm" aria-hidden="true">観</span>
+      <p>Catatan nonton pribadi Rizky. Data film dan poster dari <a href="https://www.themoviedb.org/" target="_blank" rel="noopener">TMDB</a> dan Wikipedia. Web ini memakai TMDB API tapi tidak didukung atau disertifikasi oleh TMDB.</p>
+    </div>
+  </footer>
+
+  <!-- Detail judul -->
+  <dialog id="dlg-detail" class="dlg wide" aria-labelledby="detail-title">
+    <div class="dlg-body" id="detail-body"></div>
+  </dialog>
+
+  <!-- Tambah / ubah judul -->
+  <dialog id="dlg-form" class="dlg wide" aria-labelledby="form-title">
+    <form id="form-judul" class="dlg-body form" novalidate>
+      <div class="dlg-head">
+        <h2 id="form-title">Tambah judul</h2>
+        <button type="button" class="x" data-close aria-label="Tutup">×</button>
+      </div>
+
+      <div class="tmdb-search" id="tmdb-search">
+        <label for="f-cari">Cari di TMDB</label>
+        <div class="row">
+          <input id="f-cari" type="search" placeholder="Ketik judul, misal: Oldboy" autocomplete="off">
+          <button type="button" class="pill" id="btn-cari">Cari</button>
+        </div>
+        <p class="hint" id="tmdb-hint">Pilih hasil pencarian biar poster, genre, durasi, dan jumlah episode keisi otomatis.</p>
+        <ul class="tmdb-hasil" id="tmdb-hasil"></ul>
+      </div>
+
+      <div class="grid2">
+        <div class="field span2"><label for="f-judul">Judul</label><input id="f-judul" name="judul" required autocomplete="off"></div>
+        <div class="field"><label for="f-jenis">Jenis</label>
+          <select id="f-jenis" name="jenis"><option value="film">Film</option><option value="series">Series</option></select></div>
+        <div class="field"><label for="f-tahun">Tahun rilis</label><input id="f-tahun" name="tahun" type="number" inputmode="numeric" min="1870" max="2100" placeholder="2019"></div>
+        <div class="field"><label for="f-status">Status</label>
+          <select id="f-status" name="status">
+            <option value="watchlist">Watchlist</option>
+            <option value="ditonton">Lagi ditonton</option>
+            <option value="selesai">Tamat</option>
+            <option value="berhenti">Berhenti (drop)</option>
+          </select></div>
+        <div class="field"><label for="f-sutradara">Sutradara / kreator</label><input id="f-sutradara" name="sutradara" autocomplete="off"></div>
+
+        <fieldset class="field span2"><legend>Genre</legend><div class="chips pick" id="f-genre"></div></fieldset>
+
+        <div class="field span2"><label for="f-tag">Tag alur</label>
+          <input id="f-tag" name="tagAlur" placeholder="plot twist, slow burn, heist" autocomplete="off">
+          <div class="chips sugg" id="f-tag-sugg" aria-label="Tag yang pernah dipakai"></div></div>
+
+        <div class="field only-film"><label for="f-durasi">Durasi (menit)</label><input id="f-durasi" name="durasi" type="number" inputmode="numeric" min="1"></div>
+        <div class="field only-film only-prog"><label for="f-menit">Udah ditonton (menit)</label><input id="f-menit" name="menit" type="number" inputmode="numeric" min="0"></div>
+
+        <div class="field only-series"><label for="f-total">Total episode</label><input id="f-total" name="totalEpisode" type="number" inputmode="numeric" min="1"></div>
+        <div class="field only-series"><label for="f-durep">Durasi per episode (menit)</label><input id="f-durep" name="durasiEpisode" type="number" inputmode="numeric" min="1"></div>
+        <div class="field only-series"><label for="f-eps">Episode per season</label><input id="f-eps" name="episodePerSeason" placeholder="10, 8, 8" autocomplete="off"></div>
+        <div class="field only-series only-prog"><label for="f-epdone">Udah ditonton (episode)</label><input id="f-epdone" name="episode" type="number" inputmode="numeric" min="0"></div>
+
+        <div class="field span2 only-rate">
+          <div class="rate-head">
+            <label for="f-nilai">Nilai</label>
+            <output id="f-nilai-out" for="f-nilai">8</output>
+          </div>
+          <input id="f-nilai" name="nilai" type="range" min="1" max="10" step="0.5" value="8">
+          <label class="check"><input id="f-belum" type="checkbox"> Belum mau kasih nilai</label>
+        </div>
+        <div class="field only-rate"><label for="f-selesai">Tanggal tamat</label><input id="f-selesai" name="selesai" type="date"></div>
+        <div class="field"><label for="f-poster">Link poster (opsional)</label><input id="f-poster" name="poster" type="url" placeholder="https://…" autocomplete="off"></div>
+        <div class="field span2"><label for="f-catatan">Catatan</label><textarea id="f-catatan" name="catatan" rows="2" placeholder="Kesan singkat, bebas"></textarea></div>
+      </div>
+      <p class="err" id="form-err" role="alert"></p>
+      <div class="dlg-foot">
+        <button type="button" class="pill" data-close>Batal</button>
+        <button type="submit" class="pill solid">Simpan</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Kasih nilai saat tamat -->
+  <dialog id="dlg-nilai" class="dlg" aria-labelledby="nilai-title">
+    <form id="form-nilai" class="dlg-body form">
+      <div class="dlg-head">
+        <h2 id="nilai-title">Tamat! Kasih nilai</h2>
+        <button type="button" class="x" data-close aria-label="Tutup">×</button>
+      </div>
+      <p class="sub" id="nilai-judul"></p>
+      <div class="field">
+        <div class="rate-head"><label for="n-nilai">Nilai</label><output id="n-nilai-out" for="n-nilai">8</output></div>
+        <input id="n-nilai" type="range" min="1" max="10" step="0.5" value="8">
+      </div>
+      <div class="field"><label for="n-tag">Tag alur</label><input id="n-tag" placeholder="plot twist, slow burn" autocomplete="off"></div>
+      <div class="field"><label for="n-catatan">Catatan</label><textarea id="n-catatan" rows="2"></textarea></div>
+      <div class="dlg-foot">
+        <button type="button" class="pill" data-close>Nanti aja</button>
+        <button type="submit" class="pill solid">Pindah ke Arsip</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Mode Edit -->
+  <dialog id="dlg-edit" class="dlg" aria-labelledby="edit-title">
+    <div class="dlg-body form">
+      <div class="dlg-head">
+        <h2 id="edit-title">Mode Edit</h2>
+        <button type="button" class="x" data-close aria-label="Tutup">×</button>
+      </div>
+      <label class="switch"><input id="s-edit" type="checkbox"> <span>Tampilkan tombol edit di semua halaman</span></label>
+      <p class="sub" id="s-status"></p>
+
+      <div class="field">
+        <label for="s-gh">Token GitHub</label>
+        <input id="s-gh" type="password" autocomplete="off" placeholder="github_pat_…">
+        <p class="hint">Fine-grained token, akses <b>Contents: Read and write</b> cuma ke repo rizkysugiharto-eng.github.io. Disimpan di browser ini aja.</p>
+      </div>
+      <div class="field">
+        <label for="s-tmdb">API key TMDB</label>
+        <input id="s-tmdb" type="password" autocomplete="off" placeholder="API key (v3) atau Read Access Token">
+        <p class="hint">Buat cari judul dan poster otomatis. Disimpan di browser ini aja.</p>
+      </div>
+      <div class="actions">
+        <button type="button" class="pill" id="s-simpan-key">Simpan key</button>
+        <button type="button" class="pill solid" id="s-push">Simpan ke GitHub</button>
+      </div>
+
+      <hr>
+      <h3>Data</h3>
+      <div class="actions">
+        <button type="button" class="pill" id="s-export">Download cadangan (JSON)</button>
+        <label class="pill file">Pulihkan dari JSON<input id="s-import" type="file" accept="application/json,.json"></label>
+      </div>
+      <div class="actions" id="s-contoh-wrap">
+        <button type="button" class="pill danger" id="s-hapus-contoh">Hapus semua data contoh</button>
+      </div>
+      <div class="confirm" id="s-confirm" hidden>
+        <p>Yakin hapus semua judul contoh? Judul yang lu tambah sendiri gak ikut kehapus.</p>
+        <div class="actions">
+          <button type="button" class="pill" id="s-confirm-no">Gak jadi</button>
+          <button type="button" class="pill danger solid" id="s-confirm-yes">Ya, hapus</button>
+        </div>
+      </div>
+      <div class="confirm" id="s-reset-wrap">
+        <button type="button" class="linkish" id="s-reset">Buang perubahan lokal &amp; muat ulang dari server</button>
+      </div>
+    </div>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+  <script src="app.js"></script>
+</body>
+</html>

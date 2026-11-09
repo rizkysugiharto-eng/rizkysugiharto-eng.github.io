@@ -1,0 +1,197 @@
+{
+  "versi": 1,
+  "diperbarui": "2026-11-09T08:00:00.000Z",
+  "judul": [
+    {
+      "id": "c-parasite", "contoh": true,
+      "jenis": "film", "judul": "Parasite", "tahun": 2019,
+      "genre": ["Thriller", "Drama", "Komedi"],
+      "tagAlur": ["plot twist", "kritik sosial", "dark comedy"],
+      "sutradara": "Bong Joon-ho", "durasi": 132,
+      "status": "selesai", "nilai": 9.5,
+      "catatan": "Babak kedua bikin gak bisa napas.",
+      "selesai": "2026-08-17", "diupdate": "2026-08-17",
+      "wiki": "Parasite (2019 film)"
+    },
+    {
+      "id": "c-dark", "contoh": true,
+      "jenis": "series", "judul": "Dark", "tahun": 2017,
+      "genre": ["Sci-Fi", "Misteri", "Drama"],
+      "tagAlur": ["time travel", "alur rumit", "misteri keluarga"],
+      "totalEpisode": 26, "episodePerSeason": [10, 8, 8], "durasiEpisode": 55,
+      "status": "selesai", "nilai": 9,
+      "catatan": "Season 3 agak berat, tapi ending-nya worth it.",
+      "selesai": "2026-06-18", "diupdate": "2026-06-18",
+      "wiki": "Dark (TV series)"
+    },
+    {
+      "id": "c-breaking-bad", "contoh": true,
+      "jenis": "series", "judul": "Breaking Bad", "tahun": 2008,
+      "genre": ["Kriminal", "Drama", "Thriller"],
+      "tagAlur": ["anti-hero", "slow burn", "perebutan kekuasaan"],
+      "totalEpisode": 62, "episodePerSeason": [7, 13, 13, 13, 16], "durasiEpisode": 47,
+      "status": "selesai", "nilai": 9.5,
+      "catatan": "",
+      "selesai": "2026-03-02", "diupdate": "2026-03-02",
+      "wiki": "Breaking Bad"
+    },
+    {
+      "id": "c-godfather", "contoh": true,
+      "jenis": "film", "judul": "The Godfather", "tahun": 1972,
+      "genre": ["Kriminal", "Drama"],
+      "tagAlur": ["keluarga mafia", "perebutan kekuasaan", "slow burn"],
+      "sutradara": "Francis Ford Coppola", "durasi": 175,
+      "status": "selesai", "nilai": 9,
+      "catatan": "Panjang, tapi gak kerasa.",
+      "selesai": "2025-12-28", "diupdate": "2025-12-28",
+      "wiki": "The Godfather"
+    },
+    {
+      "id": "c-spirited-away", "contoh": true,
+      "jenis": "film", "judul": "Spirited Away", "tahun": 2001,
+      "genre": ["Animasi", "Fantasi", "Keluarga"],
+      "tagAlur": ["dunia fantasi", "coming of age"],
+      "sutradara": "Hayao Miyazaki", "durasi": 125,
+      "status": "selesai", "nilai": 9,
+      "catatan": "",
+      "selesai": "2026-01-20", "diupdate": "2026-01-20",
+      "wiki": "Spirited Away"
+    },
+    {
+      "id": "c-inception", "contoh": true,
+      "jenis": "film", "judul": "Inception", "tahun": 2010,
+      "genre": ["Sci-Fi", "Aksi", "Thriller"],
+      "tagAlur": ["heist", "alur rumit", "plot twist"],
+      "sutradara": "Christopher Nolan", "durasi": 148,
+      "status": "selesai", "nilai": 8.5,
+      "catatan": "",
+      "selesai": "2026-04-11", "diupdate": "2026-04-11",
+      "wiki": "Inception"
+    },
+    {
+      "id": "c-rear-window", "contoh": true,
+      "jenis": "film", "judul": "Rear Window", "tahun": 1954,
+      "genre": ["Misteri", "Thriller"],
+      "tagAlur": ["slow burn", "misteri pembunuhan", "satu lokasi"],
+      "sutradara": "Alfred Hitchcock", "durasi": 112,
+      "status": "selesai", "nilai": 8,
+      "catatan": "Film tua yang tetap tegang.",
+      "selesai": "2026-09-05", "diupdate": "2026-09-05",
+      "wiki": "Rear Window"
+    },
+    {
+      "id": "c-the-raid", "contoh": true,
+      "jenis": "film", "judul": "The Raid", "tahun": 2011,
+      "genre": ["Aksi", "Thriller"],
+      "tagAlur": ["aksi brutal", "satu lokasi"],
+      "sutradara": "Gareth Evans", "durasi": 101,
+      "status": "selesai", "nilai": 8,
+      "catatan": "",
+      "selesai": "2025-11-30", "diupdate": "2025-11-30",
+      "wiki": "The Raid (2011 film)"
+    },
+    {
+      "id": "c-pengabdi-setan", "contoh": true,
+      "jenis": "film", "judul": "Pengabdi Setan", "tahun": 2017,
+      "genre": ["Horor"],
+      "tagAlur": ["horor supranatural", "misteri keluarga"],
+      "sutradara": "Joko Anwar", "durasi": 107,
+      "status": "selesai", "nilai": 7.5,
+      "catatan": "",
+      "selesai": "2026-10-31", "diupdate": "2026-10-31",
+      "wiki": "Satan's Slaves"
+    },
+    {
+      "id": "c-squid-game", "contoh": true,
+      "jenis": "series", "judul": "Squid Game", "tahun": 2021,
+      "genre": ["Thriller", "Drama"],
+      "tagAlur": ["survival game", "kritik sosial"],
+      "totalEpisode": 9, "durasiEpisode": 55,
+      "status": "selesai", "nilai": 7.5,
+      "catatan": "Season 1 aja.",
+      "selesai": "2025-10-12", "diupdate": "2025-10-12",
+      "wiki": "Squid Game"
+    },
+    {
+      "id": "c-la-la-land", "contoh": true,
+      "jenis": "film", "judul": "La La Land", "tahun": 2016,
+      "genre": ["Romansa", "Musik", "Drama"],
+      "tagAlur": ["bittersweet ending", "mimpi & ambisi"],
+      "sutradara": "Damien Chazelle", "durasi": 128,
+      "status": "selesai", "nilai": 6.5,
+      "catatan": "Bagus, tapi bukan selera gw.",
+      "selesai": "2026-02-14", "diupdate": "2026-02-14",
+      "wiki": "La La Land"
+    },
+    {
+      "id": "c-severance", "contoh": true,
+      "jenis": "series", "judul": "Severance", "tahun": 2022,
+      "genre": ["Sci-Fi", "Misteri", "Thriller"],
+      "tagAlur": ["dystopia", "alur rumit", "kritik sosial"],
+      "totalEpisode": 19, "episodePerSeason": [9, 10], "durasiEpisode": 50,
+      "status": "ditonton", "progres": { "episode": 14 },
+      "mulai": "2026-10-20", "diupdate": "2026-11-07",
+      "wiki": "Severance (TV series)"
+    },
+    {
+      "id": "c-interstellar", "contoh": true,
+      "jenis": "film", "judul": "Interstellar", "tahun": 2014,
+      "genre": ["Sci-Fi", "Drama", "Petualangan"],
+      "tagAlur": ["luar angkasa", "time travel", "drama keluarga"],
+      "sutradara": "Christopher Nolan", "durasi": 169,
+      "status": "ditonton", "progres": { "menit": 72 },
+      "mulai": "2026-11-08", "diupdate": "2026-11-08",
+      "wiki": "Interstellar (film)"
+    },
+    {
+      "id": "c-shogun", "contoh": true,
+      "jenis": "series", "judul": "Shōgun", "tahun": 2024,
+      "genre": ["Drama", "Sejarah", "Perang"],
+      "tagAlur": ["perebutan kekuasaan", "intrik politik"],
+      "totalEpisode": 10, "durasiEpisode": 60,
+      "status": "ditonton", "progres": { "episode": 3 },
+      "mulai": "2026-10-10", "diupdate": "2026-10-18",
+      "wiki": "Shōgun (2024 TV series)"
+    },
+    {
+      "id": "c-walking-dead", "contoh": true,
+      "jenis": "series", "judul": "The Walking Dead", "tahun": 2010,
+      "genre": ["Horor", "Drama"],
+      "tagAlur": ["survival", "dystopia"],
+      "totalEpisode": 177, "durasiEpisode": 44,
+      "status": "berhenti", "progres": { "episode": 40 },
+      "catatan": "Drop di season 4, kepanjangan.",
+      "mulai": "2025-06-01", "diupdate": "2025-08-20",
+      "wiki": "The Walking Dead (TV series)"
+    },
+    {
+      "id": "c-seven-samurai", "contoh": true,
+      "jenis": "film", "judul": "Seven Samurai", "tahun": 1954,
+      "genre": ["Aksi", "Drama"],
+      "tagAlur": ["perebutan kekuasaan", "slow burn"],
+      "sutradara": "Akira Kurosawa", "durasi": 207,
+      "status": "watchlist", "diupdate": "2026-11-01",
+      "wiki": "Seven Samurai"
+    },
+    {
+      "id": "c-arrival", "contoh": true,
+      "jenis": "film", "judul": "Arrival", "tahun": 2016,
+      "genre": ["Sci-Fi", "Drama"],
+      "tagAlur": ["alur rumit", "time travel"],
+      "sutradara": "Denis Villeneuve", "durasi": 116,
+      "status": "watchlist", "diupdate": "2026-11-03",
+      "wiki": "Arrival (film)"
+    },
+    {
+      "id": "c-mindhunter", "contoh": true,
+      "jenis": "series", "judul": "Mindhunter", "tahun": 2017,
+      "genre": ["Kriminal", "Drama"],
+      "tagAlur": ["misteri pembunuhan", "slow burn", "kisah nyata"],
+      "totalEpisode": 19, "episodePerSeason": [10, 9], "durasiEpisode": 55,
+      "status": "watchlist", "diupdate": "2026-10-25",
+      "wiki": "Mindhunter (TV series)"
+    }
+  ],
+  "ditolak": [],
+  "kandidatTmdb": []
+}
