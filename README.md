@@ -52,4 +52,15 @@ Konsep lengkap ada di `nonton/KONSEP.md`.
   web nanya dulu mau pakai yang mana (gak nimpa diam-diam).
 - Keamanan: Content-Security-Policy di `index.html`, semua data dirapikan (`cleanData`)
   sebelum dipakai, dan halaman menolak dibuka di dalam iframe.
+
+### Token buat Mode Edit
+
+- **Token GitHub** (fine-grained, akun `rizkysugiharto-eng`): Only select repositories →
+  `rizkysugiharto-eng.github.io`, izin **Contents: Read and write**. Masa berlaku 90 hari;
+  pas habis, web tetap online, cuma tombol "Simpan ke GitHub" yang ditolak. Perpanjang lewat
+  https://github.com/settings/personal-access-tokens → Regenerate token, lalu tempel ulang di Mode Edit.
+- **Token TMDB** (API Read Access Token, Developer Plan gratis tanpa masa berlaku):
+  https://www.themoviedb.org/settings/api
+- Kedua token cuma ditempel di Mode Edit (tersimpan di browser itu aja). Jangan di-commit
+  ke repo. Ganti perangkat = tempel ulang.
 - Poster: dari TMDB kalau judulnya ditambah lewat pencarian TMDB, selain itu dicari otomatis di Wikipedia.
