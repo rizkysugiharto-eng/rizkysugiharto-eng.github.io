@@ -51,10 +51,19 @@ pegunungan), nav tengah dengan garis bawah aktif, tombol pill.
 5. Sinkron Trakt (opsional)
 6. Evaluasi (review kode, performa, keamanan token, aksesibilitas, go/no-go) → merge ke `main`
 
-## Perlu dijawab sebelum Fase 1
+## Keputusan (9 Nov 2026)
 
-- Nama web
-- Publik (noindex, tidak di-link dari portfolio) atau privat
-- Skala nilai: 1–10 atau bintang 1–5
-- Data awal: dari Letterboxd/IMDb/spreadsheet atau daftar kasar
-- Bahasa tampilan: Indonesia santai atau Inggris
+- Skala nilai 1–10, boleh setengah (8,5)
+- Publik: noindex, tidak di-link dari portfolio
+- Poster asli dari TMDB (atribusi TMDB di footer); simpan `tmdbId`, `poster`
+  (path), `ratingPublik` di JSON supaya pengunjung tidak memanggil API
+- Rentang tahun: semua era, tanpa batas
+- Bahasa: Indonesia santai, campur English kalau lebih natural
+  (Watchlist, Rating, Season, Mode Edit)
+- Data awal: metadata dari TMDB; daftar judul yang sudah ditonton + nilai dari pemilik
+- API key TMDB dan token GitHub hanya disimpan di browser pemilik (Mode Edit)
+
+## Kandidat nama
+
+Layar Tancap (saran utama), Tamat., Kan., Sisa Durasi, Kursi Depan.
+Logo stempel 観 tetap.
