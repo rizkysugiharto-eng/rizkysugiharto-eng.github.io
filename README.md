@@ -35,3 +35,21 @@ Desain sebelum Oktober 2026 (gelap + kuning, foto bulat di kiri) tetap disimpan:
 - `assets/Portfolio-Rizky-Bagus-Eka-Sugiharto-lama.pdf` — PDF portfolio desain lama
 - `tools/build-portfolio-pdf-lama.mjs` — script PDF desain lama (butuh Node.js + Playwright)
 - tag git `v1-desain-lama` — kondisi repo terakhir sebelum desain baru
+
+## Layar Tancap (`/nonton/`)
+
+Web catatan nonton pribadi: Arsip (yang udah tamat + nilai 1–10), Lagi Ditonton
+(progres episode/menit), Watchlist, dan Rekomendasi dari selera sendiri.
+Konsep lengkap ada di `nonton/KONSEP.md`.
+
+- `nonton/index.html`, `style.css`, `app.js` — halaman dan logika (tanpa build, tanpa library)
+- `nonton/data/tontonan.json` — semua data tontonan
+- `nonton/data/kandidat.json` — kandidat bawaan untuk Rekomendasi
+- Mode Edit di web menyimpan perubahan ke browser dulu, lalu ke repo lewat
+  GitHub API pakai token fine-grained (Contents: read/write, cuma repo ini).
+  Token dan API key TMDB cuma disimpan di browser pemilik. Simpan ke GitHub pakai SHA
+  versi yang terakhir dimuat, jadi kalau data di GitHub udah diubah dari perangkat lain,
+  web nanya dulu mau pakai yang mana (gak nimpa diam-diam).
+- Keamanan: Content-Security-Policy di `index.html`, semua data dirapikan (`cleanData`)
+  sebelum dipakai, dan halaman menolak dibuka di dalam iframe.
+- Poster: dari TMDB kalau judulnya ditambah lewat pencarian TMDB, selain itu dicari otomatis di Wikipedia.

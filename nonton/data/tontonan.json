@@ -1,0 +1,1055 @@
+{
+ "versi": 1,
+ "diperbarui": "2026-11-09T10:00:00.000Z",
+ "judul": [
+  {
+   "id": "mcu-iron-man",
+   "jenis": "film",
+   "judul": "Iron Man",
+   "tahun": 2008,
+   "genre": [
+    "Aksi",
+    "Petualangan",
+    "Sci-Fi"
+   ],
+   "tagAlur": [
+    "superhero"
+   ],
+   "koleksi": "Marvel Cinematic Universe",
+   "urutanKoleksi": 1,
+   "sutradara": "Jon Favreau",
+   "durasi": 126,
+   "status": "selesai",
+   "diupdate": "2026-11-09",
+   "wiki": "Iron Man (2008 film)"
+  },
+  {
+   "id": "mcu-the-incredible-hulk",
+   "jenis": "film",
+   "judul": "The Incredible Hulk",
+   "tahun": 2008,
+   "genre": [
+    "Aksi",
+    "Petualangan",
+    "Sci-Fi"
+   ],
+   "tagAlur": [
+    "superhero"
+   ],
+   "koleksi": "Marvel Cinematic Universe",
+   "urutanKoleksi": 2,
+   "sutradara": "Louis Leterrier",
+   "durasi": 112,
+   "status": "selesai",
+   "diupdate": "2026-11-09",
+   "wiki": "The Incredible Hulk (film)"
+  },
+  {
+   "id": "mcu-iron-man-2",
+   "jenis": "film",
+   "judul": "Iron Man 2",
+   "tahun": 2010,
+   "genre": [
+    "Aksi",
+    "Petualangan",
+    "Sci-Fi"
+   ],
+   "tagAlur": [
+    "superhero"
+   ],
+   "koleksi": "Marvel Cinematic Universe",
+   "urutanKoleksi": 3,
+   "sutradara": "Jon Favreau",
+   "durasi": 124,
+   "status": "selesai",
+   "diupdate": "2026-11-09",
+   "wiki": "Iron Man 2"
+  },
+  {
+   "id": "mcu-thor",
+   "jenis": "film",
+   "judul": "Thor",
+   "tahun": 2011,
+   "genre": [
+    "Aksi",
+    "Petualangan",
+    "Fantasi"
+   ],
+   "tagAlur": [
+    "superhero"
+   ],
+   "koleksi": "Marvel Cinematic Universe",
+   "urutanKoleksi": 4,
+   "sutradara": "Kenneth Branagh",
+   "durasi": 115,
+   "status": "selesai",
+   "diupdate": "2026-11-09",
+   "wiki": "Thor (film)"
+  },
+  {
+   "id": "mcu-captain-america-the-first-avenger",
+   "jenis": "film",
+   "judul": "Captain America: The First Avenger",
+   "tahun": 2011,
+   "genre": [
+    "Aksi",
+    "Petualangan",
+    "Sci-Fi"
+   ],
+   "tagAlur": [
+    "superhero"
+   ],
+   "koleksi": "Marvel Cinematic Universe",
+   "urutanKoleksi": 5,
+   "sutradara": "Joe Johnston",
+   "durasi": 124,
+   "status": "selesai",
+   "diupdate": "2026-11-09",
+   "wiki": "Captain America: The First Avenger"
+  },
+  {
+   "id": "mcu-the-avengers",
+   "jenis": "film",
+   "judul": "The Avengers",
+   "tahun": 2012,
+   "genre": [
+    "Aksi",
+    "Petualangan",
+    "Sci-Fi"
+   ],
+   "tagAlur": [
+    "superhero"
+   ],
+   "koleksi": "Marvel Cinematic Universe",
+   "urutanKoleksi": 6,
+   "sutradara": "Joss Whedon",
+   "durasi": 143,
+   "status": "selesai",
+   "diupdate": "2026-11-09",
+   "wiki": "The Avengers (2012 film)"
+  },
+  {
+   "id": "mcu-iron-man-3",
+   "jenis": "film",
+   "judul": "Iron Man 3",
+   "tahun": 2013,
+   "genre": [
+    "Aksi",
+    "Petualangan",
+    "Sci-Fi"
+   ],
+   "tagAlur": [
+    "superhero"
+   ],
+   "koleksi": "Marvel Cinematic Universe",
+   "urutanKoleksi": 7,
+   "sutradara": "Shane Black",
+   "durasi": 130,
+   "status": "selesai",
+   "diupdate": "2026-11-09",
+   "wiki": "Iron Man 3"
+  },
+  {
+   "id": "mcu-thor-the-dark-world",
+   "jenis": "film",
+   "judul": "Thor: The Dark World",
+   "tahun": 2013,
+   "genre": [
+    "Aksi",
+    "Petualangan",
+    "Fantasi"
+   ],
+   "tagAlur": [
+    "superhero"
+   ],
+   "koleksi": "Marvel Cinematic Universe",
+   "urutanKoleksi": 8,
+   "sutradara": "Alan Taylor",
+   "durasi": 112,
+   "status": "selesai",
+   "diupdate": "2026-11-09",
+   "wiki": "Thor: The Dark World"
+  },
+  {
+   "id": "mcu-captain-america-the-winter-soldier",
+   "jenis": "film",
+   "judul": "Captain America: The Winter Soldier",
+   "tahun": 2014,
+   "genre": [
+    "Aksi",
+    "Petualangan",
+    "Sci-Fi"
+   ],
+   "tagAlur": [
+    "superhero"
+   ],
+   "koleksi": "Marvel Cinematic Universe",
+   "urutanKoleksi": 9,
+   "sutradara": "Anthony & Joe Russo",
+   "durasi": 136,
+   "status": "selesai",
+   "diupdate": "2026-11-09",
+   "wiki": "Captain America: The Winter Soldier"
+  },
+  {
+   "id": "mcu-guardians-of-the-galaxy",
+   "jenis": "film",
+   "judul": "Guardians of the Galaxy",
+   "tahun": 2014,
+   "genre": [
+    "Aksi",
+    "Petualangan",
+    "Sci-Fi",
+    "Komedi"
+   ],
+   "tagAlur": [
+    "superhero"
+   ],
+   "koleksi": "Marvel Cinematic Universe",
+   "urutanKoleksi": 10,
+   "sutradara": "James Gunn",
+   "durasi": 121,
+   "status": "selesai",
+   "diupdate": "2026-11-09",
+   "wiki": "Guardians of the Galaxy (film)"
+  },
+  {
+   "id": "mcu-avengers-age-of-ultron",
+   "jenis": "film",
+   "judul": "Avengers: Age of Ultron",
+   "tahun": 2015,
+   "genre": [
+    "Aksi",
+    "Petualangan",
+    "Sci-Fi"
+   ],
+   "tagAlur": [
+    "superhero"
+   ],
+   "koleksi": "Marvel Cinematic Universe",
+   "urutanKoleksi": 11,
+   "sutradara": "Joss Whedon",
+   "durasi": 141,
+   "status": "selesai",
+   "diupdate": "2026-11-09",
+   "wiki": "Avengers: Age of Ultron"
+  },
+  {
+   "id": "mcu-ant-man",
+   "jenis": "film",
+   "judul": "Ant-Man",
+   "tahun": 2015,
+   "genre": [
+    "Aksi",
+    "Petualangan",
+    "Sci-Fi",
+    "Komedi"
+   ],
+   "tagAlur": [
+    "superhero"
+   ],
+   "koleksi": "Marvel Cinematic Universe",
+   "urutanKoleksi": 12,
+   "sutradara": "Peyton Reed",
+   "durasi": 117,
+   "status": "selesai",
+   "diupdate": "2026-11-09",
+   "wiki": "Ant-Man (film)"
+  },
+  {
+   "id": "mcu-captain-america-civil-war",
+   "jenis": "film",
+   "judul": "Captain America: Civil War",
+   "tahun": 2016,
+   "genre": [
+    "Aksi",
+    "Petualangan",
+    "Sci-Fi"
+   ],
+   "tagAlur": [
+    "superhero"
+   ],
+   "koleksi": "Marvel Cinematic Universe",
+   "urutanKoleksi": 13,
+   "sutradara": "Anthony & Joe Russo",
+   "durasi": 147,
+   "status": "selesai",
+   "diupdate": "2026-11-09",
+   "wiki": "Captain America: Civil War"
+  },
+  {
+   "id": "mcu-doctor-strange",
+   "jenis": "film",
+   "judul": "Doctor Strange",
+   "tahun": 2016,
+   "genre": [
+    "Aksi",
+    "Petualangan",
+    "Fantasi"
+   ],
+   "tagAlur": [
+    "superhero"
+   ],
+   "koleksi": "Marvel Cinematic Universe",
+   "urutanKoleksi": 14,
+   "sutradara": "Scott Derrickson",
+   "durasi": 115,
+   "status": "selesai",
+   "diupdate": "2026-11-09",
+   "wiki": "Doctor Strange (2016 film)"
+  },
+  {
+   "id": "mcu-guardians-of-the-galaxy-vol-2",
+   "jenis": "film",
+   "judul": "Guardians of the Galaxy Vol. 2",
+   "tahun": 2017,
+   "genre": [
+    "Aksi",
+    "Petualangan",
+    "Sci-Fi",
+    "Komedi"
+   ],
+   "tagAlur": [
+    "superhero"
+   ],
+   "koleksi": "Marvel Cinematic Universe",
+   "urutanKoleksi": 15,
+   "sutradara": "James Gunn",
+   "durasi": 136,
+   "status": "selesai",
+   "diupdate": "2026-11-09",
+   "wiki": "Guardians of the Galaxy Vol. 2"
+  },
+  {
+   "id": "mcu-spider-man-homecoming",
+   "jenis": "film",
+   "judul": "Spider-Man: Homecoming",
+   "tahun": 2017,
+   "genre": [
+    "Aksi",
+    "Petualangan",
+    "Sci-Fi",
+    "Komedi"
+   ],
+   "tagAlur": [
+    "superhero"
+   ],
+   "koleksi": "Marvel Cinematic Universe",
+   "urutanKoleksi": 16,
+   "sutradara": "Jon Watts",
+   "durasi": 133,
+   "status": "selesai",
+   "diupdate": "2026-11-09",
+   "wiki": "Spider-Man: Homecoming"
+  },
+  {
+   "id": "mcu-thor-ragnarok",
+   "jenis": "film",
+   "judul": "Thor: Ragnarok",
+   "tahun": 2017,
+   "genre": [
+    "Aksi",
+    "Petualangan",
+    "Sci-Fi",
+    "Komedi"
+   ],
+   "tagAlur": [
+    "superhero"
+   ],
+   "koleksi": "Marvel Cinematic Universe",
+   "urutanKoleksi": 17,
+   "sutradara": "Taika Waititi",
+   "durasi": 130,
+   "status": "selesai",
+   "diupdate": "2026-11-09",
+   "wiki": "Thor: Ragnarok"
+  },
+  {
+   "id": "mcu-black-panther",
+   "jenis": "film",
+   "judul": "Black Panther",
+   "tahun": 2018,
+   "genre": [
+    "Aksi",
+    "Petualangan",
+    "Sci-Fi"
+   ],
+   "tagAlur": [
+    "superhero"
+   ],
+   "koleksi": "Marvel Cinematic Universe",
+   "urutanKoleksi": 18,
+   "sutradara": "Ryan Coogler",
+   "durasi": 134,
+   "status": "selesai",
+   "diupdate": "2026-11-09",
+   "wiki": "Black Panther (film)"
+  },
+  {
+   "id": "mcu-avengers-infinity-war",
+   "jenis": "film",
+   "judul": "Avengers: Infinity War",
+   "tahun": 2018,
+   "genre": [
+    "Aksi",
+    "Petualangan",
+    "Sci-Fi"
+   ],
+   "tagAlur": [
+    "superhero"
+   ],
+   "koleksi": "Marvel Cinematic Universe",
+   "urutanKoleksi": 19,
+   "sutradara": "Anthony & Joe Russo",
+   "durasi": 149,
+   "status": "selesai",
+   "diupdate": "2026-11-09",
+   "wiki": "Avengers: Infinity War"
+  },
+  {
+   "id": "mcu-ant-man-and-the-wasp",
+   "jenis": "film",
+   "judul": "Ant-Man and the Wasp",
+   "tahun": 2018,
+   "genre": [
+    "Aksi",
+    "Petualangan",
+    "Sci-Fi",
+    "Komedi"
+   ],
+   "tagAlur": [
+    "superhero"
+   ],
+   "koleksi": "Marvel Cinematic Universe",
+   "urutanKoleksi": 20,
+   "sutradara": "Peyton Reed",
+   "durasi": 118,
+   "status": "selesai",
+   "diupdate": "2026-11-09",
+   "wiki": "Ant-Man and the Wasp"
+  },
+  {
+   "id": "mcu-captain-marvel",
+   "jenis": "film",
+   "judul": "Captain Marvel",
+   "tahun": 2019,
+   "genre": [
+    "Aksi",
+    "Petualangan",
+    "Sci-Fi"
+   ],
+   "tagAlur": [
+    "superhero"
+   ],
+   "koleksi": "Marvel Cinematic Universe",
+   "urutanKoleksi": 21,
+   "sutradara": "Anna Boden & Ryan Fleck",
+   "durasi": 123,
+   "status": "selesai",
+   "diupdate": "2026-11-09",
+   "wiki": "Captain Marvel (film)"
+  },
+  {
+   "id": "mcu-avengers-endgame",
+   "jenis": "film",
+   "judul": "Avengers: Endgame",
+   "tahun": 2019,
+   "genre": [
+    "Aksi",
+    "Petualangan",
+    "Sci-Fi"
+   ],
+   "tagAlur": [
+    "superhero"
+   ],
+   "koleksi": "Marvel Cinematic Universe",
+   "urutanKoleksi": 22,
+   "sutradara": "Anthony & Joe Russo",
+   "durasi": 181,
+   "status": "selesai",
+   "diupdate": "2026-11-09",
+   "wiki": "Avengers: Endgame"
+  },
+  {
+   "id": "mcu-spider-man-far-from-home",
+   "jenis": "film",
+   "judul": "Spider-Man: Far From Home",
+   "tahun": 2019,
+   "genre": [
+    "Aksi",
+    "Petualangan",
+    "Sci-Fi"
+   ],
+   "tagAlur": [
+    "superhero"
+   ],
+   "koleksi": "Marvel Cinematic Universe",
+   "urutanKoleksi": 23,
+   "sutradara": "Jon Watts",
+   "durasi": 129,
+   "status": "selesai",
+   "diupdate": "2026-11-09",
+   "wiki": "Spider-Man: Far From Home"
+  },
+  {
+   "id": "mcu-black-widow",
+   "jenis": "film",
+   "judul": "Black Widow",
+   "tahun": 2021,
+   "genre": [
+    "Aksi",
+    "Petualangan",
+    "Sci-Fi"
+   ],
+   "tagAlur": [
+    "superhero"
+   ],
+   "koleksi": "Marvel Cinematic Universe",
+   "urutanKoleksi": 24,
+   "sutradara": "Cate Shortland",
+   "durasi": 134,
+   "status": "selesai",
+   "diupdate": "2026-11-09",
+   "wiki": "Black Widow (2021 film)"
+  },
+  {
+   "id": "mcu-shang-chi-and-the-legend-of-the-ten-rings",
+   "jenis": "film",
+   "judul": "Shang-Chi and the Legend of the Ten Rings",
+   "tahun": 2021,
+   "genre": [
+    "Aksi",
+    "Petualangan",
+    "Sci-Fi"
+   ],
+   "tagAlur": [
+    "superhero"
+   ],
+   "koleksi": "Marvel Cinematic Universe",
+   "urutanKoleksi": 25,
+   "sutradara": "Destin Daniel Cretton",
+   "durasi": 132,
+   "status": "selesai",
+   "diupdate": "2026-11-09",
+   "wiki": "Shang-Chi and the Legend of the Ten Rings"
+  },
+  {
+   "id": "mcu-eternals",
+   "jenis": "film",
+   "judul": "Eternals",
+   "tahun": 2021,
+   "genre": [
+    "Aksi",
+    "Petualangan",
+    "Fantasi"
+   ],
+   "tagAlur": [
+    "superhero"
+   ],
+   "koleksi": "Marvel Cinematic Universe",
+   "urutanKoleksi": 26,
+   "sutradara": "Chloé Zhao",
+   "durasi": 156,
+   "status": "selesai",
+   "diupdate": "2026-11-09",
+   "wiki": "Eternals (film)"
+  },
+  {
+   "id": "mcu-spider-man-no-way-home",
+   "jenis": "film",
+   "judul": "Spider-Man: No Way Home",
+   "tahun": 2021,
+   "genre": [
+    "Aksi",
+    "Petualangan",
+    "Sci-Fi"
+   ],
+   "tagAlur": [
+    "superhero"
+   ],
+   "koleksi": "Marvel Cinematic Universe",
+   "urutanKoleksi": 27,
+   "sutradara": "Jon Watts",
+   "durasi": 148,
+   "status": "selesai",
+   "diupdate": "2026-11-09",
+   "wiki": "Spider-Man: No Way Home"
+  },
+  {
+   "id": "mcu-doctor-strange-in-the-multiverse-of-madness",
+   "jenis": "film",
+   "judul": "Doctor Strange in the Multiverse of Madness",
+   "tahun": 2022,
+   "genre": [
+    "Aksi",
+    "Petualangan",
+    "Fantasi"
+   ],
+   "tagAlur": [
+    "superhero"
+   ],
+   "koleksi": "Marvel Cinematic Universe",
+   "urutanKoleksi": 28,
+   "sutradara": "Sam Raimi",
+   "durasi": 126,
+   "status": "selesai",
+   "diupdate": "2026-11-09",
+   "wiki": "Doctor Strange in the Multiverse of Madness"
+  },
+  {
+   "id": "mcu-thor-love-and-thunder",
+   "jenis": "film",
+   "judul": "Thor: Love and Thunder",
+   "tahun": 2022,
+   "genre": [
+    "Aksi",
+    "Petualangan",
+    "Fantasi",
+    "Komedi"
+   ],
+   "tagAlur": [
+    "superhero"
+   ],
+   "koleksi": "Marvel Cinematic Universe",
+   "urutanKoleksi": 29,
+   "sutradara": "Taika Waititi",
+   "durasi": 119,
+   "status": "selesai",
+   "diupdate": "2026-11-09",
+   "wiki": "Thor: Love and Thunder"
+  },
+  {
+   "id": "mcu-black-panther-wakanda-forever",
+   "jenis": "film",
+   "judul": "Black Panther: Wakanda Forever",
+   "tahun": 2022,
+   "genre": [
+    "Aksi",
+    "Petualangan",
+    "Sci-Fi"
+   ],
+   "tagAlur": [
+    "superhero"
+   ],
+   "koleksi": "Marvel Cinematic Universe",
+   "urutanKoleksi": 30,
+   "sutradara": "Ryan Coogler",
+   "durasi": 161,
+   "status": "selesai",
+   "diupdate": "2026-11-09",
+   "wiki": "Black Panther: Wakanda Forever"
+  },
+  {
+   "id": "mcu-ant-man-and-the-wasp-quantumania",
+   "jenis": "film",
+   "judul": "Ant-Man and the Wasp: Quantumania",
+   "tahun": 2023,
+   "genre": [
+    "Aksi",
+    "Petualangan",
+    "Sci-Fi"
+   ],
+   "tagAlur": [
+    "superhero"
+   ],
+   "koleksi": "Marvel Cinematic Universe",
+   "urutanKoleksi": 31,
+   "sutradara": "Peyton Reed",
+   "durasi": 125,
+   "status": "selesai",
+   "diupdate": "2026-11-09",
+   "wiki": "Ant-Man and the Wasp: Quantumania"
+  },
+  {
+   "id": "mcu-guardians-of-the-galaxy-vol-3",
+   "jenis": "film",
+   "judul": "Guardians of the Galaxy Vol. 3",
+   "tahun": 2023,
+   "genre": [
+    "Aksi",
+    "Petualangan",
+    "Sci-Fi"
+   ],
+   "tagAlur": [
+    "superhero"
+   ],
+   "koleksi": "Marvel Cinematic Universe",
+   "urutanKoleksi": 32,
+   "sutradara": "James Gunn",
+   "durasi": 150,
+   "status": "selesai",
+   "diupdate": "2026-11-09",
+   "wiki": "Guardians of the Galaxy Vol. 3"
+  },
+  {
+   "id": "mcu-the-marvels",
+   "jenis": "film",
+   "judul": "The Marvels",
+   "tahun": 2023,
+   "genre": [
+    "Aksi",
+    "Petualangan",
+    "Sci-Fi"
+   ],
+   "tagAlur": [
+    "superhero"
+   ],
+   "koleksi": "Marvel Cinematic Universe",
+   "urutanKoleksi": 33,
+   "sutradara": "Nia DaCosta",
+   "durasi": 105,
+   "status": "selesai",
+   "diupdate": "2026-11-09",
+   "wiki": "The Marvels"
+  },
+  {
+   "id": "mcu-deadpool-wolverine",
+   "jenis": "film",
+   "judul": "Deadpool & Wolverine",
+   "tahun": 2024,
+   "genre": [
+    "Aksi",
+    "Petualangan",
+    "Sci-Fi",
+    "Komedi"
+   ],
+   "tagAlur": [
+    "superhero"
+   ],
+   "koleksi": "Marvel Cinematic Universe",
+   "urutanKoleksi": 34,
+   "sutradara": "Shawn Levy",
+   "durasi": 128,
+   "status": "selesai",
+   "diupdate": "2026-11-09",
+   "wiki": "Deadpool & Wolverine"
+  },
+  {
+   "id": "mcu-captain-america-brave-new-world",
+   "jenis": "film",
+   "judul": "Captain America: Brave New World",
+   "tahun": 2025,
+   "genre": [
+    "Aksi",
+    "Petualangan",
+    "Sci-Fi"
+   ],
+   "tagAlur": [
+    "superhero"
+   ],
+   "koleksi": "Marvel Cinematic Universe",
+   "urutanKoleksi": 35,
+   "sutradara": "Julius Onah",
+   "durasi": 118,
+   "status": "selesai",
+   "diupdate": "2026-11-09",
+   "wiki": "Captain America: Brave New World"
+  },
+  {
+   "id": "mcu-thunderbolts",
+   "jenis": "film",
+   "judul": "Thunderbolts*",
+   "tahun": 2025,
+   "genre": [
+    "Aksi",
+    "Petualangan",
+    "Sci-Fi"
+   ],
+   "tagAlur": [
+    "superhero"
+   ],
+   "koleksi": "Marvel Cinematic Universe",
+   "urutanKoleksi": 36,
+   "sutradara": "Jake Schreier",
+   "durasi": 127,
+   "status": "selesai",
+   "diupdate": "2026-11-09",
+   "wiki": "Thunderbolts*"
+  },
+  {
+   "id": "mcu-the-fantastic-four-first-steps",
+   "jenis": "film",
+   "judul": "The Fantastic Four: First Steps",
+   "tahun": 2025,
+   "genre": [
+    "Aksi",
+    "Petualangan",
+    "Sci-Fi"
+   ],
+   "tagAlur": [
+    "superhero"
+   ],
+   "koleksi": "Marvel Cinematic Universe",
+   "urutanKoleksi": 37,
+   "sutradara": "Matt Shakman",
+   "durasi": 115,
+   "status": "selesai",
+   "diupdate": "2026-11-09",
+   "wiki": "The Fantastic Four: First Steps"
+  },
+  {
+   "id": "mcu-spider-man-brand-new-day",
+   "jenis": "film",
+   "judul": "Spider-Man: Brand New Day",
+   "tahun": 2026,
+   "genre": [
+    "Aksi",
+    "Petualangan",
+    "Sci-Fi"
+   ],
+   "tagAlur": [
+    "superhero"
+   ],
+   "koleksi": "Marvel Cinematic Universe",
+   "urutanKoleksi": 38,
+   "sutradara": "Destin Daniel Cretton",
+   "status": "selesai",
+   "diupdate": "2026-11-09",
+   "wiki": "Spider-Man: Brand New Day"
+  },
+  {
+   "id": "exhuma",
+   "jenis": "film",
+   "judul": "Exhuma",
+   "tahun": 2024,
+   "genre": [
+    "Horor",
+    "Misteri"
+   ],
+   "tagAlur": [
+    "horor supranatural",
+    "okultisme"
+   ],
+   "sutradara": "Jang Jae-hyun",
+   "durasi": 134,
+   "status": "selesai",
+   "diupdate": "2026-11-09",
+   "wiki": "Exhuma"
+  },
+  {
+   "id": "insidious-insidious",
+   "jenis": "film",
+   "judul": "Insidious",
+   "tahun": 2010,
+   "genre": [
+    "Horor",
+    "Misteri",
+    "Thriller"
+   ],
+   "tagAlur": [
+    "horor supranatural",
+    "rumah berhantu"
+   ],
+   "koleksi": "Insidious",
+   "urutanKoleksi": 1,
+   "sutradara": "James Wan",
+   "durasi": 103,
+   "status": "selesai",
+   "diupdate": "2026-11-09",
+   "wiki": "Insidious (film)"
+  },
+  {
+   "id": "insidious-insidious-chapter-2",
+   "jenis": "film",
+   "judul": "Insidious: Chapter 2",
+   "tahun": 2013,
+   "genre": [
+    "Horor",
+    "Misteri",
+    "Thriller"
+   ],
+   "tagAlur": [
+    "horor supranatural",
+    "rumah berhantu"
+   ],
+   "koleksi": "Insidious",
+   "urutanKoleksi": 2,
+   "sutradara": "James Wan",
+   "durasi": 106,
+   "status": "selesai",
+   "diupdate": "2026-11-09",
+   "wiki": "Insidious: Chapter 2"
+  },
+  {
+   "id": "insidious-insidious-chapter-3",
+   "jenis": "film",
+   "judul": "Insidious: Chapter 3",
+   "tahun": 2015,
+   "genre": [
+    "Horor",
+    "Misteri",
+    "Thriller"
+   ],
+   "tagAlur": [
+    "horor supranatural",
+    "rumah berhantu"
+   ],
+   "koleksi": "Insidious",
+   "urutanKoleksi": 3,
+   "sutradara": "Leigh Whannell",
+   "durasi": 97,
+   "status": "selesai",
+   "diupdate": "2026-11-09",
+   "wiki": "Insidious: Chapter 3"
+  },
+  {
+   "id": "insidious-insidious-the-last-key",
+   "jenis": "film",
+   "judul": "Insidious: The Last Key",
+   "tahun": 2018,
+   "genre": [
+    "Horor",
+    "Misteri",
+    "Thriller"
+   ],
+   "tagAlur": [
+    "horor supranatural",
+    "rumah berhantu"
+   ],
+   "koleksi": "Insidious",
+   "urutanKoleksi": 4,
+   "sutradara": "Adam Robitel",
+   "durasi": 103,
+   "status": "selesai",
+   "diupdate": "2026-11-09",
+   "wiki": "Insidious: The Last Key"
+  },
+  {
+   "id": "insidious-insidious-the-red-door",
+   "jenis": "film",
+   "judul": "Insidious: The Red Door",
+   "tahun": 2023,
+   "genre": [
+    "Horor",
+    "Misteri",
+    "Thriller"
+   ],
+   "tagAlur": [
+    "horor supranatural",
+    "rumah berhantu"
+   ],
+   "koleksi": "Insidious",
+   "urutanKoleksi": 5,
+   "sutradara": "Patrick Wilson",
+   "durasi": 107,
+   "status": "selesai",
+   "diupdate": "2026-11-09",
+   "wiki": "Insidious: The Red Door"
+  },
+  {
+   "id": "doctor-x-2026",
+   "jenis": "series",
+   "judul": "Doctor X",
+   "judulAsli": "닥터X",
+   "tahun": 2026,
+   "genre": [
+    "Drama"
+   ],
+   "tagAlur": [
+    "medis",
+    "drakor"
+   ],
+   "status": "ditonton",
+   "progres": {
+    "episode": 0
+   },
+   "mulai": "2026-11-09",
+   "diupdate": "2026-11-09",
+   "wiki": "Doctor X (South Korean TV series)"
+  },
+  {
+   "id": "dexter",
+   "jenis": "series",
+   "judul": "Dexter",
+   "tahun": 2006,
+   "genre": [
+    "Kriminal",
+    "Drama",
+    "Thriller"
+   ],
+   "tagAlur": [
+    "anti-hero",
+    "misteri pembunuhan"
+   ],
+   "sutradara": "James Manos Jr.",
+   "totalEpisode": 96,
+   "episodePerSeason": [
+    12,
+    12,
+    12,
+    12,
+    12,
+    12,
+    12,
+    12
+   ],
+   "durasiEpisode": 53,
+   "status": "ditonton",
+   "progres": {
+    "episode": 0
+   },
+   "mulai": "2026-11-09",
+   "diupdate": "2026-11-09",
+   "wiki": "Dexter (TV series)"
+  },
+  {
+   "id": "the-mentalist",
+   "jenis": "series",
+   "judul": "The Mentalist",
+   "tahun": 2008,
+   "genre": [
+    "Kriminal",
+    "Drama",
+    "Misteri"
+   ],
+   "tagAlur": [
+    "misteri pembunuhan",
+    "detektif"
+   ],
+   "sutradara": "Bruno Heller",
+   "totalEpisode": 151,
+   "episodePerSeason": [
+    23,
+    23,
+    24,
+    24,
+    22,
+    22,
+    13
+   ],
+   "durasiEpisode": 43,
+   "status": "ditonton",
+   "progres": {
+    "episode": 0
+   },
+   "mulai": "2026-11-09",
+   "diupdate": "2026-11-09",
+   "wiki": "The Mentalist"
+  },
+  {
+   "id": "the-odyssey",
+   "jenis": "film",
+   "judul": "The Odyssey",
+   "tahun": 2026,
+   "genre": [
+    "Petualangan",
+    "Fantasi",
+    "Aksi"
+   ],
+   "tagAlur": [
+    "mitologi",
+    "petualangan epik"
+   ],
+   "sutradara": "Christopher Nolan",
+   "status": "ditonton",
+   "progres": {
+    "menit": 0
+   },
+   "mulai": "2026-11-09",
+   "diupdate": "2026-11-09",
+   "wiki": "The Odyssey (2026 film)"
+  }
+ ],
+ "ditolak": [],
+ "kandidatTmdb": []
+}
