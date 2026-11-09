@@ -2,6 +2,8 @@
 <html lang="id">
 <head>
   <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://api.github.com https://api.themoviedb.org https://en.wikipedia.org; base-uri 'none'; form-action 'none'; object-src 'none'">
+  <meta name="referrer" content="no-referrer">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Layar Tancap · Catatan Nonton Rizky</title>
   <meta name="description" content="Catatan pribadi Rizky: film dan series yang udah tamat, yang lagi dikejar, dan rekomendasi tontonan berikutnya.">
@@ -157,16 +159,17 @@
 
       <div class="field">
         <label for="s-gh">Token GitHub</label>
-        <input id="s-gh" type="password" autocomplete="off" placeholder="github_pat_…">
-        <p class="hint">Fine-grained token, akses <b>Contents: Read and write</b> cuma ke repo rizkysugiharto-eng.github.io. Disimpan di browser ini aja.</p>
+        <input id="s-gh" type="password" autocomplete="new-password" placeholder="github_pat_…">
+        <p class="hint">Fine-grained token: pilih <b>Only select repositories</b> → rizkysugiharto-eng.github.io, izin <b>Contents: Read and write</b> aja, dan kasih masa berlaku (misal 90 hari). Disimpan di browser ini aja, jangan dipakai di HP/laptop orang lain.</p>
       </div>
       <div class="field">
         <label for="s-tmdb">API key TMDB</label>
-        <input id="s-tmdb" type="password" autocomplete="off" placeholder="API key (v3) atau Read Access Token">
-        <p class="hint">Buat cari judul dan poster otomatis. Disimpan di browser ini aja.</p>
+        <input id="s-tmdb" type="password" autocomplete="new-password" placeholder="Read Access Token (eyJ…)">
+        <p class="hint">Buat cari judul dan poster otomatis. Pakai <b>API Read Access Token</b> dari themoviedb.org → Settings → API (API key v3 juga bisa). Disimpan di browser ini aja.</p>
       </div>
       <div class="actions">
         <button type="button" class="pill" id="s-simpan-key">Simpan key</button>
+        <button type="button" class="pill danger" id="s-lupa" hidden>Lupakan token &amp; key</button>
         <button type="button" class="pill solid" id="s-push">Simpan ke GitHub</button>
       </div>
 
@@ -175,6 +178,13 @@
       <div class="actions">
         <button type="button" class="pill" id="s-export">Download cadangan (JSON)</button>
         <label class="pill file">Pulihkan dari JSON<input id="s-import" type="file" accept="application/json,.json"></label>
+      </div>
+      <div class="confirm" id="s-import-confirm" hidden>
+        <p id="s-import-text"></p>
+        <div class="actions">
+          <button type="button" class="pill" id="s-import-no">Gak jadi</button>
+          <button type="button" class="pill danger solid" id="s-import-yes">Ya, ganti</button>
+        </div>
       </div>
       <div class="actions" id="s-contoh-wrap">
         <button type="button" class="pill danger" id="s-hapus-contoh">Hapus semua data contoh</button>
@@ -188,6 +198,13 @@
       </div>
       <div class="confirm" id="s-reset-wrap">
         <button type="button" class="linkish" id="s-reset">Buang perubahan lokal &amp; muat ulang dari server</button>
+      </div>
+      <div class="confirm" id="s-reset-confirm" hidden>
+        <p>Ada perubahan yang belum disimpan ke GitHub. Yakin dibuang?</p>
+        <div class="actions">
+          <button type="button" class="pill" id="s-reset-no">Gak jadi</button>
+          <button type="button" class="pill danger solid" id="s-reset-yes">Ya, buang</button>
+        </div>
       </div>
     </div>
   </dialog>

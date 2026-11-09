@@ -43,9 +43,13 @@ Web catatan nonton pribadi: Arsip (yang udah tamat + nilai 1–10), Lagi Ditonto
 Konsep lengkap ada di `nonton/KONSEP.md`.
 
 - `nonton/index.html`, `style.css`, `app.js` — halaman dan logika (tanpa build, tanpa library)
-- `nonton/data/tontonan.json` — semua data tontonan (sekarang masih data contoh)
+- `nonton/data/tontonan.json` — semua data tontonan
 - `nonton/data/kandidat.json` — kandidat bawaan untuk Rekomendasi
 - Mode Edit di web menyimpan perubahan ke browser dulu, lalu ke repo lewat
   GitHub API pakai token fine-grained (Contents: read/write, cuma repo ini).
-  Token dan API key TMDB cuma disimpan di browser pemilik.
+  Token dan API key TMDB cuma disimpan di browser pemilik. Simpan ke GitHub pakai SHA
+  versi yang terakhir dimuat, jadi kalau data di GitHub udah diubah dari perangkat lain,
+  web nanya dulu mau pakai yang mana (gak nimpa diam-diam).
+- Keamanan: Content-Security-Policy di `index.html`, semua data dirapikan (`cleanData`)
+  sebelum dipakai, dan halaman menolak dibuka di dalam iframe.
 - Poster: dari TMDB kalau judulnya ditambah lewat pencarian TMDB, selain itu dicari otomatis di Wikipedia.

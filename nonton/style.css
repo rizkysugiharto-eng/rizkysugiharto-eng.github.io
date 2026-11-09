@@ -146,7 +146,7 @@ main:focus{outline:none}
 button.chip{cursor:pointer;min-height:28px}
 .chips.pick label{position:relative}
 .chips.pick input{position:absolute;opacity:0;width:1px;height:1px}
-.chips.pick span{display:inline-flex;align-items:center;min-height:32px;font-size:.8rem;font-weight:600;border:1.5px solid var(--stone);border-radius:999px;padding:2px 12px;cursor:pointer}
+.chips.pick span{display:inline-flex;align-items:center;min-height:32px;font-size:.8rem;font-weight:600;border:1.5px solid var(--ink-soft);border-radius:999px;padding:2px 12px;cursor:pointer}
 .chips.pick input:checked + span{background:var(--ink);border-color:var(--ink);color:var(--on-ink)}
 .chips.pick input:focus-visible + span{outline:2px solid var(--ink);outline-offset:2px}
 
@@ -256,8 +256,9 @@ hr{border:0;border-top:1.5px solid var(--line);margin:4px 0;width:100%}
 .genre-row{display:flex;gap:10px;overflow-x:auto;padding-bottom:6px;scrollbar-width:none}
 .genre-row::-webkit-scrollbar{display:none}
 .genre{flex:none;display:flex;align-items:center;gap:10px;text-decoration:none;border:1.5px solid var(--ink);border-radius:10px;padding:10px 14px;font-weight:700;font-size:.9rem;background:var(--surface)}
-.genre b{font-family:var(--display);font-weight:400;font-size:1.3rem;line-height:1;color:var(--stone)}
+.genre b{font-family:var(--display);font-weight:400;font-size:1.3rem;line-height:1;color:var(--ink-soft)}
 .genre:hover{background:var(--ink);color:var(--on-ink)}
+.genre:hover b{color:var(--on-ink)}
 .bigsearch input{font-size:1.15rem;min-height:52px;padding-inline:16px;border-width:2px;border-color:var(--ink)}
 .detail-bd{margin:-20px -20px 0;height:clamp(120px,24vw,200px);overflow:hidden;border-bottom:2px solid var(--ink);position:relative}
 .detail-bd img{width:100%;height:100%;object-fit:cover}

@@ -3,6 +3,12 @@
    lalu bisa dikirim ke repo lewat GitHub API (Mode Edit). */
 'use strict';
 
+// Jangan jalan di dalam iframe situs lain (cegah klik palsu ke tombol simpan/hapus).
+if (window.top !== window.self) {
+  document.documentElement.hidden = true;
+  throw new Error('Layar Tancap gak boleh dibuka di dalam frame.');
+}
+
 const CFG = {
   owner: 'rizkysugiharto-eng',
   repo: 'rizkysugiharto-eng.github.io',
@@ -27,10 +33,10 @@ const STALE_DAYS = 14;
 /* ---------- penyimpanan browser (aman kalau diblokir) ---------- */
 const store = {
   get(k, d) { try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch { return d; } },
-  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch { /* storage penuh/diblokir */ } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch { return false; } },
   del(k) { try { localStorage.removeItem(k); } catch { /* abaikan */ } },
 };
-const K = { data: 'lt:data', dirty: 'lt:dirty', edit: 'lt:edit', gh: 'lt:gh', tmdb: 'lt:tmdb', wiki: 'lt:wiki' };
+const K = { data: 'lt:data', dirty: 'lt:dirty', edit: 'lt:edit', gh: 'lt:gh', tmdb: 'lt:tmdb', wiki: 'lt:wiki', base: 'lt:base' };
 
 const S = {
   data: null,
@@ -44,7 +50,12 @@ const S = {
   pilih: null,
   cari: '',
   pilihConfirm: false,
+  watchConfirm: false,
   visibleIds: [],
+  rev: 0,
+  base: store.get(K.base, null), // { sha, diperbarui } versi server yang jadi dasar data lokal
+  remoteInfo: null,              // { sha, diperbarui } versi server yang kebaca saat buka web
+  konflik: false,
 };
 
 /* ---------- util ---------- */
@@ -52,7 +63,7 @@ const $ = (s, el = document) => el.querySelector(s);
 const $$ = (s, el = document) => [...el.querySelectorAll(s)];
 const esc = (v) => String(v ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const clamp = (x, a, b) => Math.min(b, Math.max(a, x));
-const norm = (s) => String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, ' ').trim();
+const norm = (s) => String(s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^\p{L}\p{N}]+/gu, ' ').trim();
 const uid = () => 'j-' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
 const angka = (n) => String(n).replace('.', ',');
 function today() { const d = new Date(); return new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 10); }
@@ -97,34 +108,151 @@ const findItem = (id) => items().find((i) => i.id === id);
 
 function keyOf(x) { return x.tmdbId ? `${x.jenis}-${x.tmdbId}` : `${norm(x.judul)}|${x.tahun || ''}`; }
 
+/* Semua data yang masuk (server, browser, file cadangan, TMDB) dirapikan dulu,
+   biar tipe datanya pasti dan gak ada field aneh yang ikut kesimpan. */
+const numOr = (v) => (v !== '' && v != null && typeof v !== 'boolean' && Number.isFinite(Number(v)) ? Number(v) : undefined);
+const strOr = (v) => (typeof v === 'string' && v.trim() ? v.trim() : undefined);
+const strs = (a) => (Array.isArray(a) ? uniq(a.filter((x) => typeof x === 'string' && x.trim()).map((x) => x.trim())) : []);
+const tmdbPath = (p) => (typeof p === 'string' && /^\/[\w.-]+$/.test(p) ? p : undefined);
+const httpsUrl = (p) => { try { const u = new URL(p); return u.protocol === 'https:' ? u.href : undefined; } catch { return undefined; } };
+const okPoster = (p) => tmdbPath(p) || httpsUrl(p);
+const day = (d) => (typeof d === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(d) ? d : undefined);
+const pos = (v) => { const n = numOr(v); return n > 0 ? n : undefined; };
+function compact(o) { return Object.fromEntries(Object.entries(o).filter(([, v]) => v !== undefined)); }
+
+function cleanItem(i) {
+  if (!i || typeof i !== 'object' || !strOr(i.judul)) return null;
+  const jenis = i.jenis === 'series' ? 'series' : 'film';
+  let progres;
+  if (i.progres && typeof i.progres === 'object') {
+    progres = jenis === 'film' ? { menit: Math.max(0, Math.round(numOr(i.progres.menit) || 0)) } : { episode: Math.max(0, Math.round(numOr(i.progres.episode) || 0)) };
+  }
+  const nilai = numOr(i.nilai);
+  const eps = Array.isArray(i.episodePerSeason) ? i.episodePerSeason.map(pos).filter(Boolean).map(Math.round) : [];
+  return compact({
+    id: strOr(String(i.id ?? '')) || uid(),
+    contoh: i.contoh === true || undefined,
+    jenis,
+    judul: strOr(i.judul),
+    judulAsli: strOr(i.judulAsli),
+    tahun: pos(i.tahun),
+    genre: strs(i.genre),
+    tagAlur: uniq(strs(i.tagAlur).map((t) => t.toLowerCase())),
+    koleksi: strOr(i.koleksi),
+    urutanKoleksi: pos(i.urutanKoleksi),
+    sutradara: strOr(i.sutradara),
+    durasi: pos(i.durasi),
+    totalEpisode: pos(i.totalEpisode),
+    episodePerSeason: eps.length ? eps : undefined,
+    durasiEpisode: pos(i.durasiEpisode),
+    status: STATUS_LABEL[i.status] ? i.status : 'watchlist',
+    progres,
+    nilai: nilai >= 1 && nilai <= 10 ? Math.round(nilai * 2) / 2 : undefined,
+    catatan: strOr(i.catatan),
+    mulai: day(i.mulai),
+    selesai: day(i.selesai),
+    diupdate: day(i.diupdate),
+    tmdbId: pos(i.tmdbId),
+    poster: okPoster(i.poster),
+    backdrop: tmdbPath(i.backdrop),
+    ratingPublik: numOr(i.ratingPublik),
+    wiki: strOr(i.wiki),
+  });
+}
+function cleanList(list) {
+  const seen = new Set();
+  return (Array.isArray(list) ? list : []).map(cleanItem).filter((i) => {
+    if (!i) return false;
+    if (seen.has(i.id)) i.id = uid();
+    seen.add(i.id);
+    return true;
+  });
+}
+function cleanData(d) {
+  if (!d || typeof d !== 'object' || !Array.isArray(d.judul)) return null;
+  return {
+    versi: 1,
+    diperbarui: typeof d.diperbarui === 'string' ? d.diperbarui : '',
+    judul: cleanList(d.judul),
+    ditolak: (Array.isArray(d.ditolak) ? d.ditolak : []).filter((r) => r && typeof r === 'object' && strOr(r.judul))
+      .map((r) => compact({ id: String(r.id ?? ''), judul: strOr(r.judul), tahun: pos(r.tahun), genre: strs(r.genre), tagAlur: strs(r.tagAlur) })),
+    kandidatTmdb: cleanList(d.kandidatTmdb),
+  };
+}
+
+function persist() {
+  const ok = store.set(K.data, S.data) && store.set(K.dirty, S.dirty);
+  if (!ok) toast('Browser nolak nyimpen (penyimpanan penuh atau diblokir). Perubahan ini hilang kalau halaman ditutup.');
+  return ok;
+}
 function save(msg) {
   S.data.diperbarui = new Date().toISOString();
   S.dirty = true;
-  store.set(K.data, S.data);
-  store.set(K.dirty, true);
+  S.rev++;
+  const ok = persist();
   render();
-  if (msg) toast(msg);
+  if (msg && ok) toast(msg);
 }
 
+/* SHA blob git dari isi file, sama persis dengan yang dihitung GitHub. Dipakai buat deteksi bentrok. */
+async function gitBlobSha(text) {
+  try {
+    const body = new TextEncoder().encode(text);
+    const head = new TextEncoder().encode(`blob ${body.length}\0`);
+    const buf = new Uint8Array(head.length + body.length);
+    buf.set(head);
+    buf.set(body, head.length);
+    const h = await crypto.subtle.digest('SHA-1', buf);
+    return [...new Uint8Array(h)].map((x) => x.toString(16).padStart(2, '0')).join('');
+  } catch { return null; }
+}
 async function loadJSON(url) {
   const r = await fetch(url, { cache: 'no-cache' });
   if (!r.ok) throw new Error(`${url}: ${r.status}`);
   return r.json();
 }
+async function loadRemote() {
+  const r = await fetch('data/tontonan.json', { cache: 'no-cache' });
+  if (!r.ok) throw new Error(`tontonan.json: ${r.status}`);
+  const text = await r.text();
+  const data = cleanData(JSON.parse(text));
+  if (!data) throw new Error('Format tontonan.json gak dikenal');
+  return { data, info: { sha: await gitBlobSha(text), diperbarui: data.diperbarui } };
+}
+function setBase(info) { S.base = info; store.set(K.base, info); }
 
 async function init() {
   let remote = null;
-  try { remote = await loadJSON('data/tontonan.json'); } catch (e) { console.warn('Gagal memuat data', e); }
-  try { S.kandidat = (await loadJSON('data/kandidat.json')).kandidat || []; } catch (e) { console.warn('Gagal memuat kandidat', e); }
+  try { remote = await loadRemote(); } catch (e) { console.warn('Gagal memuat data', e); }
+  try { S.kandidat = cleanList((await loadJSON('data/kandidat.json')).kandidat); } catch (e) { console.warn('Gagal memuat kandidat', e); }
+  S.remoteInfo = remote?.info || null;
 
-  const local = store.get(K.data, null);
-  const contohLama = local && remote && local.judul?.some((i) => i.contoh) && !remote.judul?.some((i) => i.contoh);
-  const localNewer = local && !contohLama && (!remote || S.dirty || (local.diperbarui || '') >= (remote.diperbarui || ''));
-  S.data = localNewer ? local : (remote || { versi: 1, judul: [], ditolak: [], kandidatTmdb: [] });
-  S.data.judul ||= [];
-  S.data.ditolak ||= [];
-  S.data.kandidatTmdb ||= [];
-  if (!localNewer) { S.dirty = false; store.set(K.dirty, false); }
+  let local = null;
+  try { local = cleanData(store.get(K.data, null)); } catch { local = null; }
+  if (!local) S.dirty = false;
+
+  if (local && remote && local.judul.some((i) => i.contoh) && !remote.data.judul.some((i) => i.contoh)) {
+    // Browser masih nyimpen data contoh lama: pakai data server, tapi judul yang ditambah sendiri tetap dipertahankan.
+    const ids = new Set(remote.data.judul.map((i) => i.id));
+    const punyaLu = local.judul.filter((i) => !i.contoh && !ids.has(i.id));
+    S.data = remote.data;
+    setBase(remote.info);
+    if (punyaLu.length) { S.data.judul.push(...punyaLu); S.dirty = true; } else S.dirty = false;
+  } else if (local && (S.dirty || !remote || (local.diperbarui || '') > (remote.data.diperbarui || ''))) {
+    S.data = local;
+    // Ada perubahan lokal, tapi data di server udah diubah dari tempat lain sejak itu.
+    if (S.dirty && remote && S.base && remote.info.sha && remote.info.sha !== S.base.sha && (remote.info.diperbarui || '') > (S.base.diperbarui || '')) S.konflik = true;
+    // Perubahan lokal dari versi web lama (belum nyatet versi dasarnya): tanya dulu, jangan asal pilih.
+    if (S.dirty && remote && !S.base) S.konflik = true;
+    if (!S.base && remote && !S.dirty) setBase(remote.info);
+  } else if (remote) {
+    S.data = remote.data;
+    S.dirty = false;
+    setBase(remote.info);
+  } else {
+    S.data = { versi: 1, diperbarui: '', judul: [], ditolak: [], kandidatTmdb: [] };
+  }
+  store.set(K.dirty, S.dirty);
 
   bindGlobal();
   window.addEventListener('hashchange', () => render(true));
@@ -146,6 +274,8 @@ function posterHTML(it, extra = '') {
 }
 
 const wikiCache = store.get(K.wiki, {});
+const wikiInflight = new Map();
+let wikiFails = 0;
 let wikiDown = false;
 const wikiQueue = [];
 let wikiActive = 0;
@@ -156,38 +286,53 @@ function wikiTitles(it) {
   if (it.jenis === 'series') return [`${t} (TV series)`, t];
   return it.tahun ? [`${t} (${it.tahun} film)`, `${t} (film)`, t] : [`${t} (film)`, t];
 }
-async function wikiLookup(it) {
-  const ck = it.wiki || `${it.judul}|${it.tahun || ''}|${it.jenis}`;
-  if (ck in wikiCache) return wikiCache[ck];
+function wikiKey(it) { return it.wiki || `${it.judul}|${it.tahun || ''}|${it.jenis}`; }
+function okWikiImg(src) { try { return new URL(src).hostname === 'upload.wikimedia.org' ? src : ''; } catch { return ''; } }
+async function wikiFetch(it) {
   for (const title of wikiTitles(it)) {
     const r = await fetch(WIKI_API + encodeURIComponent(title.replace(/ /g, '_')));
     if (r.status === 404) continue;
     if (!r.ok) throw new Error('wiki ' + r.status);
     const j = await r.json();
     if (j.type === 'disambiguation') continue;
-    const src = j.thumbnail?.source || j.originalimage?.source;
-    if (src) { wikiCache[ck] = src; store.set(K.wiki, wikiCache); return src; }
+    const src = okWikiImg(j.thumbnail?.source || j.originalimage?.source || '');
+    if (src) return src;
   }
-  wikiCache[ck] = '';
-  store.set(K.wiki, wikiCache);
   return '';
+}
+function wikiLookup(it) {
+  const ck = wikiKey(it);
+  if (ck in wikiCache) return Promise.resolve(wikiCache[ck]);
+  if (!wikiInflight.has(ck)) {
+    wikiInflight.set(ck, wikiFetch(it)
+      .then((src) => { wikiCache[ck] = src; store.set(K.wiki, wikiCache); wikiFails = 0; return src; })
+      .finally(() => wikiInflight.delete(ck)));
+  }
+  return wikiInflight.get(ck);
 }
 function pumpWiki() {
   while (wikiActive < 4 && wikiQueue.length && !wikiDown) {
     const { img, it } = wikiQueue.shift();
+    if (!img.isConnected) continue;
     wikiActive++;
     wikiLookup(it)
       .then((src) => { if (src && img.isConnected) { img.src = src; img.hidden = false; } })
-      .catch(() => { wikiDown = true; })
+      .catch(() => { if (++wikiFails >= 3) wikiDown = true; })
       .finally(() => { wikiActive--; pumpWiki(); });
   }
 }
 function hydratePosters(root = document) {
   if (wikiDown) return;
+  // Buang antrean gambar yang udah gak ada di halaman
+  for (let n = wikiQueue.length - 1; n >= 0; n--) if (!wikiQueue[n].img.isConnected) wikiQueue.splice(n, 1);
+  const kand = new Map(allKandidat().map((k) => [k.id, k]));
   for (const img of $$('img[data-wiki-id]', root)) {
-    const it = findItem(img.dataset.wikiId) || allKandidat().find((k) => k.id === img.dataset.wikiId);
+    const it = findItem(img.dataset.wikiId) || kand.get(img.dataset.wikiId);
     img.removeAttribute('data-wiki-id');
-    if (it) wikiQueue.push({ img, it });
+    if (!it) continue;
+    const ck = wikiKey(it);
+    if (ck in wikiCache) { if (wikiCache[ck]) { img.src = wikiCache[ck]; img.hidden = false; } continue; }
+    wikiQueue.push({ img, it });
   }
   pumpWiki();
 }
@@ -197,10 +342,10 @@ document.addEventListener('error', (e) => { if (e.target.tagName === 'IMG' && e.
 function progresOf(it) {
   const p = it.progres || {};
   if (it.jenis === 'film') {
-    const tot = it.durasi || 0, done = clamp(p.menit || 0, 0, tot || Infinity);
+    const tot = Number(it.durasi) || 0, done = clamp(Number(p.menit) || 0, 0, tot || Infinity);
     return { pct: tot ? done / tot : 0, done, tot, sisa: tot ? tot - done : null };
   }
-  const tot = it.totalEpisode || 0, done = clamp(p.episode || 0, 0, tot || Infinity);
+  const tot = Number(it.totalEpisode) || 0, done = clamp(Number(p.episode) || 0, 0, tot || Infinity);
   return { pct: tot ? done / tot : 0, done, tot, sisa: tot ? (tot - done) * (it.durasiEpisode || 0) : null, sisaEps: tot ? tot - done : null };
 }
 function seasonEp(it, n) {
@@ -218,7 +363,7 @@ function jamTotal(list) {
 }
 function barHTML(pct) {
   const w = Math.round(pct * 1000) / 10;
-  return `<div class="bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${Math.round(pct * 100)}"><span style="width:${w}%"></span><i style="left:25%"></i><i style="left:50%"></i><i style="left:75%"></i></div>`;
+  return `<div class="bar" role="progressbar" aria-label="Progres nonton" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${Math.round(pct * 100)}"><span style="width:${w}%"></span><i style="left:25%"></i><i style="left:50%"></i><i style="left:75%"></i></div>`;
 }
 
 /* ---------- profil selera & rekomendasi ---------- */
@@ -231,7 +376,13 @@ function allKandidat() {
     return true;
   });
 }
+let profilCache;
 function profil() {
+  if (profilCache !== undefined) return profilCache;
+  profilCache = hitungProfil();
+  return profilCache;
+}
+function hitungProfil() {
   const rated = items().filter((i) => i.status === 'selesai' && typeof i.nilai === 'number');
   if (rated.length < 3) return null;
   const avg = rated.reduce((a, i) => a + i.nilai, 0) / rated.length;
@@ -281,7 +432,7 @@ function alasan(c, p) {
 function rekomendasi(limit = 12) {
   const p = profil();
   if (!p) return { p: null, list: [] };
-  const taken = new Set([...items().map(keyOf), ...items().map((i) => norm(i.judul)), ...S.data.ditolak.map((r) => r.id)]);
+  const taken = new Set([...items().map(keyOf), ...items().map((i) => norm(i.judul)), ...S.data.ditolak.map((r) => r.id), ...S.data.ditolak.map((r) => norm(r.judul))]);
   let list = allKandidat()
     .filter((c) => !taken.has(keyOf(c)) && !taken.has(norm(c.judul)) && !taken.has(c.id))
     .map((c) => {
@@ -300,6 +451,7 @@ function route() { const h = location.hash.replace('#', ''); return ROUTES.inclu
 
 function render(navigated = false) {
   if (!S.data) return;
+  profilCache = undefined;
   const r = route();
   $$('[data-nav]').forEach((a) => { if (a.dataset.nav === r) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
   const btn = $('#btn-edit');
@@ -309,21 +461,36 @@ function render(navigated = false) {
   renderBanner();
   const view = { beranda: viewBeranda, arsip: viewArsip, lagi: viewLagi, watchlist: viewWatchlist, rekomendasi: viewRekomendasi, cari: viewCari }[r];
   const app = $('#app');
-  const keepFocus = !navigated && document.activeElement && app.contains(document.activeElement) ? document.activeElement.id : null;
+  const ae = document.activeElement;
+  const keepFocus = !navigated && ae && app.contains(ae) ? ae.id : null;
+  const keepAct = !navigated && ae && app.contains(ae) && !ae.id && ae.dataset?.act ? `[data-act="${CSS.escape(ae.dataset.act)}"]${ae.dataset.id ? `[data-id="${CSS.escape(ae.dataset.id)}"]` : ''}${ae.dataset.v !== undefined ? `[data-v="${CSS.escape(ae.dataset.v)}"]` : ''}` : null;
+  const sel = keepFocus && typeof ae.selectionStart === 'number' ? [ae.selectionStart, ae.selectionEnd] : null;
   app.innerHTML = view();
   const titles = { beranda: 'Layar Tancap', arsip: 'Arsip', lagi: 'Lagi Ditonton', watchlist: 'Watchlist', rekomendasi: 'Rekomendasi', cari: 'Cari' };
   document.title = r === 'beranda' ? 'Layar Tancap · Catatan Nonton Rizky' : `${titles[r]} · Layar Tancap`;
   if (keepFocus && document.getElementById(keepFocus)) {
     const el = document.getElementById(keepFocus);
     el.focus();
-    if (el.setSelectionRange && el.type === 'search') el.setSelectionRange(el.value.length, el.value.length);
+    if (sel && el.setSelectionRange) { try { el.setSelectionRange(sel[0], sel[1]); } catch { /* tipe input tanpa seleksi */ } }
+  } else if (keepAct && app.querySelector(keepAct)) {
+    app.querySelector(keepAct).focus();
   } else if (navigated && location.hash) { window.scrollTo(0, 0); }
   if (navigated && r === 'cari') $('#cari-q')?.focus();
   hydratePosters(app);
 }
 
+let renderTimer;
+function renderSoon() { clearTimeout(renderTimer); renderTimer = setTimeout(() => render(), 160); }
+
 function renderBanner() {
   const b = $('#banner');
+  if (S.konflik) {
+    b.hidden = false;
+    b.innerHTML = `<div><span><b>Data di GitHub udah diubah dari perangkat lain</b> sejak lu terakhir edit di sini. Pilih mau pakai yang mana.</span>
+      <span class="actions"><button class="pill sm solid" type="button" data-act="konflik-remote">Pakai data GitHub</button>
+      <button class="pill sm" type="button" data-act="konflik-local">Tetap pakai yang di sini</button></span></div>`;
+    return;
+  }
   const contoh = items().some((i) => i.contoh);
   if (!contoh) { b.hidden = true; b.innerHTML = ''; return; }
   b.hidden = false;
@@ -388,9 +555,9 @@ function viewBeranda() {
   const watch = byStatus('watchlist').sort((a, b) => (b.diupdate || '').localeCompare(a.diupdate || ''));
   const { p, list } = rekomendasi(12);
   const genreCount = {};
-  items().forEach((i) => (i.genre || []).forEach((g) => { genreCount[g] = (genreCount[g] || 0) + 1; }));
+  byStatus('selesai').forEach((i) => (i.genre || []).forEach((g) => { genreCount[g] = (genreCount[g] || 0) + 1; }));
   const genres = Object.entries(genreCount).sort((a, b) => b[1] - a[1]);
-  const kol = koleksi.map((k) => rail('k-' + norm(k).replace(/ /g, '-'), k,
+  const kol = koleksi.map((k, n) => rail(`k${n}`, k,
     items().filter((i) => i.koleksi === k && i.status !== 'watchlist').sort((a, b) => (a.tahun || 0) - (b.tahun || 0) || (a.urutanKoleksi || 0) - (b.urutanKoleksi || 0)),
     { more: `<a class="more" href="#arsip" data-act="go-koleksi" data-v="${esc(k)}">Semua</a>` })).join('');
   return `${hero()}${statsHTML()}
@@ -455,7 +622,7 @@ function cardProgres(it) {
     right = pr.sisa != null ? `sisa ${fmtDur(pr.sisa)}` : '';
   } else {
     const se = seasonEp(it, pr.done);
-    left = pr.tot ? `<b>Episode ${pr.done}</b> dari ${pr.tot}${se ? ` · ${se}` : ''}` : `<b>Episode ${pr.done}</b>`;
+    left = pr.tot ? `<b>Episode ${esc(pr.done)}</b> dari ${esc(pr.tot)}${se ? ` · ${esc(se)}` : ''}` : `<b>Episode ${esc(pr.done)}</b>`;
     right = pr.sisaEps != null ? `sisa ${pr.sisaEps} eps${pr.sisa ? `, kira-kira ${fmtDur(pr.sisa)}` : ''}` : '';
   }
   let acts = '';
@@ -466,7 +633,7 @@ function cardProgres(it) {
          <button class="pill sm" type="button" data-act="finish" data-id="${esc(it.id)}">Tandai tamat</button>
          <button class="pill sm" type="button" data-act="drop" data-id="${esc(it.id)}">Berhenti</button></div>`
       : `<div class="inline-input"><label class="sub" for="m-${esc(it.id)}">Menit terakhir</label>
-         <input id="m-${esc(it.id)}" type="number" inputmode="numeric" min="0" max="${pr.tot || ''}" value="${pr.done}">
+         <input id="m-${esc(it.id)}" type="number" inputmode="numeric" min="0" max="${esc(pr.tot || '')}" value="${esc(pr.done)}">
          <button class="pill sm solid" type="button" data-act="set-menit" data-id="${esc(it.id)}">Update</button></div>
          <div class="actions"><button class="pill sm" type="button" data-act="finish" data-id="${esc(it.id)}">Tandai tamat</button>
          <button class="pill sm" type="button" data-act="drop" data-id="${esc(it.id)}">Berhenti</button></div>`;
@@ -477,7 +644,7 @@ function cardProgres(it) {
     <div class="card-head">
       ${posterHTML(it)}
       <div><h3><button type="button" data-act="detail" data-id="${esc(it.id)}">${esc(it.judul)}</button></h3>
-        <p class="sub">${it.jenis === 'series' ? 'Series' : 'Film'}${it.tahun ? ' · ' + it.tahun : ''} · update ${esc(relHari(it.diupdate))}</p></div>
+        <p class="sub">${it.jenis === 'series' ? 'Series' : 'Film'}${it.tahun ? ' · ' + esc(it.tahun) : ''} · update ${esc(relHari(it.diupdate))}</p></div>
       <div class="score">${pct}%<small>${it.status === 'berhenti' ? 'berhenti' : 'selesai'}</small></div>
     </div>
     ${barHTML(pr.pct)}
@@ -530,12 +697,13 @@ function viewArsip() {
   const sorters = {
     nilai: (a, b) => (b.nilai ?? -1) - (a.nilai ?? -1) || urutRilis(a, b),
     terbaru: (a, b) => (b.selesai || '').localeCompare(a.selesai || '') || urutRilis(a, b),
-    rilis: (a, b) => -urutRilis(a, b),
+    rilis: (a, b) => (b.tahun || 0) - (a.tahun || 0) || (b.urutanKoleksi || 0) - (a.urutanKoleksi || 0),
     rilisLama: urutRilis,
     az: (a, b) => a.judul.localeCompare(b.judul, 'id'),
   };
   list.sort(sorters[f.urut] || sorters.nilai);
   S.visibleIds = list.map((i) => i.id);
+  if (S.pilih) { const vis = new Set(S.visibleIds); [...S.pilih].forEach((id) => { if (!vis.has(id)) S.pilih.delete(id); }); }
   const rated = list.filter((i) => typeof i.nilai === 'number');
   const avg = rated.length ? (rated.reduce((a, i) => a + i.nilai, 0) / rated.length).toFixed(1) : '–';
   const opt = (v, label, cur) => `<option value="${esc(v)}"${v === cur ? ' selected' : ''}>${esc(label)}</option>`;
@@ -552,6 +720,9 @@ function viewArsip() {
       <button class="pill sm solid" type="button" data-act="pilih-watchlist"${n ? '' : ' disabled'}>Pindah ke Watchlist</button>
       <button class="pill sm danger" type="button" data-act="pilih-tanya-hapus"${n ? '' : ' disabled'}>Hapus</button>
       <button class="pill sm" type="button" data-act="pilih-off">Selesai milih</button>
+      ${S.watchConfirm && n ? `<div class="confirm full"><p>Sebagian judul yang dipilih udah lu kasih nilai. Nilai dan tanggal tamatnya bakal kehapus kalau dipindah ke Watchlist.</p><div class="actions">
+        <button class="pill sm" type="button" data-act="pilih-batal-hapus">Gak jadi</button>
+        <button class="pill sm danger solid" type="button" data-act="pilih-watchlist">Ya, pindahin</button></div></div>` : ''}
       ${S.pilihConfirm && n ? `<div class="confirm full"><p>Hapus ${n} judul dari catatan?</p><div class="actions">
         <button class="pill sm" type="button" data-act="pilih-batal-hapus">Gak jadi</button>
         <button class="pill sm danger solid" type="button" data-act="pilih-hapus">Ya, hapus ${n} judul</button></div></div>` : ''}
@@ -614,7 +785,7 @@ function viewWatchlist() {
   const card = (it) => `<article class="card">
     <div class="card-head">${posterHTML(it)}
       <div><h3><button type="button" data-act="detail" data-id="${esc(it.id)}">${esc(it.judul)}</button></h3>
-        <p class="sub">${it.jenis === 'series' ? 'Series' : 'Film'}${it.tahun ? ' · ' + it.tahun : ''}${it.jenis === 'film' && it.durasi ? ' · ' + fmtDur(it.durasi) : ''}${it.jenis === 'series' && it.totalEpisode ? ` · ${it.totalEpisode} eps` : ''}</p>
+        <p class="sub">${it.jenis === 'series' ? 'Series' : 'Film'}${it.tahun ? ' · ' + esc(it.tahun) : ''}${it.jenis === 'film' && it.durasi ? ' · ' + fmtDur(it.durasi) : ''}${it.jenis === 'series' && it.totalEpisode ? ` · ${esc(it.totalEpisode)} eps` : ''}</p>
         <div class="chips" style="margin-top:6px">${(it.genre || []).map((g) => `<span class="chip">${esc(g)}</span>`).join('')}</div></div>
       <span></span></div>
     ${S.edit ? `<div class="actions"><button class="pill sm solid" type="button" data-act="start" data-id="${esc(it.id)}">Mulai nonton</button>
@@ -716,7 +887,7 @@ function allTags() { return uniq([...items(), ...allKandidat()].flatMap((i) => i
 
 function openForm(id = null, preset = {}) {
   S.editingId = id;
-  const it = id ? findItem(id) : { jenis: 'film', status: preset.status || 'selesai', genre: [], tagAlur: [] };
+  const it = id ? findItem(id) : { jenis: 'film', status: preset.status || 'selesai', genre: [], tagAlur: [], judul: preset.judul || '' };
   const f = $('#form-judul');
   f.reset();
   $('#form-title').textContent = id ? `Ubah: ${it.judul}` : 'Tambah judul';
@@ -757,8 +928,8 @@ function fillForm(it) {
   $('#f-epdone').value = it.progres?.episode ?? '';
   const hasNilai = typeof it.nilai === 'number';
   $('#f-nilai').value = hasNilai ? it.nilai : 8;
-  $('#f-belum').checked = !hasNilai && !!S.editingId;
-  $('#f-selesai').value = it.selesai || today();
+  $('#f-belum').checked = !hasNilai;
+  $('#f-selesai').value = it.selesai || (S.editingId ? '' : today());
   $('#f-poster').value = it.poster && !it.poster.startsWith('/') ? it.poster : '';
   formExtra.posterPath = it.poster && it.poster.startsWith('/') ? it.poster : '';
   $('#f-catatan').value = it.catatan || '';
@@ -789,7 +960,11 @@ function readForm() {
   const tahun = num('#f-tahun');
   if (tahun && (tahun < 1870 || tahun > 2100)) return { err: 'Tahun rilis kayaknya salah ketik.' };
   const posterUrl = v('#f-poster');
-  if (posterUrl && !/^https:\/\//i.test(posterUrl)) return { err: 'Link poster harus diawali https://' };
+  if (posterUrl && !httpsUrl(posterUrl)) return { err: 'Link poster harus diawali https://' };
+  for (const [id, label] of [['#f-durasi', 'Durasi'], ['#f-total', 'Total episode'], ['#f-durep', 'Durasi per episode'], ['#f-menit', 'Menit ditonton'], ['#f-epdone', 'Episode ditonton']]) {
+    const x = num(id);
+    if (x !== undefined && (x < 0 || (x === 0 && !/ditonton/.test(label)))) return { err: `${label} gak boleh nol atau minus.` };
+  }
   const out = {
     judul, jenis, status, tahun,
     sutradara: v('#f-sutradara') || undefined,
@@ -807,14 +982,14 @@ function readForm() {
   } else {
     out.totalEpisode = num('#f-total');
     out.durasiEpisode = num('#f-durep');
-    const per = parseList(v('#f-eps')).map(Number).filter((n) => n > 0);
+    const per = parseList(v('#f-eps')).map(Number).filter((n) => Number.isInteger(n) && n > 0);
     out.episodePerSeason = per.length ? per : undefined;
     if (per.length && !out.totalEpisode) out.totalEpisode = per.reduce((a, b) => a + b, 0);
     if (status === 'ditonton' || status === 'berhenti') out.progres = { episode: clamp(num('#f-epdone') || 0, 0, out.totalEpisode || 100000) };
   }
   if (status === 'selesai') {
     out.nilai = $('#f-belum').checked ? undefined : parseFloat($('#f-nilai').value);
-    out.selesai = v('#f-selesai') || today();
+    out.selesai = v('#f-selesai') || (S.editingId ? undefined : today());
   }
   return { out };
 }
@@ -827,19 +1002,22 @@ function submitForm(e) {
   if (S.editingId) {
     const it = findItem(S.editingId);
     const keep = { id: it.id, mulai: it.mulai };
+    for (const k of ['tahun', 'selesai', 'koleksi', 'durasi', 'totalEpisode', 'durasiEpisode', 'episodePerSeason', 'sutradara', 'catatan', 'poster', 'wiki', 'nilai', 'progres']) delete it[k];
+    const dup = items().find((i) => i.id !== it.id && norm(i.judul) === norm(out.judul) && (!out.tahun || !i.tahun || i.tahun === out.tahun));
+    if (dup) { $('#form-err').textContent = `“${dup.judul}” udah ada di catatan (${STATUS_LABEL[dup.status]}).`; return; }
     if (out.status !== 'selesai') { delete it.nilai; delete it.selesai; }
-    if (out.status === 'watchlist') delete it.progres;
-    for (const k of ['koleksi', 'durasi', 'totalEpisode', 'durasiEpisode', 'episodePerSeason', 'sutradara', 'catatan', 'poster', 'wiki', 'nilai', 'progres']) delete it[k];
     Object.assign(it, clean(out), { id: keep.id, diupdate: today() });
     if (keep.mulai) it.mulai = keep.mulai;
     delete it.contoh;
     if (out.status === 'ditonton' && !it.mulai) it.mulai = today();
+    const idx = items().indexOf(it);
+    items()[idx] = cleanItem(it) || it;
   } else {
     const dup = items().find((i) => keyOf(i) === keyOf(out) || (norm(i.judul) === norm(out.judul) && (!out.tahun || !i.tahun || i.tahun === out.tahun)));
     if (dup) { $('#form-err').textContent = `“${dup.judul}” udah ada di catatan (${STATUS_LABEL[dup.status]}).`; return; }
     const it = { id: uid(), ...clean(out), diupdate: today() };
     if (it.status === 'ditonton') it.mulai = today();
-    items().push(it);
+    items().push(cleanItem(it));
   }
   closeDlg($('#dlg-form'));
   closeDlg($('#dlg-detail'));
@@ -883,12 +1061,13 @@ function submitNilai(e) {
   save(`${it.judul} masuk Arsip dengan nilai ${angka(it.nilai)}`);
 }
 function setProgress(it, patch) {
+  const before = progresOf(it).done;
   it.progres = { ...(it.progres || {}), ...patch };
   it.diupdate = today();
   delete it.contoh;
   const pr = progresOf(it);
   save();
-  if (pr.tot && pr.done >= pr.tot) askFinish(it.id);
+  if (pr.tot && pr.done >= pr.tot && before < pr.tot) askFinish(it.id);
 }
 
 /* ---------- TMDB ---------- */
@@ -919,9 +1098,9 @@ async function cariTmdb() {
     ul.innerHTML = res.map((r) => {
       const title = r.title || r.name, year = (r.release_date || r.first_air_date || '').slice(0, 4);
       const img = r.poster_path ? `<img src="${TMDB_IMG}w92${esc(r.poster_path)}" alt="">` : '<span class="noimg"></span>';
-      return `<li><button type="button" data-tmdb="${r.media_type}:${r.id}">${img}<span><b>${esc(title)}</b><small>${r.media_type === 'tv' ? 'Series' : 'Film'}${year ? ' · ' + year : ''}${r.original_title && r.original_title !== title ? ' · ' + esc(r.original_title) : ''}</small></span></button></li>`;
+      return `<li><button type="button" data-tmdb="${esc(r.media_type)}:${esc(r.id)}">${img}<span><b>${esc(title)}</b><small>${r.media_type === 'tv' ? 'Series' : 'Film'}${year ? ' · ' + esc(year) : ''}${r.original_title && r.original_title !== title ? ' · ' + esc(r.original_title) : ''}</small></span></button></li>`;
     }).join('');
-  } catch (e) { ul.innerHTML = `<li class="err">${esc(e.message)}</li>`; }
+  } catch (e) { ul.innerHTML = `<li class="err">${esc(netMsg(e, 'TMDB'))}</li>`; }
 }
 async function pilihTmdb(ref) {
   const [type, id] = ref.split(':');
@@ -950,10 +1129,12 @@ async function pilihTmdb(ref) {
       it.episodePerSeason = (d.seasons || []).filter((s) => s.season_number > 0 && s.episode_count > 0).map((s) => s.episode_count);
       it.sutradara = (d.created_by || []).map((c) => c.name).slice(0, 2).join(', ') || undefined;
     }
-    const keep = { status: $('#f-status').value, catatan: $('#f-catatan').value };
+    const keep = { status: $('#f-status').value, catatan: $('#f-catatan').value, koleksi: $('#f-koleksi').value.trim() || undefined,
+      tagAlur: uniq([...parseList($('#f-tag').value), ...(it.tagAlur || [])]) };
+    if (S.editingId === null && $('#f-belum') && !$('#f-belum').checked) keep.nilai = parseFloat($('#f-nilai').value);
     fillForm({ ...it, ...keep });
     ul.innerHTML = `<li class="sub">Terisi dari TMDB: ${esc(it.judul)}. Tinggal cek, kasih nilai atau tag alur, lalu Simpan.</li>`;
-  } catch (e) { ul.innerHTML = `<li class="err">${esc(e.message)}</li>`; }
+  } catch (e) { ul.innerHTML = `<li class="err">${esc(netMsg(e, 'TMDB'))}</li>`; }
 }
 async function tmdbKandidat() {
   if (!store.get(K.tmdb, '')) { openEdit(); toast('Masukin API key TMDB dulu'); return; }
@@ -966,7 +1147,8 @@ async function tmdbKandidat() {
     const found = new Map();
     for (const s of seeds) {
       const type = s.jenis === 'series' ? 'tv' : 'movie';
-      const j = await tmdb(`/${type}/${s.tmdbId}/recommendations`);
+      let j;
+      try { j = await tmdb(`/${type}/${s.tmdbId}/recommendations`); } catch (err) { if (/ditolak/.test(err.message)) throw err; continue; }
       for (const r of (j.results || []).slice(0, 10)) {
         if (!(r.media_type === 'movie' || r.media_type === 'tv' || !r.media_type)) continue;
         const mt = r.media_type || type;
@@ -988,9 +1170,10 @@ async function tmdbKandidat() {
         c.tagAlur = (kw.keywords || kw.results || []).slice(0, 8).map((x) => x.name.toLowerCase());
       } catch { /* kandidat tetap dipakai tanpa tag */ }
     }));
-    S.data.kandidatTmdb = list;
+    if (!list.length) { toast('TMDB gak ngasih kandidat baru kali ini. Coba lagi nanti.'); return; }
+    S.data.kandidatTmdb = cleanList(list);
     save(`${list.length} kandidat baru dari TMDB`);
-  } catch (e) { toast(e.message); }
+  } catch (e) { toast(netMsg(e, 'TMDB')); }
 }
 
 /* ---------- GitHub ---------- */
@@ -1000,37 +1183,72 @@ function b64utf8(str) {
   for (let i = 0; i < bytes.length; i += 0x8000) bin += String.fromCharCode(...bytes.subarray(i, i + 0x8000));
   return btoa(bin);
 }
+function netMsg(e, where) {
+  return e instanceof TypeError ? `Gagal nyambung ke ${where}. Cek koneksi internet lu.` : e.message;
+}
 async function pushGithub() {
   const token = store.get(K.gh, '');
   if (!token) { toast('Masukin token GitHub dulu'); $('#s-gh').focus(); return; }
+  if (S.konflik) { closeDlg($('#dlg-edit')); toast('Pilih dulu mau pakai data yang mana (lihat pita di atas).'); return; }
+  const base = S.base?.sha ? S.base : S.remoteInfo;
+  if (!base?.sha) { toast('Data dari server belum kebaca, jadi belum aman buat disimpan. Muat ulang halaman dulu.'); return; }
   const api = `https://api.github.com/repos/${CFG.owner}/${CFG.repo}/contents/${CFG.path}`;
   const headers = { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28' };
   const btn = $('#s-push');
   btn.disabled = true;
   btn.textContent = 'Menyimpan…';
+  const revAtStart = S.rev;
+  const stamp = new Date().toISOString();
+  const text = JSON.stringify({ ...S.data, diperbarui: stamp }, null, 2) + '\n';
   try {
-    let sha;
-    const g = await fetch(`${api}?ref=${CFG.branch}`, { headers, cache: 'no-store' });
-    if (g.ok) sha = (await g.json()).sha;
-    else if (g.status === 401) throw new Error('Token GitHub ditolak. Cek lagi token-nya.');
-    else if (g.status !== 404) throw new Error(`GitHub error ${g.status}`);
-    S.data.diperbarui = new Date().toISOString();
-    const body = { message: `Update catatan nonton (${today()})`, content: b64utf8(JSON.stringify(S.data, null, 2) + '\n'), branch: CFG.branch, ...(sha ? { sha } : {}) };
+    const body = { message: `Update catatan nonton (${today()})`, content: b64utf8(text), branch: CFG.branch, sha: base.sha };
     const r = await fetch(api, { method: 'PUT', headers, body: JSON.stringify(body) });
-    if (r.status === 409) throw new Error('Data di GitHub berubah dari tempat lain. Coba simpan lagi.');
-    if (r.status === 403 || r.status === 404) throw new Error('Token gak punya izin tulis ke repo ini.');
-    if (!r.ok) throw new Error(`Gagal nyimpen (${r.status})`);
-    S.dirty = false;
-    store.set(K.dirty, false);
-    store.set(K.data, S.data);
-    toast('Tersimpan ke GitHub. Web ke-update dalam 1–2 menit.');
+    if (r.status === 401) throw new Error('Token GitHub ditolak atau udah kedaluwarsa. Bikin token baru.');
+    if (r.status === 409 || r.status === 422) {
+      S.konflik = true;
+      render();
+      throw new Error('Data di GitHub udah diubah dari tempat lain. Pilih dulu mau pakai yang mana (lihat pita di atas).');
+    }
+    if (r.status === 403 || r.status === 404) throw new Error('Token gak punya izin tulis ke repo ini (atau kena limit GitHub). Cek izin token-nya.');
+    if (!r.ok) throw new Error(`Gagal nyimpen ke GitHub (kode ${r.status}).`);
+    const res = await r.json().catch(() => ({}));
+    setBase({ sha: res.content?.sha || null, diperbarui: stamp });
+    if (S.rev === revAtStart) {
+      S.data.diperbarui = stamp;
+      S.dirty = false;
+      persist();
+      toast('Tersimpan ke GitHub. Web ke-update dalam 1–2 menit.');
+    } else {
+      persist();
+      toast('Tersimpan ke GitHub, tapi ada perubahan baru sejak tadi. Simpan sekali lagi ya.');
+    }
     render();
     updateEditStatus();
   } catch (e) {
-    toast(e.message);
+    toast(netMsg(e, 'GitHub'));
   } finally {
     btn.disabled = false;
     btn.textContent = 'Simpan ke GitHub';
+  }
+}
+
+async function pakaiDataServer() {
+  try {
+    const remote = await loadRemote();
+    S.data = remote.data;
+    S.remoteInfo = remote.info;
+    setBase(remote.info);
+    S.dirty = false;
+    S.konflik = false;
+    S.rev++;
+    persist();
+    render();
+    updateEditStatus();
+    toast('Pakai data terbaru dari server');
+    return true;
+  } catch (e) {
+    toast(`Gagal muat data server: ${netMsg(e, 'server')}`);
+    return false;
   }
 }
 
@@ -1042,11 +1260,21 @@ function updateEditStatus() {
     : `Semua data sama dengan yang di GitHub (${n} judul).`;
   $('#s-contoh-wrap').hidden = !items().some((i) => i.contoh);
 }
+function keyStatus() {
+  const gh = store.get(K.gh, ''), tm = store.get(K.tmdb, '');
+  const tail = (k) => `…${String(k).slice(-4)}`;
+  $('#s-gh').value = '';
+  $('#s-tmdb').value = '';
+  $('#s-gh').placeholder = gh ? `Token tersimpan (${tail(gh)}). Isi lagi buat ganti.` : 'github_pat_…';
+  $('#s-tmdb').placeholder = tm ? `Key tersimpan (${tail(tm)}). Isi lagi buat ganti.` : 'Read Access Token (eyJ…)';
+  $('#s-lupa').hidden = !gh && !tm;
+}
 function openEdit() {
   $('#s-edit').checked = S.edit;
-  $('#s-gh').value = store.get(K.gh, '');
-  $('#s-tmdb').value = store.get(K.tmdb, '');
+  keyStatus();
   $('#s-confirm').hidden = true;
+  $('#s-import-confirm').hidden = true;
+  $('#s-reset-confirm').hidden = true;
   updateEditStatus();
   openDlg('#dlg-edit');
 }
@@ -1059,14 +1287,14 @@ function exportJSON() {
   a.click();
   setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
 }
+let pendingImport = null;
 async function importJSON(file) {
-  try {
-    const j = JSON.parse(await file.text());
-    if (!Array.isArray(j.judul)) throw new Error('Format file gak dikenal.');
-    S.data = { versi: 1, ditolak: [], kandidatTmdb: [], ...j };
-    save(`Dipulihkan: ${j.judul.length} judul`);
-    updateEditStatus();
-  } catch (e) { toast(`Gagal memulihkan: ${e.message}`); }
+  let data = null;
+  try { data = cleanData(JSON.parse(await file.text())); } catch { data = null; }
+  if (!data) { toast('File-nya bukan cadangan Layar Tancap yang valid.'); return; }
+  pendingImport = data;
+  $('#s-import-text').textContent = `Ganti semua catatan di browser ini (${items().length} judul) dengan isi file (${data.judul.length} judul)?`;
+  $('#s-import-confirm').hidden = false;
 }
 
 /* ---------- event ---------- */
@@ -1086,16 +1314,20 @@ function bindGlobal() {
       case 'ask-del': $('#del-confirm').hidden = false; break;
       case 'cancel-del': $('#del-confirm').hidden = true; break;
       case 'del': S.data.judul = items().filter((i) => i.id !== id); closeDlg($('#dlg-detail')); save('Judul dihapus'); break;
-      case 'f-status': S.filter.status = v; S.filter.genre = ''; render(); break;
+      case 'f-status': S.filter = { ...S.filter, status: v, genre: '', era: '', koleksi: '', tahunNonton: '' }; S.pilih &&= new Set(); render(); break;
       case 'f-genre': S.filter.genre = v; render(); break;
       case 'lagi-tab': S.lagiTab = v; render(); break;
       case 'melebar': S.melebar = v === '1'; render(); break;
-      case 'ep-plus': if (it) setProgress(it, { episode: (it.progres?.episode || 0) + 1 }); break;
-      case 'ep-minus': if (it) setProgress(it, { episode: Math.max(0, (it.progres?.episode || 0) - 1) }); break;
+      case 'ep-plus': if (it) {
+        const cur = progresOf(it).done;
+        if (it.totalEpisode && cur >= it.totalEpisode) { askFinish(it.id); break; }
+        setProgress(it, { episode: cur + 1 });
+      } break;
+      case 'ep-minus': if (it) setProgress(it, { episode: Math.max(0, progresOf(it).done - 1) }); break;
       case 'set-menit': {
         const inp = document.getElementById(`m-${id}`);
         const m = parseInt(inp?.value, 10);
-        if (it && Number.isFinite(m)) setProgress(it, { menit: clamp(m, 0, it.durasi || m) });
+        if (it && Number.isFinite(m)) setProgress(it, { menit: clamp(m, 0, it.durasi || Infinity) });
         break;
       }
       case 'finish': case 'rate': askFinish(id); break;
@@ -1105,7 +1337,7 @@ function bindGlobal() {
       case 'pilih-semua': if (S.pilih) { S.visibleIds.forEach((x) => S.pilih.add(x)); render(); } break;
       case 'pilih-kosong': if (S.pilih) { S.pilih.clear(); S.pilihConfirm = false; render(); } break;
       case 'pilih-tanya-hapus': S.pilihConfirm = true; render(); break;
-      case 'pilih-batal-hapus': S.pilihConfirm = false; render(); break;
+      case 'pilih-batal-hapus': S.pilihConfirm = false; S.watchConfirm = false; render(); break;
       case 'pilih-hapus': {
         const n = S.pilih.size;
         S.data.judul = items().filter((i) => !S.pilih.has(i.id));
@@ -1114,6 +1346,9 @@ function bindGlobal() {
         break;
       }
       case 'pilih-watchlist': {
+        const dinilai = items().filter((i) => S.pilih.has(i.id) && typeof i.nilai === 'number').length;
+        if (dinilai && !S.watchConfirm) { S.watchConfirm = true; S.pilihConfirm = false; render(); break; }
+        S.watchConfirm = false;
         let n = 0;
         for (const i of items()) {
           if (!S.pilih.has(i.id)) continue;
@@ -1151,22 +1386,26 @@ function bindGlobal() {
         break;
       }
       case 'tmdb-rek': tmdbKandidat(); break;
+      case 'konflik-remote': pakaiDataServer(); break;
+      case 'konflik-local': S.konflik = false; if (S.remoteInfo) setBase(S.remoteInfo); render(); toast('Oke, data di sini yang dipakai. Simpan ke GitHub buat nimpa versi di sana.'); break;
       case 'rail': {
         const el = document.getElementById(t.dataset.target);
         if (el) el.scrollBy({ left: Number(t.dataset.dir) * el.clientWidth * 0.85, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
         break;
       }
-      case 'go-genre': S.filter = { ...S.filter, status: 'selesai', genre: v, koleksi: '', q: '' }; break;
-      case 'go-koleksi': S.filter = { ...S.filter, status: 'selesai', koleksi: v, genre: '', q: '', urut: 'rilisLama' }; break;
-      case 'add-from-search': openForm(null, { judul: S.cari }); setTimeout(() => { $('#f-judul').value = S.cari; if (!$('#f-cari').disabled) { $('#f-cari').value = S.cari; cariTmdb(); } }, 60); break;
+      case 'go-genre': S.filter = { ...S.filter, status: 'selesai', genre: v, koleksi: '', q: '', jenis: 'semua', era: '', tahunNonton: '' }; break;
+      case 'go-koleksi': S.filter = { ...S.filter, status: 'selesai', koleksi: v, genre: '', q: '', jenis: 'semua', era: '', tahunNonton: '', urut: 'rilisLama' }; break;
+      case 'add-from-search': openForm(null, { judul: S.cari }); if (!$('#f-cari').disabled) { $('#f-cari').value = S.cari; cariTmdb(); } break;
       default: break;
     }
   });
 
   $('#app').addEventListener('input', (e) => {
-    if (e.target.id === 'f-q') { S.filter.q = e.target.value; render(); }
-    if (e.target.id === 'cari-q') { S.cari = e.target.value; render(); }
+    if (e.isComposing) return;
+    if (e.target.id === 'f-q') { S.filter.q = e.target.value; renderSoon(); }
+    if (e.target.id === 'cari-q') { S.cari = e.target.value; renderSoon(); }
   });
+  $('#app').addEventListener('compositionend', (e) => { if (e.target.id === 'f-q' || e.target.id === 'cari-q') e.target.dispatchEvent(new Event('input', { bubbles: true })); });
   $('#app').addEventListener('change', (e) => {
     const k = e.target.dataset.filter;
     if (k) { S.filter[k] = e.target.value; render(); }
@@ -1182,10 +1421,23 @@ function bindGlobal() {
   $('#s-edit').addEventListener('change', (e) => { S.edit = e.target.checked; store.set(K.edit, S.edit); render(); });
   $('#s-simpan-key').addEventListener('click', () => {
     const gh = $('#s-gh').value.trim(), tm = $('#s-tmdb').value.trim();
-    if (gh) store.set(K.gh, gh); else store.del(K.gh);
-    if (tm) store.set(K.tmdb, tm); else store.del(K.tmdb);
-    toast('Key disimpan di browser ini');
+    if (!gh && !tm) { toast('Isi token atau key dulu'); return; }
+    if (gh) store.set(K.gh, gh);
+    if (tm) store.set(K.tmdb, tm);
+    keyStatus();
+    toast('Disimpan di browser ini');
     render();
+  });
+  $('#s-lupa').addEventListener('click', () => { store.del(K.gh); store.del(K.tmdb); keyStatus(); toast('Token dan key dihapus dari browser ini'); render(); });
+  $('#s-import-no').addEventListener('click', () => { pendingImport = null; $('#s-import-confirm').hidden = true; });
+  $('#s-import-yes').addEventListener('click', () => {
+    if (!pendingImport) return;
+    const n = pendingImport.judul.length;
+    S.data = pendingImport;
+    pendingImport = null;
+    $('#s-import-confirm').hidden = true;
+    save(`Dipulihkan: ${n} judul`);
+    updateEditStatus();
   });
   $('#s-push').addEventListener('click', () => {
     const gh = $('#s-gh').value.trim();
@@ -1203,15 +1455,12 @@ function bindGlobal() {
     save('Data contoh dihapus');
     updateEditStatus();
   });
-  $('#s-reset').addEventListener('click', async () => {
-    store.del(K.data);
-    store.del(K.dirty);
-    S.dirty = false;
-    try { S.data = await loadJSON('data/tontonan.json'); S.data.ditolak ||= []; S.data.kandidatTmdb ||= []; } catch { toast('Gagal memuat ulang dari server'); return; }
-    render();
-    updateEditStatus();
-    toast('Data dimuat ulang dari server');
+  $('#s-reset').addEventListener('click', () => {
+    if (S.dirty) { $('#s-reset-confirm').hidden = false; return; }
+    pakaiDataServer();
   });
+  $('#s-reset-no').addEventListener('click', () => { $('#s-reset-confirm').hidden = true; });
+  $('#s-reset-yes').addEventListener('click', async () => { if (await pakaiDataServer()) $('#s-reset-confirm').hidden = true; });
 
   const form = $('#form-judul');
   form.addEventListener('submit', submitForm);
